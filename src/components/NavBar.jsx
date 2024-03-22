@@ -5,9 +5,12 @@ import {NavLink} from 'react-router-dom';
 import {AppBar, Box, Button, Toolbar, Typography, IconButton, CssBaseline} from '@mui/material';
 import {MenuIcon, AccountCircle} from '@mui/icons-material/Menu';
 
+//context imports
+import {useUser} from '../hooks/useUser';
+
 const NavBar = () => {
   const user = {name: 'testName'};
-  const pageTitle = 'Temp Page Title';
+  const {pageTitle} = useUser();
   return (
     <Fragment>
       <CssBaseline>
@@ -23,7 +26,11 @@ const NavBar = () => {
                 to="/home">
                 {/* <MenuIcon /> */} SingStarter
               </IconButton>
-              <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{display: {xs: 'none', sm: 'inline'}, flexGrow: 1}}>
+                {/* have error on this line but it works so?? */}
                 {pageTitle && pageTitle}
               </Typography>
               {!user.email && (

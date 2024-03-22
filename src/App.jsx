@@ -8,12 +8,15 @@ import LandingPage from './pages/LandingPage';
 import NotFoundPage from './pages/NotFoundPage';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
+import Signup from './components/Signup';
+import Signin from './components/Signin';
 
 //Context Imports (may need to set the theme here if we want light/dark mode setup)
 
 //MUI Stuff
 //Create the theme and apply it around the whole app
 import {createTheme, ThemeProvider} from '@mui/material';
+
 const userTheme = createTheme({
   palette: {
     primary: {
@@ -29,8 +32,6 @@ const userTheme = createTheme({
   },
 });
 
-console.log(userTheme.palette);
-
 function App() {
   return (
     <ThemeProvider theme={userTheme}>
@@ -39,6 +40,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="home" />} />
           <Route path="home" element={<LandingPage />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="signin" element={<Signin />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />

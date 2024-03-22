@@ -5,7 +5,7 @@ export const UserContext = createContext();
 export function UserProvider({children}) {
   //Add all the stuff we will keep in context below
 
-  const [pageTitle, setPageTitle] = useState('');
+  const [pageTitle, setPageTitle] = useState('Temp Title');
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState({
     email: null,
