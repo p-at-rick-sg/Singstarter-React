@@ -1,17 +1,32 @@
-import {createContext, useEffect} from 'react';
-import {createTheme} from '@mui/material';
+import {createContext, useEffect, useState} from 'react';
 
 export const UserContext = createContext();
-const userTheme = createTheme();
 
 export function UserProvider({children}) {
   //Add all the stuff we will keep in context below
+
+  const [pageTitle, setPageTitle] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState({
+    email: null,
+    firstName: null,
+    lastName: null,
+    role: null,
+    token: null,
+  });
+
   const logout = () => {
     console.log('logout function');
   };
 
+  //here  are the items we will pass to the context
   const value = {
-    userTheme,
+    pageTitle,
+    setPageTitle,
+    authenticated,
+    setAuthenticated,
+    user,
+    setUser,
     logout,
   };
 
