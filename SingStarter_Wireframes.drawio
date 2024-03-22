@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-03-22T04:38:07.791Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="PabIo7_zgoksuUu6siQp" version="24.0.7" type="github" pages="4">
+<mxfile host="app.diagrams.net" modified="2024-03-22T04:42:01.382Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="8iCKdM49HVo8_DBRcIHw" version="24.0.7" type="github" pages="4">
   <diagram name="Templates" id="c9db0220-8083-56f3-ca83-edcdcd058819">
     <mxGraphModel dx="1372" dy="945" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
@@ -454,10 +454,10 @@
           <mxGeometry x="1280" y="1040" width="200" height="40" as="geometry" />
         </mxCell>
         <mxCell id="mM_7ZvYakO-OBblxoGGg-20" value="Start New Project" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.rrect;rSize=5;fontSize=16;fillColor=#d80073;strokeColor=#A50040;fontColor=#ffffff;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="2140" y="1520" width="140" height="40" as="geometry" />
+          <mxGeometry x="1960" y="1160" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="mM_7ZvYakO-OBblxoGGg-22" value="" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.rect;fillColor=#FFCCE6;strokeColor=#A50040;whiteSpace=wrap;rounded=0;fontSize=12;align=center;fontColor=#ffffff;" vertex="1" parent="1">
-          <mxGeometry x="1280" y="1730" width="1010" height="40" as="geometry" />
+          <mxGeometry x="1270" y="1600" width="1010" height="40" as="geometry" />
         </mxCell>
         <mxCell id="mM_7ZvYakO-OBblxoGGg-23" value="&lt;font color=&quot;#ffffff&quot;&gt;Normal Footer Stuff&lt;/font&gt;" style="html=1;shadow=0;dashed=0;fillColor=none;strokeColor=none;shape=mxgraph.bootstrap.rect;fontColor=#999999;whiteSpace=wrap;" vertex="1" parent="mM_7ZvYakO-OBblxoGGg-22">
           <mxGeometry x="430" width="180" height="40" as="geometry" />
@@ -474,8 +474,8 @@
         <mxCell id="mM_7ZvYakO-OBblxoGGg-47" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/boxicons-regular-vol-2/24/bx-list-ul-128.png" vertex="1" parent="1">
           <mxGeometry x="1250" y="1400" width="210" height="210" as="geometry" />
         </mxCell>
-        <mxCell id="mM_7ZvYakO-OBblxoGGg-48" value="Have a New Idea?" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.anchor;fontSize=26;align=left;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="1880" y="1520" width="250" height="40" as="geometry" />
+        <mxCell id="mM_7ZvYakO-OBblxoGGg-48" value="Got a New Idea?" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.anchor;fontSize=26;align=left;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="1690" y="1160" width="250" height="40" as="geometry" />
         </mxCell>
         <mxCell id="mM_7ZvYakO-OBblxoGGg-49" value="&lt;font color=&quot;#ff0080&quot;&gt;Welcome Back @userFirstName&lt;/font&gt;" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.anchor;fontSize=26;align=left;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="1560" y="1040" width="430" height="40" as="geometry" />
@@ -484,16 +484,16 @@
           <mxGeometry x="2193" y="1050" width="68" height="68" as="geometry" />
         </mxCell>
         <mxCell id="mM_7ZvYakO-OBblxoGGg-51" value="&lt;font color=&quot;#ff0080&quot;&gt;Answer Question&lt;/font&gt;" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.rrect;rSize=5;fontSize=16;strokeColor=#dddddd;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="1980" y="1430" width="159.55" height="40" as="geometry" />
+          <mxGeometry x="1980" y="1532" width="159.55" height="40" as="geometry" />
         </mxCell>
         <mxCell id="mM_7ZvYakO-OBblxoGGg-53" value="Outstanding Questions" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.anchor;fontSize=26;align=left;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="1560" y="1118" width="290" height="40" as="geometry" />
+          <mxGeometry x="1560" y="1220" width="290" height="40" as="geometry" />
         </mxCell>
         <mxCell id="mM_7ZvYakO-OBblxoGGg-55" value="Q: Why do frogs bump their butts when they jump?" style="strokeWidth=1;shadow=0;dashed=0;align=left;html=1;shape=mxgraph.mockup.text.textBox;fontColor=#666666;align=left;fontSize=17;spacingLeft=4;spacingTop=-3;whiteSpace=wrap;strokeColor=#666666;mainText=" vertex="1" parent="1">
-          <mxGeometry x="1560" y="1180" width="579.55" height="41" as="geometry" />
+          <mxGeometry x="1560" y="1282" width="579.55" height="41" as="geometry" />
         </mxCell>
         <mxCell id="mM_7ZvYakO-OBblxoGGg-56" value="Question (user x): blah blah&lt;div&gt;Answer: some clever text here&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Question (user y): mode stuiuff&lt;/div&gt;&lt;div&gt;Answer: Not Yet Responded&lt;/div&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.textBox;fontColor=#666666;align=left;fontSize=17;spacingLeft=4;spacingTop=-3;whiteSpace=wrap;strokeColor=#666666;mainText=" vertex="1" parent="1">
-          <mxGeometry x="1560" y="1270" width="580" height="150" as="geometry" />
+          <mxGeometry x="1560" y="1372" width="580" height="150" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
