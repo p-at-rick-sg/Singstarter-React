@@ -1,6 +1,8 @@
 import {useState, useEffect} from 'react';
 import {useNavigate, NavLink} from 'react-router-dom';
-
+import useFetch from '../hooks/useFetch';
+// Context Stuff
+import {useUser} from '../hooks/useUser'; //import the hgook here to be able to easily import the reqwuired items below from it
 //MUI Imports
 import {
   Avatar,
@@ -19,21 +21,34 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 // Component Imports
 
-// Context Stuff
-import {useUser} from '../hooks/useUser';
-
 const Signin = () => {
+  const fetchData = useFetch();
   const {pageTitle, setPageTitle, user, setUser, setAuthenticated} = useUser(); // comes from user context
   const [credentials, setCredentials] = useState({email: '', password: ''});
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = e => {
+  const handleSignin = async e => {
     e.preventDefault();
     setSubmitting(true);
+    const result = await fetchData('/auth/signin', 'POST', {
+      email: credentials.email,
+      password: credentials.password,
+    });
+    if (result.ok) {
+      setUser({access: result.data.access});
+      localStorage.setItem('refresh', result.data.refresh);
+      setSubmitting(false);
+    } else {
+      //login has failed for some reason
+      console.error('failed login attempt');
+      setSubmitting(false);
+    }
   };
 
   const handleChange = e => {
-    if (e.target.name === 'email') console.log('email change:', e.target.value);
-    if (e.target.name === 'password') console.log('password change:', e.target.value);
+    setCredentials({...credentials, [e.target.name]: e.target.value});
+    console.log(credentials);
+    // if (e.target.name === 'password') console.log('password change:', e.target.value);
   };
 
   return (
@@ -52,8 +67,8 @@ const Signin = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-
-          <Box component="form" onSubmit={handleSubmit} sx={{mt: 1}}>
+          {user && <p>{user.access}</p>}
+          <Box component="form" onSubmit={handleSignin} sx={{mt: 1}}>
             <TextField
               margin="normal"
               required

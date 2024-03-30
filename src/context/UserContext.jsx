@@ -8,11 +8,11 @@ export function UserProvider({children}) {
   const [pageTitle, setPageTitle] = useState('Temp Title');
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState({
+    accessToken: null,
     email: null,
     firstName: null,
     lastName: null,
     role: null,
-    token: null,
   });
 
   const logout = () => {
