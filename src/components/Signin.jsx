@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useNavigate, NavLink} from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
+import {jwtDecode} from 'jwt-decode';
 // Context Stuff
 import {useUser} from '../hooks/useUser'; //import the hgook here to be able to easily import the reqwuired items below from it
 //MUI Imports
@@ -29,14 +30,16 @@ const Signin = () => {
 
   const handleSignin = async e => {
     e.preventDefault();
-    setSubmitting(true);
+    setSubmitting(true); //we can use this variable for the spinner
     const result = await fetchData('/auth/signin', 'POST', {
       email: credentials.email,
       password: credentials.password,
     });
     if (result.ok) {
-      setUser({access: result.data.access});
-      localStorage.setItem('refresh', result.data.refresh);
+      setUser({access: result.data.access}); //set the access token in the user context
+      localStorage.setItem('refresh', result.data.refresh); //set the refresh in local storage
+      const decodedClaims = jwtDecode(result.data.access); //decode the access token
+      setUser({role: decodedClaims.role});
       setSubmitting(false);
     } else {
       //login has failed for some reason
@@ -47,8 +50,6 @@ const Signin = () => {
 
   const handleChange = e => {
     setCredentials({...credentials, [e.target.name]: e.target.value});
-    console.log(credentials);
-    // if (e.target.name === 'password') console.log('password change:', e.target.value);
   };
 
   return (
@@ -67,7 +68,7 @@ const Signin = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          {user && <p>{user.access}</p>}
+          {user && <p>{typeof user.role}</p>}
           <Box component="form" onSubmit={handleSignin} sx={{mt: 1}}>
             <TextField
               margin="normal"

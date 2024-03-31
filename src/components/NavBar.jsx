@@ -3,14 +3,17 @@ import {NavLink} from 'react-router-dom';
 
 //MUI Imports
 import {AppBar, Box, Button, Toolbar, Typography, IconButton, CssBaseline} from '@mui/material';
-import {MenuIcon, AccountCircle} from '@mui/icons-material/Menu';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 //context imports
 import {useUser} from '../hooks/useUser';
 
 const NavBar = () => {
-  const user = {name: 'testName'};
-  const {pageTitle} = useUser();
+  const {pageTitle, logout, user} = useUser();
+  const tempFunc = () => {
+    console.log('temp func');
+  };
+
   return (
     <Fragment>
       <CssBaseline>
@@ -33,28 +36,30 @@ const NavBar = () => {
                 {/* have error on this line but it works so?? */}
                 {pageTitle && pageTitle}
               </Typography>
-              {!user.email && (
+              {!user.role && (
                 <Button color="inherit" component={NavLink} to="signin">
                   Login
                 </Button>
               )}
-              {user.email && (
+              {user.role && (
                 <Button color="inherit" component={NavLink} to="home" onClick={logout}>
                   Logout
                 </Button>
               )}
-              {user.email && (
+              {user.role === 'contributor' && (
                 <Button color="inherit" component={NavLink} to="user">
                   Pich Area
                 </Button>
               )}
-              {!user.email && (
+              {!user.role && (
                 <Button color="inherit" component={NavLink} to="signup">
                   Sign Up
                 </Button>
               )}
-              {user.email && (
-                <AccountCircle onClick={handleClick} sx={{fontSize: 40, marginLeft: 5}} />
+              {user.role && (
+                <Button sx={{m: 1, bgcolor: 'primary.main'}}>
+                  <AccountCircleIcon sx={{color: 'white', fontSize: 'large'}} />
+                </Button>
               )}
             </Toolbar>
           </AppBar>
