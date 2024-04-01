@@ -5,11 +5,14 @@ import {Route, Routes, Navigate, NavLink} from 'react-router-dom';
 
 ///Component Imports
 import LandingPage from './pages/LandingPage';
+import MemberPage from './pages/MemberPage';
 import NotFoundPage from './pages/NotFoundPage';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
+import Success from './components/Success';
+import Cancel from './components/Cancel';
 
 //Context Imports (may need to set the theme here if we want light/dark mode setup)
 
@@ -43,6 +46,10 @@ function App() {
           <Route path="signup" element={<Signup />} />
           <Route path="signin" element={<Signin />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/member" element={<MemberPage />} />
+          // move these routes to be under the a master member page??
+          <Route path="/success" element={<Success />} />
+          <Route path="/cancel" element={<Cancel />} />
         </Routes>
         <Footer />
       </Fragment>
