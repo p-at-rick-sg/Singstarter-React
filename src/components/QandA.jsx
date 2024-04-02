@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
 
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -13,14 +12,23 @@ const QandA = (props) => {
     <>
       <Card variant="outlined" sx={{ maxWidth: 600 }}>
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            date/time
-          </Typography>
+          <Typography variant="body1">Question:</Typography>
+          <Typography variant="body1">{props.question}</Typography>
+          <br />
+          <hr />
 
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            username
-          </Typography>
-          <Typography variant="body2">why do clocks run clockwise?</Typography>
+          {props.answer !== null && (
+            <>
+              <Typography variant="body1">Answer:</Typography>
+              <Typography variant="body1">{props.answer}</Typography>
+            </>
+          )}
+          {props.answer === null && (
+            <>
+              <Typography variant="body1">Answer:</Typography>
+              <Typography variant="body1">Unanswered</Typography>
+            </>
+          )}
         </CardContent>
         <CardActions>
           {props.login && (
