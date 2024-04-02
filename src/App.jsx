@@ -7,6 +7,7 @@ import { Route, Routes, Navigate, NavLink } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import MemberPage from "./pages/MemberPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ProjectPage from "./pages/ProjectPage";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Signup from "./components/Signup";
@@ -47,6 +48,7 @@ function App() {
           <Route path="signin" element={<Signin />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/member" element={<MemberPage />} />
+          <Route path="/project" element={<ProjectPage />} />
           // move these routes to be under the a master member page??
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
