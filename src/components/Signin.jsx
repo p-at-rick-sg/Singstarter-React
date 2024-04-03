@@ -23,9 +23,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const Signin = () => {
   const fetchData = useFetch();
-  const {pageTitle, setPageTitle, user, setUser, setAuthenticated} = useUser(); // comes from user context
+  const {pageTitle, setPageTitle, user, setUser} = useUser(); // comes from user context
   const [credentials, setCredentials] = useState({email: '', password: ''});
   const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignin = async e => {
     e.preventDefault();
@@ -35,11 +36,12 @@ const Signin = () => {
       password: credentials.password,
     });
     if (result.ok) {
-      setUser({access: result.data.access}); //set the access token in the user context
+      console.log(result.data.access);
       localStorage.setItem('refresh', result.data.refresh); //set the refresh in local storage
       const decodedClaims = jwtDecode(result.data.access); //decode the access token
-      setUser({role: decodedClaims.role});
+      setUser({...user, role: decodedClaims.role, accessToken: result.data.access});
       setSubmitting(false);
+      navigate('/member');
     } else {
       //login has failed for some reason
       console.error('failed login attempt');

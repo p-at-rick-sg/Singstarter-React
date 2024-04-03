@@ -13,6 +13,7 @@ export function UserProvider({children}) {
     firstName: null,
     lastName: null,
     role: null,
+    createdDate: null,
   });
 
   const logout = () => {

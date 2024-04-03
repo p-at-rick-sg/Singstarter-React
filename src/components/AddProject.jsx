@@ -2,29 +2,17 @@ import {useEffect, useState} from 'react';
 import useFetch from '../hooks/useFetch';
 //MUI Imports
 import {
-  Avatar,
   Button,
   TextField,
-  FormControlLabel,
-  Checkbox,
-  Link,
   Grid,
   Box,
   Container,
   Typography,
   CssBaseline,
   InputAdornment,
-  ListItem,
-  List,
-  ListItemIcon,
-  ListItemButton,
-  ListItemText,
   InputLabel,
 } from '@mui/material';
-import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
-
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
-import {Dayjs} from 'dayjs';
 
 //Context
 import {useUser} from '../hooks/useUser';
@@ -42,10 +30,6 @@ const AddProject = () => {
   });
   const [endDate, setEndDate] = useState(null);
   const [image, setImage] = useState(null);
-
-  useEffect(() => {
-    setPageTitle('Add Project');
-  }, []);
 
   const handleChange = e => {
     setNewProject({...newProject, [e.target.name]: e.target.value});
@@ -76,7 +60,6 @@ const AddProject = () => {
       requestOptions
     );
     const data = await result.json();
-    console.log(data);
   };
 
   const addProject = async () => {
@@ -117,7 +100,6 @@ const AddProject = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              border: '1px solid black', //remove once layout looks OK
             }}>
             {/* <Avatar sx={{m: 1, bgcolor: 'primary.main'}}>
             <LockOutlinedIcon sx={{color: 'inherit'}} />

@@ -1,5 +1,100 @@
+import {useEffect, useState} from 'react';
+import {useUser} from '../hooks/useUser';
+import useFetch from '../hooks/useFetch';
+//MUI Imports
+import {
+  Avatar,
+  Button,
+  TextField,
+  Grid,
+  Box,
+  Container,
+  Typography,
+  CssBaseline,
+  InputAdornment,
+  InputLabel,
+} from '@mui/material';
+
 const ContributorHome = () => {
-  return <></>;
+  const {user, setUser, setPageTitle} = useUser();
+  const fetchData = useFetch();
+  const [projects, setProjects] = useState([]);
+
+  const populateUser = async () => {
+    const result = await fetchData('/api/users', 'GET', undefined, user.accessToken);
+    console.log('names: ', result.data.firstName, result.data.lastName);
+    setUser({...user, firstName: result.data.firstName, createdDate: result.data.createdDate});
+    console.log(user);
+  };
+
+  const populateProjects = async () => {
+    const result = await fetchData('/api/projects/myProjects', 'GET', undefined, user.accessToken);
+  };
+
+  useEffect(() => {
+    setPageTitle('Contributor Home');
+  }, []);
+
+  useEffect(() => {
+    populateUser();
+    populateProjects();
+  }, []);
+
+  return (
+    <>
+      {user.email}
+      <Container component="main" maxWidth="m">
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            border: '1px solid black', //remove once layout looks OK
+          }}>
+          {user.accessToke && (
+            <Typography component="h1" variant="h5" sx={{color: 'primary.main'}}>
+              Welcome back {user.accessToken}
+            </Typography>
+          )}
+          <Grid container spacing={2}>
+            <Grid container item xs={6} direction="column">
+              <Grid item xs={12} sm={6}>
+                <Typography
+                  component="h2"
+                  variant="h5"
+                  sx={{color: 'primary.main', fontWeight: '600'}}>
+                  Your Projects
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid container item xs={6} direction="column">
+              <Grid item xs={12} sm={6}>
+                <Typography
+                  component="h2"
+                  variant="h5"
+                  sx={{color: 'primary.main', fontWeight: '600'}}>
+                  Questions & Answers
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    </>
+  );
 };
 
 export default ContributorHome;
+
+{
+  /* <Grid item xs={8} sm={5}>
+<Button
+  type="submit"
+  fullWidth
+  variant="contained"
+  sx={{mt: 3, mb: 2, margin: '5px'}}>
+  Add my Project
+</Button>
+</Grid> */
+}

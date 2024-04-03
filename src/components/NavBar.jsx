@@ -42,8 +42,8 @@ const NavBar = () => {
                 </Button>
               )}
               {user.role === 'contributor' && (
-                <Button color="inherit" component={NavLink} to="user">
-                  Pich Area
+                <Button color="inherit" component={NavLink} to="member">
+                  Member Area
                 </Button>
               )}
               {!user.role && (
@@ -52,7 +52,7 @@ const NavBar = () => {
                 </Button>
               )}
               {user.role && (
-                <IconButton sx={{m: 1, bgcolor: 'primary.main'}}>
+                <IconButton sx={{m: 1, bgcolor: 'footer.text'}}>
                   <AccountCircleIcon sx={{color: 'white', fontSize: 'large'}} />
                 </IconButton>
               )}

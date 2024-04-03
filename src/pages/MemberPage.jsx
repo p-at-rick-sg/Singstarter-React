@@ -1,10 +1,11 @@
-import StripePayment from '../components/StripePayment';
+import ContributorHome from '../components/ContributorHome';
 
 const MemberPage = () => {
   return (
     <div>
       <p>Main Member page (logged in) placeholder</p>
-      <StripePayment />
+      {/* TODO: add logic here to display the user or contreinutor page depending on the role  */}
+      <ContributorHome />
     </div>
   );
 };
