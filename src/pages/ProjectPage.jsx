@@ -1,24 +1,29 @@
-import React, {useEffect, useRef, useState} from 'react';
-import QandA from '../components/QandA';
-import useFetch from '../hooks/useFetch';
+import React, { useEffect, useRef, useState } from "react";
+import QandA from "../components/QandA";
+import useFetch from "../hooks/useFetch";
+import { useUser } from "../hooks/useUser";
+
 // mui
-import {Paper, List, Button, TextField} from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { Paper, List } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
 
 const ProjectPage = () => {
-  // pretend this is usercontext for now
-  const [login, setLogin] = useState(true);
   const [qAndA, setQandA] = useState([]);
+  const [questionInput, setQuestionInput] = useState();
+  const user = useUser();
+  // user.accessToken to use access token
 
-  const questionRef = useRef('');
+  const questionRef = useRef("");
 
   const fetchData = useFetch();
 
   const getQandA = async () => {
     try {
       const res = await fetchData(
-        '/api/projects/qa/' + '6700ddf51fd1162aae22ea20',
-        'GET',
+        "/api/projects/qa/" + "6700ddf51fd1162aae22ea20",
+        "GET",
         undefined,
         undefined
       );
@@ -33,18 +38,27 @@ const ProjectPage = () => {
     } catch (error) {}
   };
 
-  const askQuestion = async () => {
+  // TODO
+  // -[x] user context for login state
+  // -[x] add question to project using project id
+  // -[x] add answer to question using question id
+  // -[] toast for asking question when not logged in
+  // -[x] answer question button should only appear when logged in as contributor
+
+  const addQuestion = async () => {
     try {
       const res = await fetchData(
-        '/api/projects/qa/' + '6700ddf51fd1162aae22ea20',
-        'PATCH',
-        {question: questionRef.current.value},
-        undefined
+        // DON'T FORGET TO change the concat id to a propped value
+        "/api/projects/q/" + "6700ddf51fd1162aae22ea20",
+        "PATCH",
+        { question: questionRef.current.value },
+        user.user.accessToken
       );
 
       if (res.ok) {
-        setQandA(res.data);
-        console.log(`Projects fetched successfully`);
+        console.log(`question added successfully`);
+        getQandA();
+        setQuestionInput("");
       } else {
         alert(JSON.stringify(res.data));
         console.log(res.data);
@@ -58,11 +72,18 @@ const ProjectPage = () => {
     <>
       <h1>Questions</h1>
 
-      <Paper style={{maxHeight: 400, maxWidth: 620, overflow: 'auto'}}>
+      <Paper style={{ maxHeight: 400, maxWidth: 620, overflow: "auto" }}>
         <List>
-          {qAndA.map(item => {
+          {qAndA.map((item) => {
             console.log(item);
-            return <QandA login={login} question={item.question} answer={item.answer} />;
+            return (
+              <QandA
+                question={item.question}
+                answer={item.answer}
+                id={item._id}
+                getQandA={getQandA}
+              />
+            );
           })}
         </List>
       </Paper>
@@ -74,36 +95,26 @@ const ProjectPage = () => {
       <TextField
         id="standard-multiline-flexible"
         inputRef={questionRef}
+        value={questionInput}
         label="Ask a question"
         multiline
         maxRows={5}
         variant="standard"
         fullWidth
-        sx={{maxWidth: 600}}
+        sx={{ maxWidth: 600 }}
       />
 
       <Button
         variant="outlined"
         onClick={() => {
-          if (!login) {
-            alert(`redirect to login/signup page`);
+          if (user.user.role === "contributor" || user.user.role === "user") {
+            addQuestion();
           } else {
-            getProjects();
+            console.log(`dog`);
           }
-        }}>
+        }}
+      >
         Ask
-      </Button>
-
-      <Button
-        variant="outlined"
-        onClick={() => {
-          if (!login) {
-            alert(`redirect to login/signup page`);
-          } else {
-            console.log(questionRef.current.value);
-          }
-        }}>
-        test
       </Button>
     </>
   );
