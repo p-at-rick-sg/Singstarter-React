@@ -13,11 +13,13 @@ import {
   Container,
   Typography,
   CssBaseline,
+  InputAdornment,
   ListItem,
   List,
   ListItemIcon,
   ListItemButton,
   ListItemText,
+  InputLabel,
 } from '@mui/material';
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
 
@@ -36,6 +38,7 @@ const AddProject = () => {
     description: '',
     target: 0,
     images: null,
+    imageDescription: null,
   });
   const [endDate, setEndDate] = useState(null);
   const [image, setImage] = useState(null);
@@ -51,15 +54,15 @@ const AddProject = () => {
   const handleFile = async e => {
     setImage(e.target.files[0]);
   };
-
-  const uploadImage = async () => {
+  //Using a standard fetch for now - may upodate the hook tomorrow to accomodate the application type required
+  const uploadImage = async projectID => {
     const myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbnRyaWJ1dG9yQHRlc3QuY29tIiwicm9sZSI6ImNvbnRyaWJ1dG9yIiwiaWQiOiI2NzAwZGU2YjFmZDExNjJhYWUyMmZmMzAiLCJpYXQiOjE3MTIxMzY5MDcsImV4cCI6MTcxMjEzODcwNywianRpIjoiOWRlYWU4MjYtMWYzOC00NGJkLTkyYzYtZWZhMDRjZjM5NTFkIn0.CyTUDaW7S77Cpu5AClPYQGB4fwilZa4Uy3rnVNCOeNk'
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbnRyaWJ1dG9yQHRlc3QuY29tIiwicm9sZSI6ImNvbnRyaWJ1dG9yIiwiaWQiOiI2NzAwZGU2YjFmZDExNjJhYWUyMmZmMzAiLCJpYXQiOjE3MTIxNDc3MjEsImV4cCI6MTcxMjE0OTUyMSwianRpIjoiNWM0ZTYwNjEtNmJlZC00ZTYwLWJiMmMtMmM5NTNkYmFlZDE1In0.TcvlWSrWS6ddg6zPQJVqK1Wc87zEmCKTCNekgth8isg'
     );
     const formdata = new FormData();
-    formdata.append('image', image, 'test-image.jpg');
+    formdata.append('image', image, 'test-image.jpg'); //change out for description variable once fully tested
 
     const requestOptions = {
       method: 'POST',
@@ -69,7 +72,7 @@ const AddProject = () => {
     };
 
     const result = await fetch(
-      'http://localhost:7001/api/projects/uploadAsset/6700ddf51fd1162aae22ea20',
+      'http://localhost:7001/api/projects/uploadAsset/' + projectID,
       requestOptions
     );
     const data = await result.json();
@@ -83,14 +86,13 @@ const AddProject = () => {
       target: newProject.target,
     };
     if (endDate) body.endDate = endDate;
-    console.log(body);
     const result = await fetchData(
       '/api/projects',
       'PUT',
       body,
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbnRyaWJ1dG9yQHRlc3QuY29tIiwicm9sZSI6ImNvbnRyaWJ1dG9yIiwiaWQiOiI2NzAwZGU2YjFmZDExNjJhYWUyMmZmMzAiLCJpYXQiOjE3MTIxMzY5MDcsImV4cCI6MTcxMjEzODcwNywianRpIjoiOWRlYWU4MjYtMWYzOC00NGJkLTkyYzYtZWZhMDRjZjM5NTFkIn0.CyTUDaW7S77Cpu5AClPYQGB4fwilZa4Uy3rnVNCOeNk'
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbnRyaWJ1dG9yQHRlc3QuY29tIiwicm9sZSI6ImNvbnRyaWJ1dG9yIiwiaWQiOiI2NzAwZGU2YjFmZDExNjJhYWUyMmZmMzAiLCJpYXQiOjE3MTIxNDc3MjEsImV4cCI6MTcxMjE0OTUyMSwianRpIjoiNWM0ZTYwNjEtNmJlZC00ZTYwLWJiMmMtMmM5NTNkYmFlZDE1In0.TcvlWSrWS6ddg6zPQJVqK1Wc87zEmCKTCNekgth8isg'
     );
-    uploadImage();
+    uploadImage(result.data.id);
   };
 
   const handleSubmit = e => {
@@ -128,7 +130,6 @@ const AddProject = () => {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
-                    fullWidth
                     required
                     id="title"
                     label="Project Title"
@@ -136,19 +137,23 @@ const AddProject = () => {
                     autoFocus
                     value={newProject.title}
                     onChange={handleChange}
+                    sx={{width: '90%'}}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={6} sx={{textAlign: 'right'}}>
                   <TextField
                     margin="normal"
-                    fullWidth
                     required
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">S$</InputAdornment>,
+                    }}
                     id="target"
                     label="Funding Target"
                     name="target"
                     autoFocus
                     value={newProject.target}
                     onChange={handleChange}
+                    sx={{width: '90%'}}
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
@@ -175,10 +180,10 @@ const AddProject = () => {
                   alignItems="center"
                   justifyContent="center">
                   <Grid item xs={12} sm={4}>
-                    <TextField
+                    <InputLabel htmlFor="image">Select A Main Image</InputLabel>
+                    <input
                       type="file"
                       margin="normal"
-                      sx={{marginTop: '5px'}}
                       required
                       id="image"
                       label="Upload Images"
@@ -201,7 +206,7 @@ const AddProject = () => {
                       onChange={handleChange}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={4} sx={{textAlign: 'right'}}>
                     <DatePicker
                       sx={{}}
                       id="endDate"
