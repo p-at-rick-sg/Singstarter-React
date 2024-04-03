@@ -1,33 +1,47 @@
-import {Fragment} from 'react';
-import {NavLink, Link} from 'react-router-dom';
+import { Fragment } from "react";
+import { NavLink, Link } from "react-router-dom";
 
 //MUI Imports
-import {AppBar, Box, Button, Toolbar, Typography, IconButton, CssBaseline} from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {
+  AppBar,
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+  IconButton,
+  CssBaseline,
+} from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 //context imports
-import {useUser} from '../hooks/useUser';
+import { useUser } from "../hooks/useUser";
 
 const NavBar = () => {
-  const {pageTitle, logout, user} = useUser();
+  const { pageTitle, logout, user } = useUser();
   const tempFunc = () => {
-    console.log('temp func');
+    console.log("temp func");
   };
 
   return (
     <Fragment>
       <CssBaseline>
-        <Box sx={{flexgrow: 1}}>
+        <Box sx={{ flexgrow: 1 }}>
           <AppBar position="static">
             <Toolbar>
               <Link to="/home">
-                <img src="/src/image/Cropped.png" alt="SingStarter" width="200" height="200"></img>
+                <img
+                  src="/src/image/Cropped.png"
+                  alt="SingStarter"
+                  width="200"
+                  height="200"
+                ></img>
               </Link>
 
               <Typography
                 variant="h6"
                 component="div"
-                sx={{display: {xs: 'none', sm: 'inline'}, flexGrow: 1}}>
+                sx={{ display: { xs: "none", sm: "inline" }, flexGrow: 1 }}
+              >
                 {/* have error on this line but it works so?? */}
                 {pageTitle && pageTitle}
               </Typography>
@@ -37,23 +51,37 @@ const NavBar = () => {
                 </Button>
               )}
               {user.role && (
-                <Button color="inherit" component={NavLink} to="home" onClick={logout}>
+                <Button
+                  color="inherit"
+                  component={NavLink}
+                  to="home"
+                  onClick={logout}
+                >
                   Logout
                 </Button>
               )}
-              {user.role === 'contributor' && (
+              {user.role === "contributor" && (
                 <Button color="inherit" component={NavLink} to="member">
                   Member Area
                 </Button>
               )}
+
+              {user.role === "contributor" && (
+                <Button color="inherit" component={NavLink} to="project">
+                  Project test
+                </Button>
+              )}
+
               {!user.role && (
                 <Button color="inherit" component={NavLink} to="signup">
                   Sign Up
                 </Button>
               )}
               {user.role && (
-                <IconButton sx={{m: 1, bgcolor: 'footer.text'}}>
-                  <AccountCircleIcon sx={{color: 'white', fontSize: 'large'}} />
+                <IconButton sx={{ m: 1, bgcolor: "footer.text" }}>
+                  <AccountCircleIcon
+                    sx={{ color: "white", fontSize: "large" }}
+                  />
                 </IconButton>
               )}
             </Toolbar>
