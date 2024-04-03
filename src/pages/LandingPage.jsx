@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import HeroHome from "../components/HeroHome";
 import HomeCard from "../components/HomeCard";
 
-const LandingPage = () => {
+const LandingPage = (props) => {
   return (
     <>
       <HeroHome></HeroHome>
@@ -13,7 +13,10 @@ const LandingPage = () => {
               Recent Kick Starter Projects
             </h2>
           </div>
-          <HomeCard></HomeCard>
+          <HomeCard
+            createdDate={props.createdDate}
+            getProject={props.getProject}
+          />
         </div>
       </div>
     </>
