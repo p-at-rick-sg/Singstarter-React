@@ -17,7 +17,6 @@ import {
   Container,
   Typography,
 } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 // Component Imports
@@ -68,7 +67,6 @@ const Signin = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          {user && <p>{typeof user.role}</p>}
           <Box component="form" onSubmit={handleSignin} sx={{mt: 1}}>
             <TextField
               margin="normal"

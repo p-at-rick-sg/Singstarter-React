@@ -1,26 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import QandA from "../components/QandA";
-import useFetch from "../hooks/useFetch";
+import React, {useEffect, useRef, useState} from 'react';
+import QandA from '../components/QandA';
+import useFetch from '../hooks/useFetch';
 // mui
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { Paper, List } from "@mui/material";
-import Snackbar from "@mui/material/Snackbar";
+import {Paper, List, Button, TextField} from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
 
 const ProjectPage = () => {
   // pretend this is usercontext for now
   const [login, setLogin] = useState(true);
   const [qAndA, setQandA] = useState([]);
 
-  const questionRef = useRef("");
+  const questionRef = useRef('');
 
   const fetchData = useFetch();
 
   const getQandA = async () => {
     try {
       const res = await fetchData(
-        "/api/projects/qa/" + "6700ddf51fd1162aae22ea20",
-        "GET",
+        '/api/projects/qa/' + '6700ddf51fd1162aae22ea20',
+        'GET',
         undefined,
         undefined
       );
@@ -38,9 +36,9 @@ const ProjectPage = () => {
   const askQuestion = async () => {
     try {
       const res = await fetchData(
-        "/api/projects/qa/" + "6700ddf51fd1162aae22ea20",
-        "PATCH",
-        { question: questionRef.current.value },
+        '/api/projects/qa/' + '6700ddf51fd1162aae22ea20',
+        'PATCH',
+        {question: questionRef.current.value},
         undefined
       );
 
@@ -60,17 +58,11 @@ const ProjectPage = () => {
     <>
       <h1>Questions</h1>
 
-      <Paper style={{ maxHeight: 400, maxWidth: 620, overflow: "auto" }}>
+      <Paper style={{maxHeight: 400, maxWidth: 620, overflow: 'auto'}}>
         <List>
-          {qAndA.map((item) => {
+          {qAndA.map(item => {
             console.log(item);
-            return (
-              <QandA
-                login={login}
-                question={item.question}
-                answer={item.answer}
-              />
-            );
+            return <QandA login={login} question={item.question} answer={item.answer} />;
           })}
         </List>
       </Paper>
@@ -87,7 +79,7 @@ const ProjectPage = () => {
         maxRows={5}
         variant="standard"
         fullWidth
-        sx={{ maxWidth: 600 }}
+        sx={{maxWidth: 600}}
       />
 
       <Button
@@ -98,8 +90,7 @@ const ProjectPage = () => {
           } else {
             getProjects();
           }
-        }}
-      >
+        }}>
         Ask
       </Button>
 
@@ -111,8 +102,7 @@ const ProjectPage = () => {
           } else {
             console.log(questionRef.current.value);
           }
-        }}
-      >
+        }}>
         test
       </Button>
     </>
