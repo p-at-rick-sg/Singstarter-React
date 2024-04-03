@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useUser} from '../hooks/useUser';
 import useFetch from '../hooks/useFetch';
 //MUI Imports
@@ -19,6 +20,7 @@ const ContributorHome = () => {
   const {user, setUser, setPageTitle} = useUser();
   const fetchData = useFetch();
   const [projects, setProjects] = useState([]);
+  const navigate = useNavigate();
 
   const populateUser = async () => {
     const result = await fetchData('/api/users', 'GET', undefined, user.accessToken);
@@ -52,9 +54,21 @@ const ContributorHome = () => {
             alignItems: 'center',
             border: '1px solid black', //remove once layout looks OK
           }}>
-          {user.accessToke && (
+          <Grid container spacing={2}>
+            <Grid container item xs={6} direction="column"></Grid>
+            <Grid item xs={8} sm={5} sx={{textAlign: 'right'}}>
+              <Button
+                variant="contained"
+                sx={{mt: 3, mb: 2, mr: -7}}
+                onClick={() => navigate('/member/add')}>
+                Add Project
+              </Button>
+            </Grid>
+          </Grid>
+
+          {user.accessToken && (
             <Typography component="h1" variant="h5" sx={{color: 'primary.main'}}>
-              Welcome back {user.accessToken}
+              Welcome back {user.firstName}
             </Typography>
           )}
           <Grid container spacing={2}>
