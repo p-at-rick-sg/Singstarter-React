@@ -18,6 +18,7 @@ export function UserProvider({children}) {
 
   const logout = () => {
     console.log('logout function');
+    sessionStorage.clear('access');
   };
 
   //here  are the items we will pass to the context

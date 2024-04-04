@@ -24,9 +24,9 @@ const ContributorHome = () => {
 
   const populateUser = async () => {
     const result = await fetchData('/api/users', 'GET', undefined, user.accessToken);
-    console.log('names: ', result.data.firstName, result.data.lastName);
+    console.log('names: ', result.data.firstName, result.data.lastName, result.data.createdDate);
     setUser({...user, firstName: result.data.firstName, createdDate: result.data.createdDate});
-    console.log(user);
+    console.log(user.accessToken);
   };
 
   const populateProjects = async () => {
@@ -44,8 +44,8 @@ const ContributorHome = () => {
 
   return (
     <>
-      {user.email}
       <Container component="main" maxWidth="m">
+        {user.accessToken}
         <Box
           sx={{
             marginTop: 8,
