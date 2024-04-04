@@ -40,11 +40,9 @@ const AddProject = () => {
   };
   //Using a standard fetch for now - may upodate the hook tomorrow to accomodate the application type required
   const uploadImage = async projectID => {
+    console.log(projectID);
     const myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbnRyaWJ1dG9yQHRlc3QuY29tIiwicm9sZSI6ImNvbnRyaWJ1dG9yIiwiaWQiOiI2NzAwZGU2YjFmZDExNjJhYWUyMmZmMzAiLCJpYXQiOjE3MTIxNDc3MjEsImV4cCI6MTcxMjE0OTUyMSwianRpIjoiNWM0ZTYwNjEtNmJlZC00ZTYwLWJiMmMtMmM5NTNkYmFlZDE1In0.TcvlWSrWS6ddg6zPQJVqK1Wc87zEmCKTCNekgth8isg'
-    );
+    myHeaders.append('Authorization', 'Bearer ' + user.accessToken);
     const formdata = new FormData();
     formdata.append('image', image, 'test-image.jpg'); //change out for description variable once fully tested
 
@@ -69,13 +67,9 @@ const AddProject = () => {
       target: newProject.target,
     };
     if (endDate) body.endDate = endDate;
-    const result = await fetchData(
-      '/api/projects',
-      'PUT',
-      body,
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbnRyaWJ1dG9yQHRlc3QuY29tIiwicm9sZSI6ImNvbnRyaWJ1dG9yIiwiaWQiOiI2NzAwZGU2YjFmZDExNjJhYWUyMmZmMzAiLCJpYXQiOjE3MTIxNDc3MjEsImV4cCI6MTcxMjE0OTUyMSwianRpIjoiNWM0ZTYwNjEtNmJlZC00ZTYwLWJiMmMtMmM5NTNkYmFlZDE1In0.TcvlWSrWS6ddg6zPQJVqK1Wc87zEmCKTCNekgth8isg'
-    );
-    uploadImage(result.data.id);
+    const result = await fetchData('/api/projects', 'PUT', body, user.accessToken);
+    console.log(result);
+    uploadImage(result.data.id); //passes the project id to the upload
   };
 
   const handleSubmit = e => {
@@ -93,6 +87,7 @@ const AddProject = () => {
   return (
     <>
       <CssBaseline>
+        {user.accessToken}
         <Container component="main" maxWidth="m">
           <Box
             sx={{

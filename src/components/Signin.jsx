@@ -28,6 +28,22 @@ const Signin = () => {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  //check logged in session data and bypass login if exists
+  const checkSession = () => {
+    console.log('checking session');
+    if (sessionStorage.getItem('access') !== null) {
+      console.log('data in session storage, bypassing login');
+      const sessionAccess = sessionStorage.getItem('access');
+      const role = sessionStorage.getItem('role');
+      setUser({...user, accessToken: sessionAccess, role: role});
+      navigate('/member');
+    }
+  };
+
+  useEffect(() => {
+    checkSession();
+  }, []);
+
   const handleSignin = async e => {
     e.preventDefault();
     setSubmitting(true); //we can use this variable for the spinner
@@ -39,6 +55,8 @@ const Signin = () => {
       localStorage.setItem('refresh', result.data.refresh); //set the refresh in local storage
       const decodedClaims = jwtDecode(result.data.access); //decode the access token
       setUser({...user, role: decodedClaims.role, accessToken: result.data.access});
+      sessionStorage.setItem('access', result.data.access);
+      sessionStorage.setItem('role', decodedClaims.role);
       setSubmitting(false);
       navigate('/member');
     } else {
