@@ -17,20 +17,31 @@ import {
 } from '@mui/material';
 
 const ContributorHome = () => {
-  const {user, setUser, setPageTitle} = useUser();
+  const {user, setUser, checkSession, setPageTitle} = useUser();
   const fetchData = useFetch();
   const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    checkSession();
+  }, []);
+
   const populateUser = async () => {
-    const result = await fetchData('/api/users', 'GET', undefined, user.accessToken);
-    console.log('names: ', result.data.firstName, result.data.lastName, result.data.createdDate);
-    setUser({...user, firstName: result.data.firstName, createdDate: result.data.createdDate});
-    console.log(user.accessToken);
+    if (user.accessToken) {
+      const result = await fetchData('/api/users', 'GET', undefined, user.accessToken);
+      setUser({...user, firstName: result.data.firstName, createdDate: result.data.createdDate});
+    }
   };
 
   const populateProjects = async () => {
-    const result = await fetchData('/api/projects/myProjects', 'GET', undefined, user.accessToken);
+    if (user.accessToken) {
+      const result = await fetchData(
+        '/api/projects/myProjects',
+        'GET',
+        undefined,
+        user.accessToken
+      );
+    }
   };
 
   useEffect(() => {
@@ -45,7 +56,7 @@ const ContributorHome = () => {
   return (
     <>
       <Container component="main" maxWidth="m">
-        {user.accessToken}
+        {user.role}
         <Box
           sx={{
             marginTop: 8,

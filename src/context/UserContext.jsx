@@ -16,9 +16,20 @@ export function UserProvider({children}) {
     createdDate: null,
   });
 
+  const checkSession = async () => {
+    console.log('checking session: ', sessionStorage.getItem('role'));
+    if (sessionStorage.getItem('access') !== null) {
+      const sessionAccess = await sessionStorage.getItem('access');
+      const role = await sessionStorage.getItem('role');
+      await setUser({...user, accessToken: sessionAccess, role: role});
+      if (role === 'user') navigate('/');
+    }
+  };
+
   const logout = () => {
     console.log('logout function');
     sessionStorage.clear('access');
+    sessionStorage.clear('role');
   };
 
   //here  are the items we will pass to the context
@@ -30,6 +41,7 @@ export function UserProvider({children}) {
     user,
     setUser,
     logout,
+    checkSession,
   };
 
   //return the context provider below using thew value object above

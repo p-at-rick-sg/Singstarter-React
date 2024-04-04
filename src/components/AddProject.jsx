@@ -29,35 +29,36 @@ const AddProject = () => {
     imageDescription: null,
   });
   const [endDate, setEndDate] = useState(null);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState({
+    file: null,
+    name: null,
+  });
 
   const handleChange = e => {
     setNewProject({...newProject, [e.target.name]: e.target.value});
   };
 
   const handleFile = async e => {
-    setImage(e.target.files[0]);
+    setImage({...image, file: e.target.files[0], name: e.target.files[0].name});
+    // setImage(e.target.files[0]);
+    // setImageName(e.target.files[0].name);
   };
   //Using a standard fetch for now - may upodate the hook tomorrow to accomodate the application type required
   const uploadImage = async projectID => {
-    console.log(projectID);
     const myHeaders = new Headers();
     myHeaders.append('Authorization', 'Bearer ' + user.accessToken);
     const formdata = new FormData();
-    formdata.append('image', image, 'test-image.jpg'); //change out for description variable once fully tested
-
+    formdata.append('image', image.file, image.name); //change out for description variable once fully tested
     const requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: formdata,
       redirect: 'follow',
     };
-
     const result = await fetch(
       'http://localhost:7001/api/projects/uploadAsset/' + projectID,
       requestOptions
     );
-    const data = await result.json();
   };
 
   const addProject = async () => {
@@ -68,12 +69,10 @@ const AddProject = () => {
     };
     if (endDate) body.endDate = endDate;
     const result = await fetchData('/api/projects', 'PUT', body, user.accessToken);
-    console.log(result);
-    uploadImage(result.data.id); //passes the project id to the upload
+    uploadImage(result.data.id);
   };
 
   const handleSubmit = e => {
-    console.log('submit function');
     e.preventDefault();
     addProject();
     const formData = new FormData();
