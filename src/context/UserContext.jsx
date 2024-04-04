@@ -1,4 +1,5 @@
 import {createContext, useEffect, useState} from 'react';
+
 import {createTheme} from '@mui/material';
 
 export const UserContext = createContext();
@@ -22,7 +23,6 @@ export function UserProvider({children}) {
       const sessionAccess = await sessionStorage.getItem('access');
       const role = await sessionStorage.getItem('role');
       await setUser({...user, accessToken: sessionAccess, role: role});
-      if (role === 'user') navigate('/');
     }
   };
 
@@ -30,6 +30,14 @@ export function UserProvider({children}) {
     console.log('logout function');
     sessionStorage.clear('access');
     sessionStorage.clear('role');
+    setUser({
+      accessToken: null,
+      email: null,
+      firstName: null,
+      lastName: null,
+      role: null,
+      createdDate: null,
+    });
   };
 
   //here  are the items we will pass to the context
