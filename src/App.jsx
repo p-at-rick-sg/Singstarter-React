@@ -13,6 +13,7 @@ import Signin from './components/Signin';
 import Success from './components/Success';
 import Cancel from './components/Cancel';
 import AddProject from './components/AddProject';
+import ProfileManager from './components/ProfileManager';
 //Context Imports (may need to set the theme here if we want light/dark mode setup)
 import {useUser} from './hooks/useUser';
 //MUI Stuff
@@ -43,7 +44,6 @@ function App() {
     checkSession();
   }, []);
 
-  console.log(user.role);
   if (user.role === 'contributor') {
     return (
       <ThemeProvider theme={userTheme}>
@@ -57,6 +57,7 @@ function App() {
               <Route path="/member" element={<MemberPage />} />
               <Route path="/member/add" element={<AddProject />} />
               <Route path="/project" element={<ProjectPage />} />
+              <Route path="/profile" element={<ProfileManager />} />
             </Routes>
             <Footer />
           </Fragment>
@@ -74,6 +75,7 @@ function App() {
               <Route path="home" element={<LandingPage />} />
               <Route path="*" element={<NotFoundPage />} />
               <Route path="/project" element={<ProjectPage />} />
+              <Route path="/profile" element={<ProfileManager />} />
               {/* move these routes to be under the a master member page?? */}
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
