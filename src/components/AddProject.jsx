@@ -69,12 +69,10 @@ const AddProject = () => {
     };
     if (endDate) body.endDate = endDate;
     const result = await fetchData('/api/projects', 'PUT', body, user.accessToken);
-    console.log(result);
     uploadImage(result.data.id);
   };
 
   const handleSubmit = e => {
-    console.log('submit function');
     e.preventDefault();
     addProject();
     const formData = new FormData();
