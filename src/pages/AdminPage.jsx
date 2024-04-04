@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { useUser } from "../hooks/useUser";
-
+import { format } from "date-fns";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,54 +24,20 @@ import {
   randomArrayItem,
 } from "@mui/x-data-grid-generator";
 
-// const AdminPage = () => {
-//   const [users, setUsers] = useState([]);
-//   const fetchData = useFetch();
-
-//   const getAllUser = async () => {
-//     try {
-//       const res = await fetchData("/api/users/all", "GET");
-//       if (res.ok) {
-//         setUsers(res.data);
-//         console.log("Users fetched successfully");
-//       } else {
-//         console.log(res.data);
-//       }
-//     } catch (error) {}
-//   };
-
-//   useEffect(() => {
-//     getAllUser();
-//   }, []);
-
-//   return <></>;
-// };
-
 const roles = ["Market", "Finance", "Development"];
 const randomRole = () => {
   return randomArrayItem(roles);
 };
-
-// {
-//   user.map((user) => {
-//     <div
-//       key={user._id}
-//       _id={user.id}
-//       email={user.email}
-//       firstName={user.firstName}
-//       lastName={user.lastName}
-//       role={user.role}
-//       active={user.active}
-//     />;
-//   });
-// }
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
   const handleClick = () => {
     const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: "", age: "", isNew: true }]);
+    setRows((oldRows) => [
+      ...oldRows,
+      { id, name: "", email: "", isNew: true },
+    ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
@@ -150,7 +116,6 @@ const AdminPage = () => {
       const res = await fetchData("/api/users/all", "GET");
       if (res.ok) {
         setUsers(res.data);
-
         console.log("Users fetched successfully");
       } else {
         console.log(res.data);
@@ -162,18 +127,23 @@ const AdminPage = () => {
     getAllUser();
   }, []);
 
-  const initialRows = users.map((user) => ({
-    id: user._id,
-    name: `${user.firstName} ${user.lastName}`, // Combining firstName and lastName
-    age: 25, // Assuming a static age, adjust as needed
-    joinDate: user.joinDate, // Assuming this exists, replace with your method if needed
-    role: user.role,
-    // Assuming 'active' status is part of the object you want to include, adjust accordingly
-    active: user.active,
-  }));
+  useEffect(() => {
+    const transformedRows = users.map((user) => ({
+      id: user._id,
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.email,
+      joinDate: user.createdDate
+        ? format(new Date(user.createdDate), "dd/MM/yyyy")
+        : "Unknown Date",
+      role: user.role,
+      active: user.active,
+    }));
 
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+    setRows(transformedRows);
+  }, [users]); // This effect depends on the users state
+
+  const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -215,32 +185,46 @@ const AdminPage = () => {
     setRowModesModel(newRowModesModel);
   };
 
+  const [filterModel, setFilterModel] = useState({
+    items: [],
+  });
+
   const columns = [
-    { field: "name", headerName: "Name", width: 180, editable: true },
+    { field: "name", headerName: "Name", width: 200, editable: true },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      width: 80,
+      field: "email",
+      headerName: "Email",
+      type: "String",
+      width: 200,
       align: "left",
       headerAlign: "left",
-      editable: true,
+      editable: false,
     },
     {
       field: "joinDate",
       headerName: "Join date",
-      type: "date",
-      width: 180,
+      type: "String",
+      width: 150,
       editable: true,
     },
     {
       field: "role",
       headerName: "Role",
-      width: 220,
+      width: 150,
       editable: true,
       type: "singleSelect",
-      valueOptions: ["Market", "Finance", "Development"],
+      valueOptions: ["contributor", "user", "admin"], // Specify the roles here
+      filterable: true, // Make sure this column is filterable
     },
+    {
+      field: "active",
+      headerName: "Active",
+      width: 100,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: ["Active", "Inactive"],
+    },
+
     {
       field: "actions",
       type: "actions",
@@ -293,7 +277,7 @@ const AdminPage = () => {
     <Box
       sx={{
         height: 500,
-        width: "100%",
+        width: "60%",
         "& .actions": {
           color: "text.secondary",
         },
@@ -316,6 +300,8 @@ const AdminPage = () => {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        filterModel={filterModel}
+        onFilterModelChange={(newModel) => setFilterModel(newModel)}
       />
     </Box>
   );
