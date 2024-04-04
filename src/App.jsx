@@ -1,5 +1,3 @@
-import './App.css';
-
 import {useState, Fragment} from 'react';
 import {Route, Routes, Navigate, NavLink} from 'react-router-dom';
 

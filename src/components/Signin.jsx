@@ -36,7 +36,11 @@ const Signin = () => {
       const sessionAccess = sessionStorage.getItem('access');
       const role = sessionStorage.getItem('role');
       setUser({...user, accessToken: sessionAccess, role: role});
-      navigate('/member');
+      if (user.role === 'contributor') {
+        navigate('/member');
+      } else {
+        navigate('/member');
+      }
     }
   };
 
@@ -58,7 +62,11 @@ const Signin = () => {
       sessionStorage.setItem('access', result.data.access);
       sessionStorage.setItem('role', decodedClaims.role);
       setSubmitting(false);
-      navigate('/member');
+      if (user.role === 'contributor') {
+        navigate('/member');
+      } else {
+        navigate('/member');
+      }
     } else {
       //login has failed for some reason
       console.error('failed login attempt');
