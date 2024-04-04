@@ -36,7 +36,6 @@ const Signin = () => {
       password: credentials.password,
     });
     if (result.ok) {
-      console.log(result.data.access);
       localStorage.setItem('refresh', result.data.refresh); //set the refresh in local storage
       const decodedClaims = jwtDecode(result.data.access); //decode the access token
       setUser({...user, role: decodedClaims.role, accessToken: result.data.access});
