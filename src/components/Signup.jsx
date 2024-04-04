@@ -3,7 +3,18 @@ import {useNavigate, NavLink} from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 
 //MUI Imports
-import {Avatar, Button, TextField, Link, Grid, Box, Container, Typography} from '@mui/material';
+import {
+  Avatar,
+  Button,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Container,
+  Typography,
+  Switch,
+  FormControlLabel,
+} from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
@@ -47,7 +58,7 @@ const Signup = () => {
     password: '',
     passwordCheck: '',
   });
-  const [submitting, setSubmitting] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const handleSignup = async e => {
     e.preventDefault();
@@ -87,6 +98,10 @@ const Signup = () => {
     if (inputFields.password !== inputFields.passwordCheck) {
       setPasswordErrorText('Password Mismatch');
     }
+  };
+
+  const handleSwitch = e => {
+    setChecked(e.target.checked);
   };
 
   return (
@@ -247,6 +262,27 @@ const Signup = () => {
                   //   disabled={addUser ? true : false}
                 />
               </Grid> */}
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <FormControlLabel
+                    sx={{pl: 2, pt: 2}}
+                    required
+                    checked={checked}
+                    onChange={handleSwitch}
+                    control={<Switch />}
+                    label="I need to post projects"
+                  />
+                </Grid>
+              </Grid>
+
+              {checked && (
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    a conditional section here for the contributor additional fields
+                  </Grid>
+                </Grid>
+              )}
 
               <Grid item xs={12}>
                 <TextField
