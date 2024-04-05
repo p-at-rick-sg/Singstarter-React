@@ -11,7 +11,7 @@ const AboutUs = () => {
     { name: "Number of users", value: "1352" },
     { name: "Current Kick Starter Projects", value: "300+" },
     { name: "Total Projects Funded", value: "40" },
-    { name: "Total Funds Generated", value: "$3,214,221" },
+    { name: "Total Funds Generated", value: "$214,221" },
   ];
   return (
     <>
