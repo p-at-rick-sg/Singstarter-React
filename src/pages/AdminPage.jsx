@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
-import { useUser } from "../hooks/useUser";
 import { format } from "date-fns";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -16,24 +14,23 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
 import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from "@mui/x-data-grid-generator";
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  ComposedChart,
+  Bar,
+  Area,
+} from "recharts";
 
-const roles = ["Market", "Finance", "Development"];
-const randomRole = () => {
-  return randomArrayItem(roles);
-};
-
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
+function EditToolbar({ setRows, setRowModesModel }) {
   const handleClick = () => {
-    const id = randomId();
+    const id = Math.random().toString(36).substr(2, 9);
     setRows((oldRows) => [
       ...oldRows,
       { id, name: "", email: "", isNew: true },
@@ -54,61 +51,10 @@ function EditToolbar(props) {
 }
 
 const AdminPage = () => {
-  const [users, setUsers] = useState([]);
   const fetchData = useFetch();
-
-  //   const initialRows = () => {
-  //     {
-  //       users.map((user) => {
-  //         <div
-  //           key={user._id}
-  //           _id={user.id}
-  //           email={user.email}
-  //           firstName={user.firstName}
-  //           lastName={user.lastName}
-  //           role={user.role}
-  //           active={user.active}
-  //         />;
-  //       });
-  //     }
-  //     [
-  //       {
-  //         id: user._id,
-  //         name: randomTraderName(),
-  //         age: 25,
-  //         joinDate: randomCreatedDate(),
-  //         role: randomRole(),
-  //       },
-  //       {
-  //         id: randomId(),
-  //         name: randomTraderName(),
-  //         age: 36,
-  //         joinDate: randomCreatedDate(),
-  //         role: randomRole(),
-  //       },
-  //       {
-  //         id: randomId(),
-  //         name: randomTraderName(),
-  //         age: 19,
-  //         joinDate: randomCreatedDate(),
-  //         role: randomRole(),
-  //       },
-  //       {
-  //         id: randomId(),
-  //         name: randomTraderName(),
-  //         age: 28,
-  //         joinDate: randomCreatedDate(),
-  //         role: randomRole(),
-  //       },
-  //       {
-  //         id: randomId(),
-  //         name: randomTraderName(),
-  //         age: 23,
-  //         joinDate: randomCreatedDate(),
-  //         role: randomRole(),
-  //       },
-  //     ];
-  //   };
+  const [users, setUsers] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
 
   //Call API USER ALL
   const getAllUser = async () => {
@@ -141,9 +87,6 @@ const AdminPage = () => {
 
     setRows(transformedRows);
   }, [users]); // This effect depends on the users state
-
-  const [rows, setRows] = useState([]);
-  const [rowModesModel, setRowModesModel] = useState({});
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -273,37 +216,91 @@ const AdminPage = () => {
     },
   ];
 
+  // Sample data for the chart
+  const data = [
+    { name: "Jan", Users: 400 },
+    { name: "Feb", Users: 300 },
+    // More data points...
+  ];
+
+  const composedChartData = [
+    { name: "Jan", Users: 400, Active: 240, Registrations: 240 },
+    { name: "Feb", Users: 300, Active: 139, Registrations: 221 },
+    { name: "Mar", Users: 200, Active: 980, Registrations: 229 },
+    { name: "Apr", Users: 278, Active: 390, Registrations: 200 },
+    // Add more data as needed
+  ];
+
   return (
-    <Box
-      sx={{
-        height: 500,
-        width: "60%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-        filterModel={filterModel}
-        onFilterModelChange={(newModel) => setFilterModel(newModel)}
-      />
-    </Box>
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Typography variant="h4" gutterBottom component="div">
+        Admin Dashboard
+      </Typography>
+      <Paper sx={{ p: 2, display: "flex", flexDirection: "column", mb: 2 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={setRowModesModel}
+          components={{
+            Toolbar: EditToolbar,
+          }}
+          componentsProps={{
+            toolbar: { setRows, setRowModesModel },
+          }}
+          autoHeight
+        />
+      </Paper>
+      <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+        <Typography variant="h6" component="h2">
+          User Registrations Over Time
+        </Typography>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart
+            data={data}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="Users"
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </Paper>
+      <Paper sx={{ p: 2, display: "flex", flexDirection: "column", mb: 2 }}>
+        <Typography variant="h6" gutterBottom component="div">
+          Detailed Statistics
+        </Typography>
+        <ResponsiveContainer width="100%" height={300}>
+          <ComposedChart
+            data={composedChartData}
+            margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+          >
+            <CartesianGrid stroke="#f5f5f5" />
+            <XAxis dataKey="name" scale="band" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="Users" barSize={20} fill="#413ea0" />
+            <Line type="monotone" dataKey="Active" stroke="#ff7300" />
+            <Area
+              type="monotone"
+              dataKey="Registrations"
+              fill="#8884d8"
+              stroke="#8884d8"
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </Paper>
+    </Container>
   );
 };
 
