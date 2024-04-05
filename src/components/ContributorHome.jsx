@@ -18,6 +18,7 @@ import {
 
 //Component Imports
 import SingleCard from './SingleCard';
+import ProjectTable from './ProjectTable';
 
 const ContributorHome = () => {
   const {user, setUser, checkSession, setPageTitle} = useUser();
@@ -42,13 +43,7 @@ const ContributorHome = () => {
           user.accessToken
         );
         if (result.ok) {
-          console.log(result);
-          for (const project of result.data) {
-            setProjects(prevProjects => ({
-              ...prevProjects,
-              projects: [...(prevProjects.projects || []), project._id],
-            }));
-          }
+          setProjects(result.data);
         }
       } catch (err) {
         console.log(err.message);
@@ -65,7 +60,7 @@ const ContributorHome = () => {
 
   return (
     <>
-      <Container component="main" maxWidth="m">
+      <Container component="main" maxWidth="lg">
         <Box
           sx={{
             marginTop: 8,
@@ -75,7 +70,9 @@ const ContributorHome = () => {
             border: '1px solid black', //remove once layout looks OK
           }}>
           <Grid container spacing={2}>
-            <Grid container item xs={6} direction="column"></Grid>
+            <Grid container item xs={6} direction="column">
+              spacing the button
+            </Grid>
             <Grid item xs={8} sm={5} sx={{textAlign: 'right'}}>
               <Button
                 variant="contained"
@@ -100,11 +97,13 @@ const ContributorHome = () => {
                   sx={{color: 'primary.main', fontWeight: '600'}}>
                   Your Projects
                 </Typography>
-                {/* {projects && (
-                  <Grid item xs={12} sm={6}>
-                    <SingleCard projectID={'6700ddf51fd1162aae22ea20'} />
-                  </Grid>
-                )} */}
+                <ProjectTable projects={projects} />
+                {/* {Array.isArray(projects) &&
+                  projects.map(project => (
+                    <Grid item xs={12} sm={6} key={project._id}>
+                      <SingleCard projectID={project._id} />
+                    </Grid>
+                  ))} */}
               </Grid>
             </Grid>
             <Grid container item xs={6} direction="column">
