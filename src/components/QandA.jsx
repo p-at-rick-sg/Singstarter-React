@@ -6,14 +6,24 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { Box } from "@mui/material";
 import { useUser } from "../hooks/useUser";
 import useFetch from "../hooks/useFetch";
 
 const QandA = (props) => {
-  const user = useUser();
+  const { user } = useUser();
   const fetchData = useFetch();
   const [answerState, setAnswerState] = useState(false);
   const answerRef = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (user.role === "contributor") {
+      addAnswer();
+    } else {
+      console.log(`dog`);
+    }
+  };
 
   const addAnswer = async () => {
     try {
@@ -21,7 +31,7 @@ const QandA = (props) => {
         "/api/projects/a/" + props.id,
         "PATCH",
         { answer: answerRef.current.value },
-        user.user.accessToken
+        user.accessToken
       );
 
       if (res.ok) {
@@ -54,55 +64,45 @@ const QandA = (props) => {
               {!answerState && (
                 <Typography variant="body1">{props.answer}</Typography>
               )}
-              {answerState && (
-                <TextField
-                  id="standard-multiline-flexible"
-                  inputRef={answerRef}
-                  label=""
-                  defaultValue={props.answer}
-                  multiline
-                  maxRows={5}
-                  variant="standard"
-                  fullWidth
-                  sx={{ maxWidth: 600 }}
-                />
-              )}
             </>
           )}
-          {props.answer === null && (
+          {(props.answer === null || props.answer === "") && (
             <>
               {!answerState && (
                 <Typography variant="body1">Unanswered</Typography>
               )}
-              {answerState && (
-                <>
-                  <TextField
-                    id="standard-multiline-flexible"
-                    inputRef={answerRef}
-                    label=""
-                    defaultValue={props.answer}
-                    multiline
-                    maxRows={5}
-                    variant="standard"
-                    fullWidth
-                    sx={{ maxWidth: 600 }}
-                  />
-                </>
-              )}
+            </>
+          )}
+
+          {answerState && (
+            <>
+              <Box component="form" onSubmit={handleSubmit}>
+                <TextField
+                  id="standard-basic"
+                  inputRef={answerRef}
+                  label=""
+                  defaultValue={props.answer}
+                  maxRows={5}
+                  variant="standard"
+                  fullWidth
+                  inputProps={{ minLength: 20, maxLength: 360 }}
+                  sx={{ maxWidth: 600 }}
+                />
+                {answerState && (
+                  <Button size="small" type="submit">
+                    Done
+                  </Button>
+                )}
+              </Box>
             </>
           )}
         </CardContent>
         <CardActions>
-          {user.user.role === "contributor" && (
+          {user.role === "contributor" && (
             <>
               {!answerState && (
                 <Button size="small" onClick={() => setAnswerState(true)}>
                   Answer Question
-                </Button>
-              )}
-              {answerState && (
-                <Button size="small" onClick={() => addAnswer()}>
-                  Done
                 </Button>
               )}
             </>
@@ -119,3 +119,16 @@ const QandA = (props) => {
 };
 
 export default QandA;
+
+/*
+NOTES:
+refer to Signup.jsx line 109 onwards for input 
+  -wrap textfield and button in a container type"form", and set button type "submit"
+
+  -validate question length using the form
+
+  -get individual project by id, api call attached to getAllProjects 
+    -use if else statement
+    -if req.query.project id -> find one project by query id
+    -else get all projects
+*/
