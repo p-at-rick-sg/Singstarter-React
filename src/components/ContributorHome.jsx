@@ -16,15 +16,14 @@ import {
   InputLabel,
 } from '@mui/material';
 
+//Component Imports
+import SingleCard from './SingleCard';
+
 const ContributorHome = () => {
   const {user, setUser, checkSession, setPageTitle} = useUser();
   const fetchData = useFetch();
   const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    checkSession();
-  }, []);
 
   const populateUser = async () => {
     if (user.accessToken) {
@@ -35,20 +34,31 @@ const ContributorHome = () => {
 
   const populateProjects = async () => {
     if (user.accessToken) {
-      const result = await fetchData(
-        '/api/projects/myProjects',
-        'GET',
-        undefined,
-        user.accessToken
-      );
+      try {
+        const result = await fetchData(
+          '/api/projects/myProjects',
+          'GET',
+          undefined,
+          user.accessToken
+        );
+        if (result.ok) {
+          console.log(result);
+          for (const project of result.data) {
+            setProjects(prevProjects => ({
+              ...prevProjects,
+              projects: [...(prevProjects.projects || []), project._id],
+            }));
+          }
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   };
 
   useEffect(() => {
+    checkSession();
     setPageTitle('Contributor Home');
-  }, []);
-
-  useEffect(() => {
     populateUser();
     populateProjects();
   }, []);
@@ -56,7 +66,6 @@ const ContributorHome = () => {
   return (
     <>
       <Container component="main" maxWidth="m">
-        {user.role}
         <Box
           sx={{
             marginTop: 8,
@@ -91,6 +100,11 @@ const ContributorHome = () => {
                   sx={{color: 'primary.main', fontWeight: '600'}}>
                   Your Projects
                 </Typography>
+                {/* {projects && (
+                  <Grid item xs={12} sm={6}>
+                    <SingleCard projectID={'6700ddf51fd1162aae22ea20'} />
+                  </Grid>
+                )} */}
               </Grid>
             </Grid>
             <Grid container item xs={6} direction="column">
