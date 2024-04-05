@@ -14,7 +14,6 @@ const HomeCard = () => {
 
       if (res.ok) {
         setProjects(res.data);
-        console.log(res.data[7].images[0].URL);
         console.log(`Projects fetched successfully`);
       } else {
         alert(JSON.stringify(res.data));

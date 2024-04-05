@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useFetch from "../hooks/useFetch";
 
 const AboutUs = () => {
+  const [usercount, setUserCount] = useState("");
+  const userCounter = 0;
+
+  const fetchData = useFetch();
+
+  const getUserCount = async () => {
+    try {
+      const res = await fetchData("/api/users/count", "GET");
+      if (res.ok) {
+        setUserCount(res.data.count);
+
+        console.log(`UserCount fetched successfully`, res.data.count);
+      } else {
+        console.log("Failed to fetch project", res.statusText);
+      }
+    } catch (error) {
+      console.log();
+    }
+  };
+
+  useEffect(() => {
+    getUserCount();
+  }, []);
+
   const links = [
     { name: "Open roles", href: "#" },
     { name: "Contact Us", href: "#" },
@@ -8,7 +33,7 @@ const AboutUs = () => {
     { name: "Meet our leadership", href: "#" },
   ];
   const stats = [
-    { name: "Number of users", value: "1352" },
+    { name: "Number of users", value: usercount },
     { name: "Current Kick Starter Projects", value: "300+" },
     { name: "Total Projects Funded", value: "40" },
     { name: "Total Funds Generated", value: "$214,221" },
