@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import HeroHome from "../components/HeroHome";
 import HomeCard from "../components/HomeCard";
+import AboutUs from "../components/AboutUs";
 
 const LandingPage = (props) => {
   return (
@@ -19,6 +20,7 @@ const LandingPage = (props) => {
           />
         </div>
       </div>
+      <AboutUs />
     </>
   );
 };
