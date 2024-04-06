@@ -19,24 +19,19 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 export default function ProjectTable({projects, user}) {
   const fetchData = useFetch();
   const [rows, setRows] = useState([]);
-  //get the project data into the form below
-  function createData(title, target, total, price) {
+  const [orders, setOrders] = useState([]);
+
+  //Get the order data
+  function createRow(title, target, total, date, customerID, value) {
     return {
       title,
       target,
       total,
-
-      price,
       history: [
         {
-          date: '2020-01-05',
-          customerId: '11091700',
-          quantity: 3,
-        },
-        {
-          date: '2020-01-02',
-          customerId: '11017896',
-          quantity: 1,
+          date,
+          customerID,
+          value,
         },
       ],
     };
@@ -44,39 +39,59 @@ export default function ProjectTable({projects, user}) {
   // using this call with this data
   // const rows = [createData('Project 1', 1000, 150, 50), createData('Project 2', 5000, 500, 100)];
 
-  const getOrders = async projectID => {
+  const fetchOrdersForProject = async projectID => {
     //gets orders for 1 project
     try {
       const SUFFIX = '/api/projects/orders?projectID=' + projectID;
       const result = await fetchData(SUFFIX, 'GET', undefined, user.accessToken);
-      console.log(result);
+      return result.data || [];
     } catch (err) {
       console.error('failed to get orders by project id');
+      return [];
     }
   };
 
   useEffect(() => {
-    if (projects.length !== 0) {
-      console.log(projects[0]._id);
-      const orders = getOrders(projects[0]._id);
-      console.log(orders);
-      const newRows = [
-        {
-          title: projects[0].title,
-          target: projects[0].target,
-          total: projects[0].total,
-          history: [
-            {
-              date: '2020-01-05',
-              customerId: '11091700',
-              quantity: 3,
-            },
-          ],
-        },
-      ];
-      setRows(newRows || []);
-    }
+    const innerFunc = async () => {
+      if (projects.length !== 0) {
+        const orders = await fetchOrdersForProject(projects[0]._id);
+        setOrders(orders);
+
+        console.log(projects);
+      }
+    };
+    innerFunc();
   }, [projects]);
+
+  useEffect(() => {
+    if (orders.length !== 0) {
+      const newRow = createRow(
+        projects[0].title,
+        projects[0].target,
+        projects[0].total,
+        orders[0].createdDate,
+        orders[0].userID,
+        orders[0].totalValue
+      );
+      // setRows(newRow);
+      console.log(newRow);
+    }
+  }, [orders]);
+
+  // useEffect(() => {
+  //   if (orders.length !== 0) {
+  //     setRows(
+  //       createData(
+  //         projects[0].title,
+  //         projects[0].target,
+  //         projects[0].total,
+  //         orders[0].createdDate,
+  //         orders[0].userID,
+  //         orders[0].totalValue
+  //       ) || []
+  //     );
+  //   }
+  // }, [orders]);
 
   //trying to create the right format of data from the project object
 
@@ -137,10 +152,11 @@ export default function ProjectTable({projects, user}) {
       </>
     );
   }
-  //table return
+  //Full table return
   return (
     <Box width={500}>
       <TableContainer component={Paper}>
+        {rows && <p>test</p>}
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
