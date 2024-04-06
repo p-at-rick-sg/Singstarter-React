@@ -22,13 +22,15 @@ export default function ProjectTable({projects, user}) {
   const [orders, setOrders] = useState([]);
 
   //Get the order data
-  function createRow(title, target, total, date, customerID, value) {
+  function createRow(projectID, title, target, total, orderID, date, customerID, value) {
     return {
+      projectID,
       title,
       target,
       total,
       history: [
         {
+          orderID,
           date,
           customerID,
           value,
@@ -56,8 +58,6 @@ export default function ProjectTable({projects, user}) {
       if (projects.length !== 0) {
         const orders = await fetchOrdersForProject(projects[0]._id);
         setOrders(orders);
-
-        console.log(projects);
       }
     };
     innerFunc();
@@ -66,34 +66,20 @@ export default function ProjectTable({projects, user}) {
   useEffect(() => {
     if (orders.length !== 0) {
       const newRow = createRow(
+        projects[0]._id,
         projects[0].title,
         projects[0].target,
-        projects[0].total,
+        projects[0].total || 0,
+        orders[0]._id,
         orders[0].createdDate,
         orders[0].userID,
         orders[0].totalValue
       );
-      setRows([...rows, newRow || {}]);
+      //setRows([...rows, newRow || {}]);
+      setRows(prevRows => [...prevRows, newRow || {}]);
       console.log('rows: ', rows);
     }
   }, [orders]);
-
-  // useEffect(() => {
-  //   if (orders.length !== 0) {
-  //     setRows(
-  //       createData(
-  //         projects[0].title,
-  //         projects[0].target,
-  //         projects[0].total,
-  //         orders[0].createdDate,
-  //         orders[0].userID,
-  //         orders[0].totalValue
-  //       ) || []
-  //     );
-  //   }
-  // }, [orders]);
-
-  //trying to create the right format of data from the project object
 
   function Row(props) {
     const {row} = props;
@@ -126,8 +112,7 @@ export default function ProjectTable({projects, user}) {
                     <TableRow>
                       <TableCell>Date</TableCell>
                       <TableCell>Customer</TableCell>
-                      <TableCell align="right">Amount</TableCell>
-                      <TableCell align="right">Total price ($)</TableCell>
+                      <TableCell align="right">Total($)</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -136,11 +121,8 @@ export default function ProjectTable({projects, user}) {
                         <TableCell component="th" scope="row">
                           {historyRow.date}
                         </TableCell>
-                        <TableCell>{historyRow.customerId}</TableCell>
-                        <TableCell align="right">{historyRow.amount}</TableCell>
-                        <TableCell align="right">
-                          {Math.round(historyRow.amount * row.price * 100) / 100}
-                        </TableCell>
+                        <TableCell>{historyRow.customerID}</TableCell>
+                        <TableCell align="right">{historyRow.value}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -156,7 +138,6 @@ export default function ProjectTable({projects, user}) {
   return (
     <Box width={500}>
       <TableContainer component={Paper}>
-        {rows && <p>test</p>}
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
