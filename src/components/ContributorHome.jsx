@@ -97,7 +97,7 @@ const ContributorHome = () => {
                   sx={{color: 'primary.main', fontWeight: '600'}}>
                   Your Projects
                 </Typography>
-                <ProjectTable projects={projects} />
+                <ProjectTable projects={projects} user={user} />
                 {/* {Array.isArray(projects) &&
                   projects.map(project => (
                     <Grid item xs={12} sm={6} key={project._id}>

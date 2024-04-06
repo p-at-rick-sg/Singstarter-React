@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import useFetch from '../hooks/useFetch';
 
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -15,7 +16,8 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-export default function ProjectTable({projects}) {
+export default function ProjectTable({projects, user}) {
+  const fetchData = useFetch();
   const [rows, setRows] = useState([]);
   //get the project data into the form below
   function createData(title, target, total, price) {
@@ -42,8 +44,22 @@ export default function ProjectTable({projects}) {
   // using this call with this data
   // const rows = [createData('Project 1', 1000, 150, 50), createData('Project 2', 5000, 500, 100)];
 
+  const getOrders = async projectID => {
+    //gets orders for 1 project
+    try {
+      const SUFFIX = '/api/projects/orders?projectID=' + projectID;
+      const result = await fetchData(SUFFIX, 'GET', undefined, user.accessToken);
+      console.log(result);
+    } catch (err) {
+      console.error('failed to get orders by project id');
+    }
+  };
+
   useEffect(() => {
     if (projects.length !== 0) {
+      console.log(projects[0]._id);
+      const orders = getOrders(projects[0]._id);
+      console.log(orders);
       const newRows = [
         {
           title: projects[0].title,
