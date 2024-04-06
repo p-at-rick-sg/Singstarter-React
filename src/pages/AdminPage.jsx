@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
-import { format, compareAsc } from "date-fns";
+import { format, compareAsc, parseISO, parse } from "date-fns";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -26,6 +26,9 @@ import {
   ComposedChart,
   Bar,
   Area,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 
 function EditToolbar({ setRows, setRowModesModel }) {
@@ -55,7 +58,9 @@ const AdminPage = () => {
   const [users, setUsers] = useState([]);
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [regDate, setRegDate] = useState([]);
+  const [regDates, setRegDates] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [pieChartData, setPieChartData] = useState([]);
 
   //Call API USER ALL
   const getAllUser = async () => {
@@ -65,8 +70,9 @@ const AdminPage = () => {
         setUsers(res.data);
         console.log("Dates ====:", res.data[0].createdDate);
         console.log("Users fetched successfully");
-        setRegDate(res.date.createdDate);
-
+        const dates = res.data.map((user) => user.createdDate);
+        console.log("All Dates:", dates); // Logs all dates
+        setRegDates(dates);
         // console.log("Something", res.date.createdDate);
       } else {
         console.log(res.data);
@@ -84,20 +90,74 @@ const AdminPage = () => {
       name: `${user.firstName} ${user.lastName}`,
       email: user.email,
       joinDate: user.createdDate
-        ? format(new Date(user.createdDate), "dd/MM/yyyy")
+        ? format(parseISO(user.createdDate), "dd/MM/yyyy")
         : "Unknown Date",
       role: user.role,
       active: user.active,
     }));
-
     setRows(transformedRows);
-  }, [users]); // This effect depends on the users state
+
+    // Correctly placed useEffect to process chart data
+    const processedChartData = processDataForChart(users);
+    setChartData(processedChartData);
+  }, [users]);
+
+  const processDataForChart = (users) => {
+    const monthMap = {};
+    users.forEach((user) => {
+      const monthYear = format(parseISO(user.createdDate), "MMM-yyyy");
+      if (!monthMap[monthYear]) {
+        monthMap[monthYear] = {
+          userCount: 0,
+          activeCount: 0,
+          registrations: 0,
+        };
+      }
+      monthMap[monthYear].userCount += 1;
+      if (user.active) {
+        monthMap[monthYear].activeCount += 1;
+      }
+      monthMap[monthYear].registrations += 1;
+    });
+
+    let chartData = Object.keys(monthMap).map((monthYear) => ({
+      month: monthYear,
+      Users: monthMap[monthYear].userCount,
+      Active: monthMap[monthYear].activeCount,
+      Registrations: monthMap[monthYear].registrations,
+    }));
+
+    // Sort chartData by month in ascending order
+    chartData = chartData.sort((a, b) => {
+      const dateA = parse(a.month, "MMM-yyyy", new Date());
+      const dateB = parse(b.month, "MMM-yyyy", new Date());
+      return compareAsc(dateA, dateB);
+    });
+
+    return chartData;
+  };
+
+  useEffect(() => {
+    const roleDistribution = users.reduce((acc, user) => {
+      acc[user.role] = (acc[user.role] || 0) + 1;
+      return acc;
+    }, {});
+
+    const chartData = Object.keys(roleDistribution).map((role) => ({
+      name: role,
+      value: roleDistribution[role],
+    }));
+
+    setPieChartData(chartData);
+  }, [users]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
   };
+
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -136,15 +196,6 @@ const AdminPage = () => {
   const [filterModel, setFilterModel] = useState({
     items: [],
   });
-
-  // const registerDates = [
-  //   {
-  //     date: regDate,
-  //   },
-  // ];
-  // console.log("Orignial", registerDates);
-  // const sortDate = registerDates.sort(compareAsc);
-  // console.log(sortDate);
 
   const columns = [
     { field: "name", headerName: "Name", width: 200, editable: true },
@@ -295,11 +346,11 @@ const AdminPage = () => {
         </Typography>
         <ResponsiveContainer width="100%" height={300}>
           <ComposedChart
-            data={composedChartData}
+            data={chartData}
             margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
           >
             <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="name" scale="band" />
+            <XAxis dataKey="month" />
             <YAxis />
             <Tooltip />
             <Legend />
@@ -314,6 +365,35 @@ const AdminPage = () => {
           </ComposedChart>
         </ResponsiveContainer>
       </Paper>
+      <div>
+        <h2>User Role Distribution</h2>
+        <ResponsiveContainer width="100%" height={400}>
+          <PieChart>
+            <Pie
+              data={pieChartData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              outerRadius={150}
+              fill="#8884d8"
+              dataKey="value"
+              nameKey="name"
+              label={({ name, percent }) =>
+                `${name} ${(percent * 100).toFixed(0)}%`
+              }
+            >
+              {pieChartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </Container>
   );
 };
