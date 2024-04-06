@@ -73,8 +73,8 @@ export default function ProjectTable({projects, user}) {
         orders[0].userID,
         orders[0].totalValue
       );
-      // setRows(newRow);
-      console.log(newRow);
+      setRows([...rows, newRow || {}]);
+      console.log('rows: ', rows);
     }
   }, [orders]);
 
