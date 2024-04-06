@@ -2,6 +2,7 @@ import { useEffect, useState, Fragment } from "react";
 import { Route, Routes, Navigate, NavLink } from "react-router-dom";
 
 ///Component Imports
+<<<<<<< Updated upstream
 import LandingPage from "./pages/LandingPage";
 import MemberPage from "./pages/MemberPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -16,6 +17,22 @@ import AddProject from "./components/AddProject";
 import ProfileManager from "./components/ProfileManager";
 import AdminPage from "./pages/AdminPage";
 import SingleCard from "./components/SingleCard";
+=======
+import LandingPage from './pages/LandingPage';
+import MemberPage from './pages/MemberPage';
+import NotFoundPage from './pages/NotFoundPage';
+import ProjectPage from './pages/ProjectPage';
+import NavBar from './components/NavBar';
+import Footer from './components/Footer';
+import Signup from './components/Signup';
+import Signin from './components/Signin';
+import Success from './components/Success';
+import Cancel from './components/Cancel';
+import AddProject from './components/AddProject';
+import ProfileManager from './components/ProfileManager';
+import AdminPage from './pages/AdminPage';
+import ProjectTable from './components/ProjectTable';
+>>>>>>> Stashed changes
 //Context Imports (may need to set the theme here if we want light/dark mode setup)
 import { useUser } from "./hooks/useUser";
 //MUI Stuff
@@ -61,7 +78,7 @@ function App() {
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/profile" element={<ProfileManager />} />
               //Temp route testing single card
-              <Route path="/cardtest" element={<SingleCard />} />
+              <Route path="/table" element={<ProjectTable />} />
             </Routes>
             <Footer />
           </Fragment>

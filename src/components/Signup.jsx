@@ -133,8 +133,8 @@ const Signup = () => {
                   label="First Name"
                   value={inputFields.firstName}
                   onChange={handleChange}
-                  error={error.firstName}
                   autoFocus
+                  error={error.firstName}
                   inputProps={{pattern: '[A-Za-z]+'}}
                   helperText={error.firstName}
                   //   disabled={addUser ? true : false}

@@ -1,6 +1,6 @@
 import {useState, useEffect, Fragment} from 'react';
 import {
-  Checkbox,
+  Container,
   FormControlLabel,
   TextField,
   Grid,
@@ -29,12 +29,20 @@ const ProfileManager = () => {
     telephone: '',
     role: 'user',
   });
-
   const [companyFields, setCompanyFields] = useState({
     companyName: '',
     taxId: '',
   });
 
+  const [error, setError] = useState({
+    firstName: false,
+    lastName: false,
+    address1: false,
+    address2: false,
+    town: false,
+    country: false,
+    postcode: false,
+  });
   //grab the users full details from the db to populate
   const getUser = async () => {
     const result = await fetchData('/api/users', 'GET', undefined, user.accessToken);
@@ -68,6 +76,11 @@ const ProfileManager = () => {
   };
 
   const handleUpdate = async () => {
+    if (!e.target.validity.valid) {
+      setError({...error, [e.target.name]: true});
+    } else {
+      setError({...error, [e.target.name]: false});
+    }
     //put all the values into a single object to send 1 update
     const updatedUser = {
       firstName: inputFields.firstName,
@@ -101,170 +114,174 @@ const ProfileManager = () => {
 
   return (
     <>
-      <Box component="form" onSubmit={handleUpdate} sx={{mt: 3}}>
-        {checked && <p>{checked}</p>}
-        <Grid
-          container
-          spacing={2}
-          justifyContent="center"
-          paddingLeft={'25%'}
-          paddingRight="25%"
-          paddingTop={'5%'}>
-          <Grid item md={12} justifySelf="center">
-            <Typography variant="h6">Profile Manager</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              variant="standard"
-              id="firstName"
-              name="firstName"
-              label="First Name"
-              value={inputFields.firstName}
-              onChange={handleChange}
-              fullWidth
-              autoComplete="given-name"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              variant="standard"
-              id="lastName"
-              name="lastName"
-              label="Last name"
-              value={inputFields.lastName}
-              onChange={handleChange}
-              fullWidth
-              autoComplete="family-name"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              variant="standard"
-              id="address1"
-              name="address1"
-              value={inputFields.address1}
-              onChange={handleChange}
-              label="Address line 1"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              variant="standard"
-              id="address2"
-              name="address2"
-              label="Address line 2"
-              value={inputFields.address2}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              variant="standard"
-              id="town"
-              name="town"
-              value={inputFields.town}
-              onChange={handleChange}
-              label="Town or City"
-              fullWidth
-            />
-          </Grid>
+      <Container component="main" maxWidth="lg">
+        <Box component="form" onSubmit={handleUpdate} sx={{mt: 3}}>
+          <Grid
+            container
+            spacing={2}
+            justifyContent="center"
+            paddingLeft={'25%'}
+            paddingRight="25%"
+            paddingTop={'5%'}>
+            <Grid item md={12} justifySelf="center">
+              <Typography variant="h6">Profile Manager</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                variant="standard"
+                id="firstName"
+                name="firstName"
+                label="First Name"
+                value={inputFields.firstName}
+                onChange={handleChange}
+                error={error.firstName}
+                inputProps={{pattern: '[A-Za-z]+'}}
+                helperText={error.firstName}
+                fullWidth
+                autoComplete="given-name"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                variant="standard"
+                id="lastName"
+                name="lastName"
+                label="Last name"
+                value={inputFields.lastName}
+                onChange={handleChange}
+                fullWidth
+                autoComplete="family-name"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                variant="standard"
+                id="address1"
+                name="address1"
+                value={inputFields.address1}
+                onChange={handleChange}
+                label="Address line 1"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="standard"
+                id="address2"
+                name="address2"
+                label="Address line 2"
+                value={inputFields.address2}
+                onChange={handleChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                variant="standard"
+                id="town"
+                name="town"
+                value={inputFields.town}
+                onChange={handleChange}
+                label="Town or City"
+                fullWidth
+              />
+            </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              variant="standard"
-              id="postcode"
-              name="postcode"
-              value={inputFields.postcode}
-              onChange={handleChange}
-              label="Zip / Postal code"
-              fullWidth
-              autoComplete="shipping postal-code"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              variant="standard"
-              id="country"
-              name="country"
-              label="Country"
-              value={inputFields.country}
-              onChange={handleChange}
-              fullWidth
-              autoComplete="shipping country"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              variant="standard"
-              id="telephone"
-              name="telephone"
-              value={inputFields.telephone}
-              onChange={handleChange}
-              label="Telephone (Optional)"
-              fullWidth
-            />
-          </Grid>
-          {showUpgrade && (
-            <Fragment>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={12}>
-                  <FormControlLabel
-                    sx={{pl: 2, pt: 2}}
-                    checked={checked}
-                    onChange={handleSwitch}
-                    control={<Switch />}
-                    label="I want to post projects"
-                  />
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                variant="standard"
+                id="postcode"
+                name="postcode"
+                value={inputFields.postcode}
+                onChange={handleChange}
+                label="Zip / Postal code"
+                fullWidth
+                autoComplete="shipping postal-code"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                variant="standard"
+                id="country"
+                name="country"
+                label="Country"
+                value={inputFields.country}
+                onChange={handleChange}
+                fullWidth
+                autoComplete="shipping country"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="standard"
+                id="telephone"
+                name="telephone"
+                value={inputFields.telephone}
+                onChange={handleChange}
+                label="Telephone (Optional)"
+                fullWidth
+              />
+            </Grid>
+            {showUpgrade && (
+              <Fragment>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12}>
+                    <FormControlLabel
+                      sx={{pl: 2, pt: 2}}
+                      checked={checked}
+                      onChange={handleSwitch}
+                      control={<Switch />}
+                      label="I want to post projects"
+                    />
+                  </Grid>
                 </Grid>
+              </Fragment>
+            )}
+            {checked && (
+              <>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      variant="filled"
+                      id="companyName"
+                      name="companyName"
+                      label="Comnpany or Trading Name"
+                      value={companyFields.companyName}
+                      onChange={handleChange}
+                      fullWidth
+                      autoComplete="companny-name"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      variant="filled"
+                      id="taxId"
+                      name="taxId"
+                      label="Tax ID or Company UEN"
+                      value={companyFields.taxId}
+                      onChange={handleChange}
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
+              </>
+            )}
+            <Grid container spacing={2} justifyContent="flex-end" sx={{pt: 2}}>
+              <Grid item xs={12} sm={12}>
+                <Button type="submit" fullWidth variant="contained">
+                  Update Details
+                </Button>
               </Grid>
-            </Fragment>
-          )}
-          {checked && (
-            <>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    variant="filled"
-                    id="companyName"
-                    name="companyName"
-                    label="Comnpany or Trading Name"
-                    value={companyFields.companyName}
-                    onChange={handleChange}
-                    fullWidth
-                    autoComplete="companny-name"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    variant="filled"
-                    id="taxId"
-                    name="taxId"
-                    label="Tax ID or Company UEN"
-                    value={companyFields.taxId}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-              </Grid>
-            </>
-          )}
-          <Grid container spacing={2} justifyContent="flex-end" sx={{pt: 2}}>
-            <Grid item xs={12} sm={12}>
-              <Button type="submit" fullWidth variant="contained">
-                Update Details
-              </Button>
             </Grid>
           </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </Container>
     </>
   );
 };

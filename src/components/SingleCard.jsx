@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import useFetch from "../hooks/useFetch";
 import { format } from "date-fns";
 
+<<<<<<< Updated upstream
 const SingleCard = ({ projectID }) => {
   const [project, setProject] = useState([]);
   const fetchData = useFetch();
@@ -9,6 +10,12 @@ const SingleCard = ({ projectID }) => {
 
   const getProjectByID = async () => {
     // Use the projectID from props
+=======
+const SingleCard = ({projectID}) => {
+  const [project, setProject] = useState([]);
+  const fetchData = useFetch();
+  const getProjectByID = async projectID => {
+>>>>>>> Stashed changes
     const url = `/api/projects?projectID=${projectID}`;
     try {
       const res = await fetchData(url, "GET");
