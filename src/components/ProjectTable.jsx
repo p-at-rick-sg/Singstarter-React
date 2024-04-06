@@ -22,7 +22,7 @@ export default function ProjectTable({projects, user}) {
   const [orders, setOrders] = useState([]);
 
   //Get the order data
-  function createRow(projectID, title, target, total, orderID, date, customerID, value) {
+  function createRow(projectID, title, target, total, orderID, date, customerEmail, value) {
     return {
       projectID,
       title,
@@ -32,7 +32,7 @@ export default function ProjectTable({projects, user}) {
         {
           orderID,
           date,
-          customerID,
+          customerEmail,
           value,
         },
       ],
@@ -46,6 +46,7 @@ export default function ProjectTable({projects, user}) {
     try {
       const SUFFIX = '/api/projects/orders?projectID=' + projectID;
       const result = await fetchData(SUFFIX, 'GET', undefined, user.accessToken);
+      console.log('fetching this data: ', result);
       return result.data || [];
     } catch (err) {
       console.error('failed to get orders by project id');
@@ -57,7 +58,10 @@ export default function ProjectTable({projects, user}) {
     const innerFunc = async () => {
       if (projects.length !== 0) {
         const orders = await fetchOrdersForProject(projects[0]._id);
-        setOrders(orders);
+        setOrders(prevOrders => {
+          const newOrders = Array.isArray(orders) ? orders : [];
+          return [...prevOrders, ...newOrders];
+        });
       }
     };
     innerFunc();
@@ -70,10 +74,10 @@ export default function ProjectTable({projects, user}) {
         projects[0].title,
         projects[0].target,
         projects[0].total || 0,
-        orders[0]._id,
-        orders[0].createdDate,
-        orders[0].userID,
-        orders[0].totalValue
+        orders[0]._doc._id,
+        orders[0]._doc.createdDate,
+        orders[0].customerEmail,
+        orders[0]._doc.totalValue
       );
       //setRows([...rows, newRow || {}]);
       setRows(prevRows => [...prevRows, newRow || {}]);
@@ -121,7 +125,7 @@ export default function ProjectTable({projects, user}) {
                         <TableCell component="th" scope="row">
                           {historyRow.date}
                         </TableCell>
-                        <TableCell>{historyRow.customerID}</TableCell>
+                        <TableCell>{historyRow.customerEmail}</TableCell>
                         <TableCell align="right">{historyRow.value}</TableCell>
                       </TableRow>
                     ))}
@@ -138,6 +142,7 @@ export default function ProjectTable({projects, user}) {
   return (
     <Box width={500}>
       <TableContainer component={Paper}>
+        {/* {orders && <p>{orders[0].customerEmail}</p>} */}
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
