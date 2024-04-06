@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
-import { format } from "date-fns";
+import { format, compareAsc } from "date-fns";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -55,6 +55,7 @@ const AdminPage = () => {
   const [users, setUsers] = useState([]);
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [regDate, setRegDate] = useState([]);
 
   //Call API USER ALL
   const getAllUser = async () => {
@@ -62,7 +63,11 @@ const AdminPage = () => {
       const res = await fetchData("/api/users/all", "GET");
       if (res.ok) {
         setUsers(res.data);
+        console.log("Dates ====:", res.data[0].createdDate);
         console.log("Users fetched successfully");
+        setRegDate(res.date.createdDate);
+
+        // console.log("Something", res.date.createdDate);
       } else {
         console.log(res.data);
       }
@@ -131,6 +136,15 @@ const AdminPage = () => {
   const [filterModel, setFilterModel] = useState({
     items: [],
   });
+
+  // const registerDates = [
+  //   {
+  //     date: regDate,
+  //   },
+  // ];
+  // console.log("Orignial", registerDates);
+  // const sortDate = registerDates.sort(compareAsc);
+  // console.log(sortDate);
 
   const columns = [
     { field: "name", headerName: "Name", width: 200, editable: true },
