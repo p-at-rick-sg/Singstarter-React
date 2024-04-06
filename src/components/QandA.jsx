@@ -49,7 +49,7 @@ const QandA = (props) => {
 
   return (
     <>
-      <Card variant="outlined" sx={{ maxWidth: 600 }}>
+      <Card variant="outlined">
         <CardContent>
           {/* <Typography variant="body1">{props.id}</Typography> */}
           <Typography variant="body1">Question:</Typography>
@@ -111,8 +111,6 @@ const QandA = (props) => {
       </Card>
 
       <br />
-      <br />
-
       <br />
     </>
   );

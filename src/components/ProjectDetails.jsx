@@ -1,21 +1,43 @@
+import { Card, Grid, Paper, Typography, Container } from "@mui/material";
 import React from "react";
 
 const ProjectDetails = (props) => {
   return (
     <>
-      <div>
-        placeholders: will change to material ui components w/ propped data
-      </div>
+      {/* <Paper>
+        <Typography variant="h4">{props.project[0].title}</Typography>
+        <Typography>asdf</Typography>
+        <Typography item paragraph>
+          {props.project[0].description}
+        </Typography>
+      </Paper> */}
 
-      <div>project id</div>
-      <div>user id (owner)</div>
+      <Grid container spacing={2}>
+        <Grid item md={8}>
+          <Typography variant="h4">{props.project[0].title}</Typography>
+        </Grid>
+        <Grid item md={4}>
+          <Typography>
+            Target: {props.project[0].currentTotal} / ${props.project[0].target}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography paragraph>{props.project[0].description}</Typography>
+        </Grid>
+      </Grid>
 
-      <div>project title</div>
-      <div>project description</div>
-      <div>project target ($)</div>
-      <div>project current total ($)</div>
-      <div>project created date</div>
-      <div>project end date</div>
+      {/* <Paper>
+        <div>Project ID: {props.project[0]._id}</div>
+        <div>User ID (project owner): {props.project[0].owner}</div>
+
+        <div>Project Title: </div>
+        <div>Project Description: </div>
+        <div>Project target ($): {props.project[0].target}</div>
+        <div>Project current total ($): {props.project[0].currentTotal}</div>
+        <div>Project created date: {props.project[0].createdDate}</div>
+        <div>Project end date: {props.project[0].endDate}</div>
+      </Paper> */}
+      <br />
     </>
   );
 };

@@ -14,7 +14,6 @@ const HomeCard = () => {
 
       if (res.ok) {
         setProjects(res.data);
-        console.log(res.data[7].images[0].URL);
         console.log(`Projects fetched successfully`);
       } else {
         alert(JSON.stringify(res.data));
@@ -38,7 +37,7 @@ const HomeCard = () => {
               key={project._id}
               _id={project._id}
               owner={project.owner}
-              className="bg-white w-full rounded-lg shadow-md flex flex-col transition-all overflow-hidden hover:shadow-2xl"
+              className="bg-white w-full rounded-lg shadow-md flex flex-col overflow-hidden transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-6 relative group"
             >
               <div className="p-6">
                 <div className="pb-3 mb-4 border-b border-stone-200 text-xs font-medium flex justify-between text-blue-900">
@@ -82,6 +81,17 @@ const HomeCard = () => {
                   alt={project.images?.[0]?.description ?? "Project image"}
                   className="w-full h-48 object-cover"
                 />
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around bg-white pb-8">
+                <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+                  More Info
+                </button>
+                <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700 transition">
+                  Pledge
+                </button>
+                <button className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-700 transition">
+                  Chat
+                </button>
               </div>
             </div>
           );

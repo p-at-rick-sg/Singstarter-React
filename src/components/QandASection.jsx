@@ -6,7 +6,15 @@ import useFetch from "../hooks/useFetch";
 import { useUser } from "../hooks/useUser";
 
 // mui
-import { Paper, List, Box, Button, TextField } from "@mui/material";
+import {
+  Paper,
+  List,
+  Box,
+  Button,
+  TextField,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 const QandASection = (props) => {
   const [qAndA, setQandA] = useState([]);
@@ -46,13 +54,6 @@ const QandASection = (props) => {
     } catch (error) {}
   };
 
-  // TODO
-  // -[x] user context for login state
-  // -[x] add question to project using project id
-  // -[x] add answer to question using question id
-  // -[] toast for asking question when not logged in
-  // -[x] answer question button should only appear when logged in as contributor
-
   const addQuestion = async () => {
     try {
       const res = await fetchData(
@@ -76,12 +77,15 @@ const QandASection = (props) => {
   useEffect(() => getQandA, []);
   return (
     <>
-      <Paper style={{ maxHeight: 400, maxWidth: 620, overflow: "auto" }}>
+      <Typography variant="h4">Q & A</Typography>
+
+      <Paper style={{ maxHeight: 300, overflow: "auto" }}>
         <List>
           {qAndA.map((item) => {
             console.log(item);
             return (
               <QandA
+                key={item._id}
                 question={item.question}
                 answer={item.answer}
                 id={item._id}
@@ -91,8 +95,6 @@ const QandASection = (props) => {
           })}
         </List>
       </Paper>
-
-      <br />
       <br />
       <br />
 
@@ -119,3 +121,10 @@ const QandASection = (props) => {
 };
 
 export default QandASection;
+
+// TODO
+// -[x] user context for login state
+// -[x] add question to project using project id
+// -[x] add answer to question using question id
+// -[] toast for asking question when not logged in
+// -[x] answer question button should only appear when logged in as contributor
