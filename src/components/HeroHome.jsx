@@ -5,21 +5,7 @@ import { Carousel, Typography, Button } from "@material-tailwind/react";
 import HeroImage from "../image/events.jpg";
 function HeroHome() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const totalSlides = props.children.length;
-  // const intervalDuration = 5000; // 5 seconds interval, adjust as needed
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     const nextIndex = (currentIndex + 1) % totalSlides;
-  //     setCurrentIndex(nextIndex);
-  //   }, intervalDuration);
-
-  //   return () => clearInterval(intervalId);
-  // }, [currentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // const handleSlideChange = (index) => {
-  //   setCurrentIndex(index);
-  // };
   return (
     <section className="relative">
       {/* Illustration behind hero content */}
@@ -83,8 +69,8 @@ function HeroHome() {
               >
                 <div>
                   <a
-                    className="btn text-white bg-gray-900 hover:bg-gray-800 w-full sm:w-auto sm:ml-4"
                     href="#0"
+                    className="inline-block px-6 py-3 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out bg-black hover:bg-grey-100 active:bg-blue-700"
                   >
                     Explore Now
                   </a>
@@ -92,65 +78,128 @@ function HeroHome() {
               </div>
             </div>
           </div>
-
-          {/* Hero image */}
-          <div>
-            {/* <div
-              className="relative flex justify-center mb-8"
-              data-aos="zoom-y-out"
-              data-aos-delay="450"
-            > */}
-            {/* <div className="flex flex-col justify-center"> */}
-            {/* <Carousel transition={{ duration: 2 }} className="rounded-xl">
-              <img
-                className="mx-auto"
-                src={HeroImage}
-                width="768"
-                height="432"
-                alt="Hero"
-              />
-              <img
-                className="mx-auto"
-                src={HeroImage2}
-                width="768"
-                height="432"
-                alt="Hero"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-                alt="image 3"
-                className="h-full w-full object-cover"
-                width="768"
-                height="432"
-              />
-          </Carousel>*/}
-            <img
-              className="mx-auto"
-              src={HeroImage}
-              width="768"
-              height="432"
-              alt="Hero"
-            />
-          </div>
         </div>
       </div>
-      <Carousel transition={{ duration: 2 }} className="rounded-xl">
-        <img
-          src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
-          alt="image 1"
-          className="h-full w-full object-cover"
-        />
-        <img
-          src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-          alt="image 2"
-          className="h-full w-full object-cover"
-        />
-        <img
-          src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-          alt="image 3"
-          className="h-full w-full object-cover"
-        />
-      </Carousel>
+      <div className="flex justify-center items-center min-h-screen bg-white">
+        {/* Container to control the size and center the Carousel */}
+        <div className="w-full max-w-6xl">
+          <Carousel className="rounded-xl">
+            {/* Your slides */}
+            <div className="relative">
+              {/* Your first slide content */}
+              <img
+                src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
+                alt="image 1"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+                <div className="w-3/4 text-center md:w-2/4">
+                  <Typography
+                    variant="h1"
+                    color="white"
+                    className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+                  >
+                    The Beauty of Nature
+                  </Typography>
+                  <Typography
+                    variant="lead"
+                    color="white"
+                    className="mb-12 opacity-80"
+                  >
+                    It is not so much for its beauty that the forest makes a
+                    claim upon men&apos;s hearts, as for that subtle something,
+                    that quality of air that emanation from old trees, that so
+                    wonderfully changes and renews a weary spirit.
+                  </Typography>
+                  <div className="flex justify-center gap-2">
+                    <Button size="lg" color="white">
+                      Explore
+                    </Button>
+                    <Button size="lg" color="white" variant="text">
+                      Gallery
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Your second slide */}
+            <div className="relative">
+              {" "}
+              <img
+                src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
+                alt="image 2"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 grid h-full w-full items-center bg-black/75">
+                <div className="w-3/4 pl-12 md:w-2/4 md:pl-20 lg:pl-32">
+                  <Typography
+                    variant="h1"
+                    color="white"
+                    className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+                  >
+                    The Beauty of Nature
+                  </Typography>
+                  <Typography
+                    variant="lead"
+                    color="white"
+                    className="mb-12 opacity-80"
+                  >
+                    It is not so much for its beauty that the forest makes a
+                    claim upon men&apos;s hearts, as for that subtle something,
+                    that quality of air that emanation from old trees, that so
+                    wonderfully changes and renews a weary spirit.
+                  </Typography>
+                  <div className="flex gap-2">
+                    <Button size="lg" color="white">
+                      Explore
+                    </Button>
+                    <Button size="lg" color="white" variant="text">
+                      Gallery
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Your third slide */}
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
+                alt="image 3"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 grid h-full w-full items-end bg-black/75">
+                <div className="w-3/4 pl-12 pb-12 md:w-2/4 md:pl-20 md:pb-20 lg:pl-32 lg:pb-32">
+                  <Typography
+                    variant="h1"
+                    color="white"
+                    className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+                  >
+                    The Beauty of Nature
+                  </Typography>
+                  <Typography
+                    variant="lead"
+                    color="white"
+                    className="mb-12 opacity-80"
+                  >
+                    It is not so much for its beauty that the forest makes a
+                    claim upon men&apos;s hearts, as for that subtle something,
+                    that quality of air that emanation from old trees, that so
+                    wonderfully changes and renews a weary spirit.
+                  </Typography>
+                  <div className="flex gap-2">
+                    <Button size="lg" color="white">
+                      Explore
+                    </Button>
+                    <Button size="lg" color="white" variant="text">
+                      Gallery
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Carousel>
+        </div>
+      </div>
     </section>
   );
 }

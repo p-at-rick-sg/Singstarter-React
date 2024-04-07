@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { format, compareAsc, parseISO, parse } from "date-fns";
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { useUser } from "../hooks/useUser";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -61,6 +62,7 @@ const AdminPage = () => {
   const [regDates, setRegDates] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [pieChartData, setPieChartData] = useState([]);
+  const { user, setUser, checkSession, setPageTitle } = useUser();
 
   //Call API USER ALL
   const getAllUser = async () => {
@@ -68,10 +70,8 @@ const AdminPage = () => {
       const res = await fetchData("/api/users/all", "GET");
       if (res.ok) {
         setUsers(res.data);
-        console.log("Dates ====:", res.data[0].createdDate);
         console.log("Users fetched successfully");
         const dates = res.data.map((user) => user.createdDate);
-        console.log("All Dates:", dates); // Logs all dates
         setRegDates(dates);
         // console.log("Something", res.date.createdDate);
       } else {
@@ -83,6 +83,12 @@ const AdminPage = () => {
   useEffect(() => {
     getAllUser();
   }, []);
+
+  const deleteAccount = async () => {
+    try {
+      const res = await fetchData("/api/");
+    } catch (error) {}
+  };
 
   useEffect(() => {
     const transformedRows = users.map((user) => ({
@@ -305,6 +311,14 @@ const AdminPage = () => {
         <DataGrid
           rows={rows}
           columns={columns}
+          // initialState={{
+          //   pagination: {
+          //     paginationModel: {
+          //       pageSize: 20,
+          //     },
+          //   },
+          // }}
+          // pageSizeOptions={[5]}
           editMode="row"
           rowModesModel={rowModesModel}
           onRowModesModelChange={setRowModesModel}
