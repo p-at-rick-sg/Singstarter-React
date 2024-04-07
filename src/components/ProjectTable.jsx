@@ -23,26 +23,29 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
   const fetchData = useFetch();
   const [rows, setRows] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [orderLines, setOrderLines] = useState({});
 
   //Get the order data
-  function createRow(projectID, title, target, total, orderID, date, customerEmail, value) {
+  function createRow(projectID, title, target, total) {
     return {
       projectID,
       title,
       target,
       total,
-      history: [
-        {
-          orderID,
-          date,
-          customerEmail,
-          value,
-        },
-      ],
+      history: [],
     };
   }
-  // using this call with this data
-  // const rows = [createData('Project 1', 1000, 150, 50), createData('Project 2', 5000, 500, 100)];
+
+  function createOrdersRow(orderID, date, customerEmail, value) {
+    return (
+      {
+        orderID,
+        date,
+        customerEmail,
+        value,
+      } || {}
+    );
+  }
 
   const fetchOrdersForProject = async projectID => {
     //gets orders for 1 project
@@ -71,7 +74,8 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
   }, [projects]);
 
   useEffect(() => {
-    if (orders.length !== 0) {
+    console.log(orders);
+    if (projects.length !== 0) {
       const newRow = createRow(
         projects[0]._id,
         projects[0].title,
@@ -82,9 +86,20 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
         orders[0].customerEmail,
         orders[0]._doc.totalValue
       );
+      if (orders.length !== 0) {
+        for (const order of orders) {
+          const date = new Date(order._doc.createdDate).toLocaleDateString();
+          const newOrderRow = createOrdersRow(
+            order._id,
+            date,
+            order.customerEmail,
+            order._doc.totalValue
+          );
+          newRow.history.push(newOrderRow);
+        }
+      }
       //setRows([...rows, newRow || {}]);
       setRows(prevRows => [...prevRows, newRow || {}]);
-      console.log('rows: ', rows);
     }
   }, [orders]);
 
