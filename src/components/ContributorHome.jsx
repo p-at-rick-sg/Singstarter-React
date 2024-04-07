@@ -56,36 +56,39 @@ const ContributorHome = () => {
   return (
     <>
       <Container component="main" maxWidth="lg">
-        {/* <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            border: '1px solid black', //remove once layout looks OK
-          }}> */}
-
-        {/* Top Row */}
-        <Grid container spacing={2}>
-          <Grid container item sm={6} direction="column" sx={{border: 'red 1px solid'}}>
+        <Grid container spacing={2} sx={{marginTop: '10px'}}>
+          <Grid container item sm={6} direction="column" sx={{border: 'red 0px solid'}}>
             <Typography component="h2" variant="h5" sx={{color: 'primary.main', fontWeight: '600'}}>
               Your Projects
             </Typography>
           </Grid>
-          <Grid item sm={6} sx={{textAlign: 'right', border: 'green 1px solid'}}>
+          <Grid item sm={3} sx={{textAlign: 'right', border: 'green 0px solid'}}>
+            <Typography component="h2" variant="h5" sx={{color: 'primary.main', fontWeight: '600'}}>
+              Questions & Answers
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            sm={3}
+            sx={{
+              textAlign: 'right',
+              alignItems: 'flex-start',
+              marginBottom: '0px',
+              border: 'green 0px solid',
+            }}>
             <Button
               variant="contained"
-              sx={{mt: 3, mb: 2, mr: 3}}
+              sx={{mt: 0, mb: 2, mr: 0}}
               onClick={() => navigate('/member/add')}>
               Add Project
             </Button>
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} sx={{border: 'black 3px solid'}}>
+        <Grid container spacing={2} sx={{border: 'black 0px solid'}}>
           <Grid container item xs={6} direction="column">
-            <Grid item xs={12} sm={6} sx={{border: 'pink 2px solid'}}>
-              <Grid item xs={12} sm={6} sx={{border: 'pink 3px solid'}}>
+            <Grid item xs={12} sm={6} sx={{border: 'pink 0px solid'}}>
+              <Grid item xs={12} sm={6} sx={{border: 'pink 0px solid'}}>
                 <ProjectTable
                   projects={projects}
                   user={user}
@@ -95,18 +98,11 @@ const ContributorHome = () => {
             </Grid>
           </Grid>
           <Grid container item xs={6} direction="column">
-            <Grid item sm={6} sx={{border: 'orange 1px solid'}}>
+            <Grid item sm={6} sx={{border: 'orange 0px solid'}}>
               <QandASection selectedProjectID={selectedProjectID} />
-              {/* <Typography
-                  component="h2"
-                  variant="h5"
-                  sx={{color: 'primary.main', fontWeight: '600'}}>
-                  Questions & Answers
-                </Typography> */}
             </Grid>
           </Grid>
         </Grid>
-        {/* </Box> */}
       </Container>
     </>
   );

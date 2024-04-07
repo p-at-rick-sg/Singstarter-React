@@ -76,36 +76,30 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
   useEffect(() => {
     console.log(orders);
     if (projects.length !== 0) {
-      const newRow = createRow(
-        projects[0]._id,
-        projects[0].title,
-        projects[0].target,
-        projects[0].total || 0,
-        orders[0]._doc._id,
-        orders[0]._doc.createdDate,
-        orders[0].customerEmail,
-        orders[0]._doc.totalValue
-      );
-      if (orders.length !== 0) {
-        for (const order of orders) {
-          const date = new Date(order._doc.createdDate).toLocaleDateString();
-          const newOrderRow = createOrdersRow(
-            order._id,
-            date,
-            order.customerEmail,
-            order._doc.totalValue
-          );
-          newRow.history.push(newOrderRow);
+      for (const project of projects) {
+        const newRow = createRow(project._id, project.title, project.target, project.total || 0);
+        if (orders.length !== 0) {
+          for (const order of orders) {
+            const date = new Date(order._doc.createdDate).toLocaleDateString();
+            const newOrderRow = createOrdersRow(
+              order._id,
+              date,
+              order.customerEmail,
+              order._doc.totalValue
+            );
+            newRow.history.push(newOrderRow);
+          }
         }
+        //setRows([...rows, newRow || {}]);
+        setRows(prevRows => [...prevRows, newRow || {}]);
       }
-      //setRows([...rows, newRow || {}]);
-      setRows(prevRows => [...prevRows, newRow || {}]);
+    } else {
+      setRows([]);
     }
   }, [orders]);
 
   function Row({row}) {
     const [open, setOpen] = useState(false);
-    const [showingDetails, setShowingDetails] = useState(false);
 
     const handleRowClick = () => {
       switch (open) {
@@ -176,7 +170,6 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
   return (
     <Box width={500}>
       <TableContainer component={Paper}>
-        {/* {orders && <p>{orders[0].customerEmail}</p>} */}
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
