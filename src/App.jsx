@@ -15,7 +15,7 @@ import Cancel from './components/Cancel';
 import AddProject from './components/AddProject';
 import ProfileManager from './components/ProfileManager';
 import AdminPage from './pages/AdminPage';
-import ProjectTable from './components/ProjectTable';
+import UploadFiles from './components/UploadFiles';
 
 //Context Imports (may need to set the theme here if we want light/dark mode setup)
 import {useUser} from './hooks/useUser';
@@ -61,7 +61,7 @@ function App() {
               <Route path="/member/add" element={<AddProject />} />
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/profile" element={<ProfileManager />} />
-              <Route path="/table" element={<ProjectTable />} />
+              <Route path="/files" element={<UploadFiles />} />
             </Routes>
             <Footer />
           </Fragment>

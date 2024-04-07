@@ -43,4 +43,4 @@ const UploadFiles = ({}) => {
   );
 };
 
-export default UploadForm;
+export default UploadFiles;

@@ -7,6 +7,7 @@ import {Button, TextField, Grid, Box, Container, Typography} from '@mui/material
 
 //Component Imports
 import ProjectTable from './ProjectTable';
+import QandASection from './QandASection';
 
 const ContributorHome = () => {
   const {user, setUser, checkSession, setPageTitle} = useUser();
@@ -55,43 +56,36 @@ const ContributorHome = () => {
   return (
     <>
       <Container component="main" maxWidth="lg">
-        <Box
+        {/* <Box
           sx={{
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             border: '1px solid black', //remove once layout looks OK
-          }}>
-          <Grid container spacing={2}>
-            <Grid container item xs={6} direction="column">
-              spacing the button
-            </Grid>
-            <Grid item xs={8} sm={5} sx={{textAlign: 'right'}}>
-              <Button
-                variant="contained"
-                sx={{mt: 3, mb: 2, mr: -7}}
-                onClick={() => navigate('/member/add')}>
-                Add Project
-              </Button>
-            </Grid>
-          </Grid>
+          }}> */}
 
-          {user.accessToken && (
-            <Typography component="h1" variant="h5" sx={{color: 'primary.main'}}>
-              Welcome back {user.firstName} {selectedProjectID && <p>{selectedProjectID}</p>}{' '}
-              {projects && <p>{projects.id}</p>}
+        {/* Top Row */}
+        <Grid container spacing={2}>
+          <Grid container item sm={6} direction="column" sx={{border: 'red 1px solid'}}>
+            <Typography component="h2" variant="h5" sx={{color: 'primary.main', fontWeight: '600'}}>
+              Your Projects
             </Typography>
-          )}
-          <Grid container spacing={2}>
-            <Grid container item xs={6} direction="column">
-              <Grid item xs={12} sm={6}>
-                <Typography
-                  component="h2"
-                  variant="h5"
-                  sx={{color: 'primary.main', fontWeight: '600'}}>
-                  Your Projects
-                </Typography>
+          </Grid>
+          <Grid item sm={6} sx={{textAlign: 'right', border: 'green 1px solid'}}>
+            <Button
+              variant="contained"
+              sx={{mt: 3, mb: 2, mr: 3}}
+              onClick={() => navigate('/member/add')}>
+              Add Project
+            </Button>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={2} sx={{border: 'black 3px solid'}}>
+          <Grid container item xs={6} direction="column">
+            <Grid item xs={12} sm={6} sx={{border: 'pink 2px solid'}}>
+              <Grid item xs={12} sm={6} sx={{border: 'pink 3px solid'}}>
                 <ProjectTable
                   projects={projects}
                   user={user}
@@ -99,18 +93,20 @@ const ContributorHome = () => {
                 />
               </Grid>
             </Grid>
-            <Grid container item xs={6} direction="column">
-              <Grid item xs={12} sm={6}>
-                <Typography
+          </Grid>
+          <Grid container item xs={6} direction="column">
+            <Grid item sm={6} sx={{border: 'orange 1px solid'}}>
+              <QandASection selectedProjectID={selectedProjectID} />
+              {/* <Typography
                   component="h2"
                   variant="h5"
                   sx={{color: 'primary.main', fontWeight: '600'}}>
                   Questions & Answers
-                </Typography>
-              </Grid>
+                </Typography> */}
             </Grid>
           </Grid>
-        </Box>
+        </Grid>
+        {/* </Box> */}
       </Container>
     </>
   );
