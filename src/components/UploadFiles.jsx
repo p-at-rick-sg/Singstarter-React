@@ -1,13 +1,38 @@
+import {useState} from 'react';
 import {useUser} from '../hooks/useUser';
 
 //MUI Imports
-import {FormControl, Box, TextField, LinearProgress, Button} from '@mui/material';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+  TextField,
+  LinearProgress,
+  Button,
+  IconButton,
+  ListItemAvatar,
+  Avatar,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FolderIcon from '@mui/icons-material/Folder';
 
 const UploadFiles = ({}) => {
   const {user} = useUser();
-  const handleFiles = async e => {
-    setImage({...image, file: e.target.files[0], name: e.target.files[0].name});
+  const [imageList, setImageList] = useState([]);
+  const [secondary, setSecondary] = useState(false);
+
+  const handleFile = e => {
+    const tmpImageObj = {file: e.target.files[0], name: e.target.files[0].name};
+    setImageList(prevState => [...prevState, tmpImageObj]);
   };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    // const formData = new FormData();
+    // formData.append(newProject.title, image);
+  };
+
   //Using a standard fetch for now - may upodate the hook tomorrow to accomodate the application type required
   const uploadImage = async projectID => {
     const myHeaders = new Headers();
@@ -26,20 +51,26 @@ const UploadFiles = ({}) => {
     );
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    addProject();
-    const formData = new FormData();
-    formData.append(newProject.title, image);
-  };
-
   return (
-    <form>
-      <TextField type="file" />
-      <Button variant="contained" color="primary" component="span">
-        Upload Files
+    <Box component="form" onSubmit={handleSubmit} sx={{mt: 1}}>
+      <List dense={true}>
+        {imageList.map((image, index) => (
+          <ListItem key={index}>
+            <ListItemAvatar>
+              <Avatar>
+                <FolderIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={image.name} />
+          </ListItem>
+        ))}
+      </List>
+      <TextField type="file" id="image" name="images" onChange={handleFile} />
+      <Button variant="contained" color="primary" component="span" onClick={handleSubmit}>
+        Add File
       </Button>
-    </form>
+      {imageList && <p>{imageList.length}</p>}
+    </Box>
   );
 };
 
