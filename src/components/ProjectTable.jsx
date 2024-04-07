@@ -1,22 +1,25 @@
 import {useEffect, useState} from 'react';
 import useFetch from '../hooks/useFetch';
 
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
+import {
+  Collapse,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Paper,
+} from '@mui/material';
+
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import LoupeIcon from '@mui/icons-material/Loupe';
 
-export default function ProjectTable({projects, user}) {
+export default function ProjectTable({projects, user, setSelectedProjectID}) {
   const fetchData = useFetch();
   const [rows, setRows] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -85,15 +88,31 @@ export default function ProjectTable({projects, user}) {
     }
   }, [orders]);
 
-  function Row(props) {
-    const {row} = props;
+  function Row({row}) {
     const [open, setOpen] = useState(false);
-    //the row rendering to the table below
+    const [showingDetails, setShowingDetails] = useState(false);
+
+    const handleRowClick = () => {
+      switch (open) {
+        case true:
+          setOpen(false);
+          setSelectedProjectID(null);
+          break;
+        case false:
+          setOpen(true);
+          setSelectedProjectID(row.projectID);
+          break;
+        default:
+          console.log('no case matches');
+      }
+    };
+
+    //creating the row
     return (
       <>
-        <TableRow sx={{'& > *': {borderBottom: 'unset'}}}>
+        <TableRow key={row.projectID} sx={{'& > *': {borderBottom: 'unset'}}}>
           <TableCell>
-            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            <IconButton aria-label="expand row" size="small" onClick={handleRowClick}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
@@ -150,10 +169,10 @@ export default function ProjectTable({projects, user}) {
               <TableCell>Your Projects</TableCell>
               <TableCell align="left">Target</TableCell>
               <TableCell align="left">Total Raised</TableCell>
-              <TableCell align="left">Order Price</TableCell>
+              <TableCell align="left">Unit Price</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>{rows && rows.map(row => <Row key={row.title} row={row} />)}</TableBody>
+          <TableBody>{rows && rows.map(row => <Row key={row.projectID} row={row} />)}</TableBody>
         </Table>
       </TableContainer>
     </Box>

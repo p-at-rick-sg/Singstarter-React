@@ -3,33 +3,26 @@ import {useNavigate} from 'react-router-dom';
 import {useUser} from '../hooks/useUser';
 import useFetch from '../hooks/useFetch';
 //MUI Imports
-import {
-  Avatar,
-  Button,
-  TextField,
-  Grid,
-  Box,
-  Container,
-  Typography,
-  CssBaseline,
-  InputAdornment,
-  InputLabel,
-} from '@mui/material';
+import {Button, TextField, Grid, Box, Container, Typography} from '@mui/material';
 
 //Component Imports
-import SingleCard from './SingleCard';
 import ProjectTable from './ProjectTable';
 
 const ContributorHome = () => {
   const {user, setUser, checkSession, setPageTitle} = useUser();
+  const navigate = useNavigate();
   const fetchData = useFetch();
   const [projects, setProjects] = useState([]);
-  const navigate = useNavigate();
+  const [selectedProjectID, setSelectedProjectID] = useState();
 
   const populateUser = async () => {
     if (user.accessToken) {
       const result = await fetchData('/api/users', 'GET', undefined, user.accessToken);
-      setUser({...user, firstName: result.data.firstName, createdDate: result.data.createdDate});
+      setUser({
+        ...user,
+        firstName: result.data.firstName,
+        createdDate: result.data.createdDate,
+      });
     }
   };
 
@@ -43,6 +36,7 @@ const ContributorHome = () => {
           user.accessToken
         );
         if (result.ok) {
+          console.log(result);
           setProjects(result.data);
         }
       } catch (err) {
@@ -85,7 +79,8 @@ const ContributorHome = () => {
 
           {user.accessToken && (
             <Typography component="h1" variant="h5" sx={{color: 'primary.main'}}>
-              Welcome back {user.firstName}
+              Welcome back {user.firstName} {selectedProjectID && <p>{selectedProjectID}</p>}{' '}
+              {projects && <p>{projects.id}</p>}
             </Typography>
           )}
           <Grid container spacing={2}>
@@ -97,13 +92,11 @@ const ContributorHome = () => {
                   sx={{color: 'primary.main', fontWeight: '600'}}>
                   Your Projects
                 </Typography>
-                <ProjectTable projects={projects} user={user} />
-                {/* {Array.isArray(projects) &&
-                  projects.map(project => (
-                    <Grid item xs={12} sm={6} key={project._id}>
-                      <SingleCard projectID={project._id} />
-                    </Grid>
-                  ))} */}
+                <ProjectTable
+                  projects={projects}
+                  user={user}
+                  setSelectedProjectID={setSelectedProjectID}
+                />
               </Grid>
             </Grid>
             <Grid container item xs={6} direction="column">

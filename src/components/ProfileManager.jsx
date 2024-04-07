@@ -1,4 +1,5 @@
 import {useState, useEffect, Fragment} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
   Container,
   FormControlLabel,
@@ -15,6 +16,7 @@ import useFetch from '../hooks/useFetch';
 const ProfileManager = () => {
   const {user, setUser} = useUser(); //also remember to push back to the database
   const fetchData = useFetch();
+  const navigate = useNavigate();
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [checked, setChecked] = useState(false);
   const [inputFields, SetInputFields] = useState({
@@ -75,12 +77,14 @@ const ProfileManager = () => {
     setChecked(e.target.checked);
   };
 
-  const handleUpdate = async () => {
-    if (!e.target.validity.valid) {
-      setError({...error, [e.target.name]: true});
-    } else {
-      setError({...error, [e.target.name]: false});
-    }
+  const handleUpdate = async e => {
+    e.preventDefault();
+    console.log(e);
+    // if (!e.target.validity.valid) {
+    //   setError({...error, [e.target.name]: true});
+    // } else {
+    //   setError({...error, [e.target.name]: false});
+    // }
     //put all the values into a single object to send 1 update
     const updatedUser = {
       firstName: inputFields.firstName,
@@ -102,13 +106,18 @@ const ProfileManager = () => {
     try {
       const result = await fetchData('/api/users/update', 'PATCH', updatedUser, user.accessToken);
       console.log(result);
-      if (result.ok) Navigate('/member');
+      if (result.ok) navigate('/member');
     } catch (err) {
       console.log(err.message);
     }
   };
 
   const handleChange = e => {
+    if (!e.target.validity.valid) {
+      setError({...error, [e.target.name]: true});
+    } else {
+      setError({...error, [e.target.name]: false});
+    }
     SetInputFields({...inputFields, [e.target.name]: e.target.value});
   };
 
@@ -116,6 +125,7 @@ const ProfileManager = () => {
     <>
       <Container component="main" maxWidth="lg">
         <Box component="form" onSubmit={handleUpdate} sx={{mt: 3}}>
+          {checked && <p>{checked}</p>}
           <Grid
             container
             spacing={2}

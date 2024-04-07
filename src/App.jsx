@@ -61,7 +61,6 @@ function App() {
               <Route path="/member/add" element={<AddProject />} />
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/profile" element={<ProfileManager />} />
-              //Temp route testing single card
               <Route path="/table" element={<ProjectTable />} />
             </Routes>
             <Footer />
