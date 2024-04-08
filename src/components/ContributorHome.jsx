@@ -23,6 +23,7 @@ const ContributorHome = () => {
         ...user,
         firstName: result.data.firstName,
         createdDate: result.data.createdDate,
+        id: result.data.id,
       });
     }
   };
@@ -99,7 +100,7 @@ const ContributorHome = () => {
           </Grid>
           <Grid container item xs={6} direction="column">
             <Grid item sm={6} sx={{border: 'orange 0px solid'}}>
-              <QandASection selectedProjectID={selectedProjectID} />
+              <QandASection selectedProjectID={selectedProjectID} projectOwner={user.id} />
             </Grid>
           </Grid>
         </Grid>

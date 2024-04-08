@@ -47,7 +47,7 @@ const Signin = () => {
   useEffect(() => {
     checkSession();
   }, []);
-
+  //temp line
   const handleSignin = async e => {
     e.preventDefault();
     setSubmitting(true); //we can use this variable for the spinner
@@ -58,9 +58,15 @@ const Signin = () => {
     if (result.ok) {
       localStorage.setItem('refresh', result.data.refresh); //set the refresh in local storage
       const decodedClaims = jwtDecode(result.data.access); //decode the access token
-      setUser({...user, role: decodedClaims.role, accessToken: result.data.access});
+      setUser({
+        ...user,
+        role: decodedClaims.role,
+        accessToken: result.data.access,
+        id: result.data.id,
+      });
       sessionStorage.setItem('access', result.data.access);
       sessionStorage.setItem('role', decodedClaims.role);
+      sessionStorage.setItem('id', decodedClaims.id);
       setSubmitting(false);
       if (decodedClaims.role === 'contributor') {
         navigate('/member');
