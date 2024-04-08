@@ -1,27 +1,41 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
-import QandA from '../components/QandA';
+import QandA from "../components/QandA";
 
-import useFetch from '../hooks/useFetch';
-import {useUser} from '../hooks/useUser';
+import useFetch from "../hooks/useFetch";
+import { useUser } from "../hooks/useUser";
 
 // mui
-import {Paper, List, Box, Button, TextField, Grid, Typography} from '@mui/material';
+import {
+  Paper,
+  List,
+  Box,
+  Button,
+  TextField,
+  Grid,
+  Typography,
+} from "@mui/material";
 
-const QandASection = ({selectedProjectID}) => {
+const QandASection = ({ selectedProjectID, projectOwner }) => {
   const [qAndA, setQandA] = useState([]);
-  const [questionInput, setQuestionInput] = useState('');
-  const {user} = useUser();
+  const [questionInput, setQuestionInput] = useState("");
+  const { user } = useUser();
 
-  const questionRef = useRef('');
+  // const decodedClaims = jwtDecode(user.accessToken);
+
+  const questionRef = useRef("");
 
   const fetchData = useFetch();
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (user.role === 'contributor' || user.role === 'user') {
+    if (
+      (user.role === "contributor" || user.role === "user") &&
+      questionInput.length !== 0
+    ) {
       addQuestion();
-      setQuestionInput('');
+      setQuestionInput("");
     } else {
       console.log(`dog`);
     }
@@ -29,31 +43,33 @@ const QandASection = ({selectedProjectID}) => {
 
   const getQandA = async () => {
     console.log(selectedProjectID);
-    try {
-      const res = await fetchData(
-        '/api/projects/qa/' + selectedProjectID,
-        'GET',
-        undefined,
-        undefined
-      );
+    if (selectedProjectID !== null) {
+      try {
+        const res = await fetchData(
+          "/api/projects/qa/" + selectedProjectID,
+          "GET",
+          undefined,
+          undefined
+        );
 
-      if (res.ok) {
-        setQandA(res.data);
-        console.log(`Projects fetched successfully`);
-      } else {
-        alert(JSON.stringify(res.data));
-        console.log(res.data);
-      }
-    } catch (error) {}
+        if (res.ok) {
+          setQandA(res.data);
+          console.log(`Projects fetched successfully`);
+        } else {
+          // alert(JSON.stringify(res.data));
+          console.log(res.data);
+        }
+      } catch (error) {}
+    }
   };
 
   const addQuestion = async () => {
     try {
       const res = await fetchData(
         // DON'T FORGET TO change the concat id to a propped value
-        '/api/projects/q/' + selectedProjectID,
-        'PATCH',
-        {question: questionRef.current.value},
+        "/api/projects/q/" + selectedProjectID,
+        "PATCH",
+        { question: questionRef.current.value },
         user.accessToken
       );
 
@@ -75,9 +91,9 @@ const QandASection = ({selectedProjectID}) => {
     <>
       <Typography variant="h4">Q & A</Typography>
       {selectedProjectID && <p>{selectedProjectID}</p>}
-      <Paper style={{maxHeight: 300, overflow: 'auto'}}>
+      <Paper style={{ maxHeight: 300, overflow: "auto" }}>
         <List>
-          {qAndA.map(item => {
+          {qAndA.map((item) => {
             console.log(item);
             return (
               <QandA
@@ -85,6 +101,7 @@ const QandASection = ({selectedProjectID}) => {
                 question={item.question}
                 answer={item.answer}
                 id={item._id}
+                projectOwner={projectOwner}
                 getQandA={getQandA}
               />
             );
@@ -94,24 +111,27 @@ const QandASection = ({selectedProjectID}) => {
       <br />
       <br />
 
+      {/* {decodedClaims.id !== projectOwner && ( */}
       <Box component="form" onSubmit={handleSubmit}>
         <TextField
           id="standard-basic"
           inputRef={questionRef}
           value={questionInput}
-          onChange={e => setQuestionInput(e.target.value)}
+          onChange={(e) => setQuestionInput(e.target.value)}
           label="Ask a question"
           maxRows={5}
           variant="standard"
           fullWidth
-          inputProps={{minLength: 20, maxLength: 3600}}
-          sx={{maxWidth: 555}}
+          inputProps={{ minLength: 20, maxLength: 3600 }}
+          sx={{ maxWidth: 555 }}
         />
 
         <Button variant="outlined" type="submit">
           Ask
         </Button>
+        <Button onClick={() => console.log(questionInput.length)}>test</Button>
       </Box>
+      {/* )} */}
     </>
   );
 };
@@ -124,3 +144,8 @@ export default QandASection;
 // -[x] add answer to question using question id
 // -[] toast for asking question when not logged in
 // -[x] answer question button should only appear when logged in as contributor
+
+/*
+NOTES:
+-[] put user _id in context to shortcircuit easier
+*/

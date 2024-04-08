@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -7,11 +8,13 @@ import CardContent from "@mui/material/CardContent";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
+
 import { useUser } from "../hooks/useUser";
 import useFetch from "../hooks/useFetch";
 
 const QandA = (props) => {
   const { user } = useUser();
+  const decodedClaims = jwtDecode(user.accessToken);
   const fetchData = useFetch();
   const [answerState, setAnswerState] = useState(false);
   const answerRef = useRef();
@@ -98,12 +101,15 @@ const QandA = (props) => {
           )}
         </CardContent>
         <CardActions>
-          {user.role === "contributor" && (
+          {/* {(user.role === "contributor") && ( */}
+          {decodedClaims.id === props.projectOwner && (
             <>
               {!answerState && (
-                <Button size="small" onClick={() => setAnswerState(true)}>
-                  Answer Question
-                </Button>
+                <>
+                  <Button size="small" onClick={() => setAnswerState(true)}>
+                    Answer Question
+                  </Button>
+                </>
               )}
             </>
           )}
