@@ -86,14 +86,90 @@ const AdminPage = () => {
 
   const deleteAccount = async (userID) => {
     try {
-      const res = await fetchData(`/api/users/delete/${userID}`);
+      const res = await fetchData(
+        `/api/users/delete/${userID}`,
+        "DELETE",
+        undefined,
+        user.accessToken
+      );
       if (res.ok) {
         console.log("User ID DELETED", res.data);
+      } else {
+        // Handle non-ok response
+        console.error("Failed to delete user:", res.statusText);
       }
     } catch (error) {
       console.error(error.message);
     }
   };
+
+  const handleSaveClick = (id) => async () => {
+    // Fetching the updated row directly from the state
+    const updatedRow = rows.find((row) => row.id === id);
+    if (!updatedRow) {
+      console.error("Failed to find the updated row data");
+      return;
+    }
+
+    const updatedUserData = {
+      firstName: updatedRow.name, // Ensure these match your DataGrid's `field` definitions
+      lastName: updatedRow.lastName,
+      role: updatedRow.role,
+      active: updatedRow.active,
+    };
+
+    console.log(`Updating user with ID: ${id}`, updatedUserData);
+    await updateAccount(id, updatedUserData);
+  };
+
+  const updateAccount = async (userID, updatedUser) => {
+    console.log(`Attempting to update user ${userID} with data:`, updatedUser);
+    try {
+      const res = await fetchData(
+        `/api/users/update/${userID}`,
+        "PATCH",
+        updatedUser,
+        user.accessToken
+      );
+      if (res.ok) {
+        console.log("User updated successfully", res);
+        // Optionally refresh user list or update UI accordingly
+      } else {
+        console.error("Failed to update user:", res.message);
+        // Handle errors (e.g., show a message to the user)
+      }
+    } catch (error) {
+      console.error("Error updating user:", error.message);
+      // Handle errors (e.g., show a message to the user)
+    }
+  };
+
+  // const updateAccount = async (userID, updatedUser) => {
+  //   // const updatedUser = {
+  //   //   firstName: inputFields.firstName,
+  //   //   lastName: inputFields.lastName,
+  //   //   active: inputFields.active,
+  //   // };
+
+  //   try {
+  //     const res = await fetchData(
+  //       `/api/users/update/${userID}`,
+  //       "PATCH",
+  //       updatedUser,
+  //       user.accessToken
+  //     );
+  //     if (res.ok) {
+  //       console.log("User updated successfully", res);
+  //       // Optionally refresh user list or update UI accordingly
+  //     } else {
+  //       console.error("Failed to update user:", res.message);
+  //       // Handle errors (e.g., show a message to the user)
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating user:", error.message);
+  //     // Handle errors (e.g., show a message to the user)
+  //   }
+  // };
 
   useEffect(() => {
     const transformedRows = users.map((user) => ({
@@ -173,12 +249,41 @@ const AdminPage = () => {
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
+  // const handleSaveClick = (id) => async () => {
+  //   const rowToUpdate = rows.find((row) => row.id === id);
+  //   const updatedData = {
+  //     firstName: rowToUpdate.firstName,
+  //     lastName: rowToUpdate.lastName,
+  //     // add other fields as needed
+  //   };
+  //   await updateAccount(id, updatedData);
+  //   setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  //   // Optionally, refresh your data here
+  // };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const handleProcessRowUpdate = async (newRow) => {
+    try {
+      const response = await fetchData(
+        `/api/users/update/${newRow.id}`,
+        "PATCH",
+        newRow,
+        user.accessToken
+      );
+      if (response.ok) {
+        console.log("User updated successfully");
+        return newRow; // Return the updated row to be committed to the grid
+      } else {
+        // Handle non-ok response
+        console.error("Failed to update user:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+    return newRow;
   };
 
   const handleDeleteClick = (id) => () => {
+    deleteAccount(id);
     setRows(rows.filter((row) => row.id !== id));
   };
 
@@ -198,6 +303,17 @@ const AdminPage = () => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
+  };
+
+  const getUpdatedRowData = (id) => {
+    // This should return the updated data for the row with the given id
+    const updatedRow = rows.find((row) => row.id === id);
+    return {
+      firstName: updatedRow.firstName,
+      lastName: updatedRow.lastName,
+      active: updatedRow.active,
+      // Include other fields as necessary
+    };
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -241,7 +357,7 @@ const AdminPage = () => {
       width: 100,
       editable: true,
       type: "singleSelect",
-      valueOptions: ["Active", "Inactive"],
+      valueOptions: ["true", "false"],
     },
 
     {
@@ -327,6 +443,7 @@ const AdminPage = () => {
           editMode="row"
           rowModesModel={rowModesModel}
           onRowModesModelChange={setRowModesModel}
+          processRowUpdate={handleProcessRowUpdate} // Add this prop
           components={{
             Toolbar: EditToolbar,
           }}
