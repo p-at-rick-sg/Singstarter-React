@@ -70,7 +70,7 @@ const ProjectPage = () => {
           <Grid container item spacing={3} xs={12} md={7}>
             <Grid item xs={12}>
               <ProjectDetails project={project} />
-              <QandASection projectID={id} />
+              <QandASection selectedProjectID={id} />
             </Grid>
           </Grid>
         </Grid>
