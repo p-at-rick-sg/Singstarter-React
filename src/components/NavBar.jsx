@@ -67,12 +67,6 @@ const NavBar = () => {
                 </Button>
               )}
 
-              {user.role === "contributor" && (
-                <Button color="inherit" component={NavLink} to="project">
-                  Project test
-                </Button>
-              )}
-
               {!user.role && (
                 <Button color="inherit" component={NavLink} to="signup">
                   Sign Up
