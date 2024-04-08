@@ -21,6 +21,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
   const [qAndA, setQandA] = useState([]);
   const [questionInput, setQuestionInput] = useState("");
   const { user } = useUser();
+  const decodedClaims = jwtDecode(user.accessToken);
 
   // const decodedClaims = jwtDecode(user.accessToken);
 
@@ -94,7 +95,6 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
       <Paper style={{ maxHeight: 300, overflow: "auto" }}>
         <List>
           {qAndA.map((item) => {
-            console.log(item);
             return (
               <QandA
                 key={item._id}
@@ -111,27 +111,26 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
       <br />
       <br />
 
-      {/* {decodedClaims.id !== projectOwner && ( */}
-      <Box component="form" onSubmit={handleSubmit}>
-        <TextField
-          id="standard-basic"
-          inputRef={questionRef}
-          value={questionInput}
-          onChange={(e) => setQuestionInput(e.target.value)}
-          label="Ask a question"
-          maxRows={5}
-          variant="standard"
-          fullWidth
-          inputProps={{ minLength: 20, maxLength: 3600 }}
-          sx={{ maxWidth: 555 }}
-        />
+      {decodedClaims.id !== projectOwner && (
+        <Box component="form" onSubmit={handleSubmit}>
+          <TextField
+            id="standard-basic"
+            inputRef={questionRef}
+            value={questionInput}
+            onChange={(e) => setQuestionInput(e.target.value)}
+            label="Ask a question"
+            maxRows={5}
+            variant="standard"
+            fullWidth
+            inputProps={{ minLength: 20, maxLength: 3600 }}
+            sx={{ maxWidth: 555 }}
+          />
 
-        <Button variant="outlined" type="submit">
-          Ask
-        </Button>
-        <Button onClick={() => console.log(questionInput.length)}>test</Button>
-      </Box>
-      {/* )} */}
+          <Button variant="outlined" type="submit">
+            Ask
+          </Button>
+        </Box>
+      )}
     </>
   );
 };
