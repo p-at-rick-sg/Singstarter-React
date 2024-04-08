@@ -24,12 +24,17 @@ const UploadFiles = ({}) => {
   const [secondary, setSecondary] = useState(false);
 
   const handleFile = e => {
-    const fileArr = e.target.files[0].name.split('.').pop();
-    // const fileSuffix = fileArr.pop();
-    console.log(fileArr);
-    // if (e.targetfiles[0] )
-    const tmpImageObj = {file: e.target.files[0], name: e.target.files[0].name};
-    setImageList(prevState => [...prevState, tmpImageObj]);
+    const allowedFileTypes = ['png', 'jpg', 'jpeg', 'tiff'];
+    const fileSuffix = e.target.files[0].name.split('.').pop();
+    console.log(fileSuffix);
+    if (allowedFileTypes.includes(fileSuffix)) {
+      try {
+        const tmpImageObj = {file: e.target.files[0], name: e.target.files[0].name};
+        setImageList(prevState => [...prevState, tmpImageObj]);
+      } catch (err) {
+        console.error('error: ', err.message);
+      }
+    } else console.error('file type not supported');
   };
 
   const handleSubmit = e => {
@@ -65,7 +70,13 @@ const UploadFiles = ({}) => {
     <Box component="form" onSubmit={handleSubmit} sx={{mt: 1}}>
       <List dense={true}>
         {imageList.map((image, index) => (
-          <ListItem key={index}>
+          <ListItem
+            key={index}
+            secondaryAction={
+              <IconButton edge="end" aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            }>
             <ListItemAvatar>
               <Avatar>
                 <FolderIcon />
