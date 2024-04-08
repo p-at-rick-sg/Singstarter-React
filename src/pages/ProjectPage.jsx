@@ -6,12 +6,11 @@ import ProjectDetails from "../components/ProjectDetails";
 import QandASection from "../components/QandASection";
 
 const ProjectPage = () => {
-  let { id } = useParams(); // Extracting project ID from URL
+  const { id } = useParams(); // extract project ID from URL
   const fetchData = useFetch();
-  const [project, setProject] = useState(null); // Initialize project as null
+  const [project, setProject] = useState(null); // init "project" as null
 
   useEffect(() => {
-    // Define the function inside useEffect if it doesn't depend on props or state
     const getProjectDetails = async () => {
       try {
         const res = await fetchData(`/api/projects/?projectID=${id}`, "GET");
@@ -70,7 +69,10 @@ const ProjectPage = () => {
           <Grid container item spacing={3} xs={12} md={7}>
             <Grid item xs={12}>
               <ProjectDetails project={project} />
-              <QandASection projectID={id} />
+              <QandASection
+                selectedProjectID={id}
+                projectOwner={project[0].owner}
+              />
             </Grid>
           </Grid>
         </Grid>

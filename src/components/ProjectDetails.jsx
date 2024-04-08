@@ -1,4 +1,11 @@
-import { Card, Grid, Paper, Typography, Container } from "@mui/material";
+import {
+  Card,
+  Grid,
+  Paper,
+  Typography,
+  Container,
+  Button,
+} from "@mui/material";
 import React from "react";
 
 const ProjectDetails = (props) => {
@@ -20,6 +27,9 @@ const ProjectDetails = (props) => {
           <Typography>
             Target: {props.project[0].currentTotal} / ${props.project[0].target}
           </Typography>
+          <Button variant="contained" size="large">
+            HI PATRICK
+          </Button>
         </Grid>
         <Grid item>
           <Typography paragraph>{props.project[0].description}</Typography>
