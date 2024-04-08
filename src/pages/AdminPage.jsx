@@ -84,10 +84,15 @@ const AdminPage = () => {
     getAllUser();
   }, []);
 
-  const deleteAccount = async () => {
+  const deleteAccount = async (userID) => {
     try {
-      const res = await fetchData("/api/");
-    } catch (error) {}
+      const res = await fetchData(`/api/users/delete/${userID}`);
+      if (res.ok) {
+        console.log("User ID DELETED", res.data);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   useEffect(() => {

@@ -1,105 +1,81 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
-
-import { Button, Container, Grid, Paper } from "@mui/material";
-
+import { Container, Grid, Paper } from "@mui/material";
 import ProjectDetails from "../components/ProjectDetails";
 import QandASection from "../components/QandASection";
 
 const ProjectPage = () => {
+  let { id } = useParams(); // Extracting project ID from URL
   const fetchData = useFetch();
-  const [project, setProject] = useState([{ title: "" }]);
-  const getProjectDetails = async () => {
-    try {
-      const res = await fetchData(
-        // REMEMBER TO CHANGE ENDPOINT TO PROPPED PROJECT ID
-        "/api/projects/?projectID=" + projectID,
-        "GET",
-        undefined,
-        undefined
-      );
+  const [project, setProject] = useState(null); // Initialize project as null
 
-      if (res.ok) {
-        setProject(res.data);
-        console.log(`Project details fetched successfully`);
-        console.log(projects);
-      } else {
-        alert(JSON.stringify(res.data));
-        console.log(res.data);
+  useEffect(() => {
+    // Define the function inside useEffect if it doesn't depend on props or state
+    const getProjectDetails = async () => {
+      try {
+        const res = await fetchData(`/api/projects/?projectID=${id}`, "GET");
+        if (res.ok) {
+          setProject(res.data);
+          console.log(
+            `Project details fetched successfully for project ID: ${id}`
+          );
+        } else {
+          console.error("Failed to fetch project details:", res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching project details:", error);
       }
-    } catch (error) {}
-  };
+    };
 
-  // DEV TEST FUNCTIONS
-  const [projectID, setProjectID] = useState("6700ddf51fd1162aae22ea20");
+    getProjectDetails();
+  }, [id]); // Only re-run the effect if `id` changes
 
-  const testProjectA = () => {
-    setProjectID("6700ddf51fd1162aae22ea20");
-  };
-  const testProjectB = () => {
-    setProjectID("6700ddf51fd1162aae22ea26");
-  };
-
-  useEffect(() => getProjectDetails, []);
+  if (!project) {
+    return <div>Loading project details...</div>;
+  }
 
   return (
-    <>
-      <Container maxWidth="xl">
-        <Grid container spacing={1} marginTop={1}>
-          <Grid container item spacing={2}>
-            <Grid container item xs={12} md={5}>
-              <Grid item xs={12}>
-                <Paper>
-                  Picture carousell goes here
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />.
-                  <br />
-                  <Button
-                    onMouseEnter={() => testProjectA()}
-                    onClick={() => getProjectDetails()}
-                  >
-                    test project A
-                  </Button>
-                  <Button
-                    onMouseEnter={() => testProjectB()}
-                    onClick={() => getProjectDetails()}
-                  >
-                    test project B
-                  </Button>
-                </Paper>
-              </Grid>
+    <Container maxWidth="xl">
+      <Grid container spacing={1} marginTop={1}>
+        <Grid container item spacing={2}>
+          <Grid container item xs={12} md={5}>
+            <Grid item xs={12}>
+              <Paper>
+                {/* Placeholder for your picture carousel */}
+                Picture carousel goes here
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />.
+                <br />
+              </Paper>
             </Grid>
+          </Grid>
 
-            <Grid container item spacing={3} xs={12} md={7}>
-              <Grid item xs={12}>
-                <ProjectDetails project={project} />
-
-                <QandASection projectID={projectID} />
-              </Grid>
+          <Grid container item spacing={3} xs={12} md={7}>
+            <Grid item xs={12}>
+              <ProjectDetails project={project} />
+              <QandASection projectID={id} />
             </Grid>
           </Grid>
         </Grid>
-      </Container>
-
-      {/* <ProjectDetails />
-      <QandASection /> */}
-    </>
+      </Grid>
+    </Container>
   );
 };
 

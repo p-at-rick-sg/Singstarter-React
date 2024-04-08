@@ -3,6 +3,7 @@ import useFetch from "../hooks/useFetch";
 import LandingPage from "../pages/LandingPage";
 import { Title } from "@mui/icons-material";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 const HomeCard = () => {
   const [projects, setProjects] = useState([]);
@@ -14,6 +15,7 @@ const HomeCard = () => {
 
       if (res.ok) {
         setProjects(res.data);
+        console.log(res.data[0]._id);
         console.log(`Projects fetched successfully`);
       } else {
         alert(JSON.stringify(res.data));
@@ -64,12 +66,12 @@ const HomeCard = () => {
                   {/* Optionally include other SVG/icon here */}
                 </div>
                 <h3 className="mb-4 font-semibold text-2xl">
-                  <a
-                    href="#"
+                  <Link
+                    to={`/project/${project._id}`}
                     className="transition-all text-blue-900 hover:text-blue-600"
                   >
                     {project.title}
-                  </a>
+                  </Link>
                 </h3>
                 <p className="text-sky-800 text-sm mb-0">
                   {project.description}
