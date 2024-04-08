@@ -14,6 +14,8 @@ import Success from './components/Success';
 import Cancel from './components/Cancel';
 import AddProject from './components/AddProject';
 import ProfileManager from './components/ProfileManager';
+import StripePayment from './components/StripePayment';
+import Checkout from './components/Checkout';
 import AdminPage from './pages/AdminPage';
 
 //Context Imports (may need to set the theme here if we want light/dark mode setup)
@@ -78,9 +80,12 @@ function App() {
               <Route path="/" element={<Navigate to="home" />} />
               <Route path="home" element={<LandingPage />} />
               <Route path="*" element={<NotFoundPage />} />
+              <Route path="/project/:id" element={<ProjectPage />} />
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/profile" element={<ProfileManager />} />
               {/* move these routes to be under the a master member page?? */}
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/stripe" element={<StripePayment />} />
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
             </Routes>

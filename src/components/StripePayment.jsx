@@ -6,7 +6,7 @@ import {loadStripe} from '@stripe/stripe-js';
 import {Card, CardContent, CardActions, CardMedia, Button, Typography} from '@mui/material';
 
 const StripePayment = () => {
-  console.log('making payment function running');
+  console.log('make payment function running');
   const STRIPE_PUB_KEY = import.meta.env.VITE_STRIPE_PUB_KEY;
   const BACKEND = import.meta.env.VITE_SERVER;
   const [product, setProduct] = useState({
