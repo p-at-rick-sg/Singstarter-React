@@ -253,35 +253,36 @@ const ProfileManager = () => {
                 </Grid>
               </Fragment>
             )}
-            {checked && (
-              <>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      variant="filled"
-                      id="companyName"
-                      name="companyName"
-                      label="Comnpany or Trading Name"
-                      value={companyFields.companyName}
-                      onChange={handleChange}
-                      fullWidth
-                      autoComplete="companny-name"
-                    />
+            {checked ||
+              (!showUpgrade && (
+                <>
+                  <Grid container spacing={2} sx={{mt: '5px'}}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        variant="filled"
+                        id="companyName"
+                        name="companyName"
+                        label="Comnpany or Trading Name"
+                        value={companyFields.companyName}
+                        onChange={handleChange}
+                        fullWidth
+                        autoComplete="companny-name"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        variant="filled"
+                        id="taxId"
+                        name="taxId"
+                        label="Tax ID or Company UEN"
+                        value={companyFields.taxId}
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      variant="filled"
-                      id="taxId"
-                      name="taxId"
-                      label="Tax ID or Company UEN"
-                      value={companyFields.taxId}
-                      onChange={handleChange}
-                      fullWidth
-                    />
-                  </Grid>
-                </Grid>
-              </>
-            )}
+                </>
+              ))}
             <Grid container spacing={2} justifyContent="flex-end" sx={{pt: 2}}>
               <Grid item xs={12} sm={12}>
                 <Button type="submit" fullWidth variant="contained">
