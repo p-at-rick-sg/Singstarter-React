@@ -28,11 +28,6 @@ const NavBar = () => {
     }
   };
 
-  useEffect(() => {
-    if (!profileOpen) {
-    }
-  }, [profileOpen]);
-
   return (
     <Fragment>
       <CssBaseline>
