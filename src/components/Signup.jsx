@@ -15,7 +15,6 @@ import {
   Switch,
   FormControlLabel,
 } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 // Component Imports
@@ -26,7 +25,6 @@ import {useUser} from '../hooks/useUser';
 const Signup = () => {
   const fetchData = useFetch();
   const {setPageTitle, setUser, user} = useUser(); // comes from user context
-  setPageTitle('Signup');
   // const [emailExists, setEmailExists] = useState(false);
   const [error, setError] = useState({
     firstName: false,
@@ -41,6 +39,12 @@ const Signup = () => {
     password: false,
     passwordMismatch: false,
   });
+
+  const [companyFields, setCompanyFields] = useState({
+    companyName: '',
+    taxId: '',
+  });
+
   const [passwordErrorText, setPasswordErrorText] = useState('');
   const navigate = useNavigate();
   //state for the form
@@ -58,7 +62,10 @@ const Signup = () => {
     password: '',
     passwordCheck: '',
   });
+
   const [checked, setChecked] = useState(false);
+
+  useEffect(() => setPageTitle('Signup'), []);
 
   const handleSignup = async e => {
     e.preventDefault();
@@ -77,6 +84,11 @@ const Signup = () => {
     if (inputFields.address2) newUser.address2 = inputFields.address2;
     if (inputFields.role) newUser.role = inputFields.role;
     if (inputFields.telephone) newUser.telephone = inputFields.telephone;
+    //company specific fields
+    if (inputFields.checked) updatedUser.role = 'contributor';
+    if (companyFields.taxId) updatedUser.taxId = companyFields.taxId;
+    if (companyFields.companyName) updatedUser.companyName = companyFields.companyName;
+
     //send the call to the backend
     const result = await fetchData('/auth/signup', 'PUT', newUser);
     if (result.ok) {
@@ -100,6 +112,10 @@ const Signup = () => {
     }
   };
 
+  const handleCompanyChange = e => {
+    setCompanyFields({...companyFields, [e.target.name]: e.target.value});
+  };
+
   const handleSwitch = e => {
     setChecked(e.target.checked);
   };
@@ -107,10 +123,9 @@ const Signup = () => {
   return (
     <div>
       <Container component="main" maxWidth="sm">
-        <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -277,11 +292,33 @@ const Signup = () => {
               </Grid>
 
               {checked && (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    a conditional section here for the contributor additional fields
+                <>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        variant="filled"
+                        id="companyName"
+                        name="companyName"
+                        label="Company Name/Trading Name"
+                        value={companyFields.companyName}
+                        onChange={handleCompanyChange}
+                        fullWidth
+                        autoComplete="companny-name"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        variant="filled"
+                        id="taxId"
+                        name="taxId"
+                        label="Tax ID or Company UEN"
+                        value={companyFields.taxId}
+                        onChange={handleCompanyChange}
+                        fullWidth
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
+                </>
               )}
 
               <Grid item xs={12}>
