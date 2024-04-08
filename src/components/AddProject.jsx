@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 //MUI Imports
 import {
@@ -19,12 +20,16 @@ import {useUser} from '../hooks/useUser';
 
 //Main Component Function
 const AddProject = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const fetchData = useFetch();
   const {user, setPageTitle} = useUser();
   const [newProject, setNewProject] = useState({
     title: '',
     description: '',
     target: 0,
+    productCost: 0,
     images: null,
     imageDescription: null,
   });
@@ -39,7 +44,12 @@ const AddProject = () => {
   };
 
   const handleFile = async e => {
-    setImage({...image, file: e.target.files[0], name: e.target.files[0].name});
+    setImage({
+      ...image,
+      file: e.target.files[0],
+      name: e.target.files[0].name,
+      imageDescripion: newProject.imageDescription,
+    });
     // setImage(e.target.files[0]);
     // setImageName(e.target.files[0].name);
   };
@@ -62,31 +72,43 @@ const AddProject = () => {
   };
 
   const addProject = async () => {
-    const body = {
-      title: newProject.title,
-      description: newProject.description,
-      target: newProject.target,
-    };
-    if (endDate) body.endDate = endDate;
-    const result = await fetchData('/api/projects', 'PUT', body, user.accessToken);
-    uploadImage(result.data.id);
+    try {
+      const body = {
+        title: newProject.title,
+        description: newProject.description,
+        target: newProject.target,
+        productCost: newProject.productCost,
+      };
+      if (endDate) body.endDate = endDate;
+      const result = await fetchData('/api/projects', 'PUT', body, user.accessToken);
+      uploadImage(result.data.id);
+      return 0;
+    } catch (err) {
+      console.error('failed to add project');
+      return 1;
+    }
   };
 
   const handleSubmit = e => {
+    setSubmitting(true);
     e.preventDefault();
-    addProject();
-    const formData = new FormData();
-    formData.append(newProject.title, image);
+    const result = addProject();
+    if (!result) {
+      setSubmitting(false);
+      navigate('/member');
+    } else {
+      setSubmitting(false);
+      setError(true);
+    }
   };
 
   const handleCancel = e => {
-    //return the the member page once we have one
+    navigate('/member');
   };
 
   return (
     <>
       <CssBaseline>
-        {user.accessToken}
         <Container component="main" maxWidth="m">
           <Box
             sx={{
@@ -95,15 +117,12 @@ const AddProject = () => {
               flexDirection: 'column',
               alignItems: 'center',
             }}>
-            {/* <Avatar sx={{m: 1, bgcolor: 'primary.main'}}>
-            <LockOutlinedIcon sx={{color: 'inherit'}} />
-          </Avatar> */}
             <Typography component="h1" variant="h5" sx={{color: 'primary.main'}}>
               Adding Your Great idea
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{mt: 0}}>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item sm={12}>
                   <TextField
                     margin="normal"
                     required
@@ -113,7 +132,7 @@ const AddProject = () => {
                     autoFocus
                     value={newProject.title}
                     onChange={handleChange}
-                    sx={{width: '90%'}}
+                    sx={{width: '100%'}}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} sx={{textAlign: 'right'}}>
@@ -129,7 +148,23 @@ const AddProject = () => {
                     autoFocus
                     value={newProject.target}
                     onChange={handleChange}
-                    sx={{width: '90%'}}
+                    sx={{width: '100%'}}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} sx={{textAlign: 'left'}}>
+                  <TextField
+                    margin="normal"
+                    required
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">S$</InputAdornment>,
+                    }}
+                    id="productCost"
+                    label="Produdct Cost"
+                    name="productCost"
+                    autoFocus
+                    value={newProject.productCost}
+                    onChange={handleChange}
+                    sx={{width: '100%'}}
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
@@ -204,6 +239,7 @@ const AddProject = () => {
                 <Grid item xs={8} sm={5}>
                   <Button
                     type="cancel"
+                    onClick={handleCancel}
                     fullWidth
                     variant="outlined"
                     sx={{mt: 3, mb: 2, margin: '5px'}}
