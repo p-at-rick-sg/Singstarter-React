@@ -146,33 +146,6 @@ const AdminPage = () => {
     }
   };
 
-  // const updateAccount = async (userID, updatedUser) => {
-  //   // const updatedUser = {
-  //   //   firstName: inputFields.firstName,
-  //   //   lastName: inputFields.lastName,
-  //   //   active: inputFields.active,
-  //   // };
-
-  //   try {
-  //     const res = await fetchData(
-  //       `/api/users/update/${userID}`,
-  //       "PATCH",
-  //       updatedUser,
-  //       user.accessToken
-  //     );
-  //     if (res.ok) {
-  //       console.log("User updated successfully", res);
-  //       // Optionally refresh user list or update UI accordingly
-  //     } else {
-  //       console.error("Failed to update user:", res.message);
-  //       // Handle errors (e.g., show a message to the user)
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating user:", error.message);
-  //     // Handle errors (e.g., show a message to the user)
-  //   }
-  // };
-
   useEffect(() => {
     const transformedRows = users.map((user) => ({
       id: user._id,
