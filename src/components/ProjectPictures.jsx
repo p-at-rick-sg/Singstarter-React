@@ -16,7 +16,6 @@ const ProjectPictures = ({ selectedProjectID }) => {
   const [projectImages, setProjectImages] = useState([]);
 
   const getProjectPictures = async () => {
-    // console.log(selectedProjectID);
     if (selectedProjectID !== null) {
       try {
         const res = await fetchData(
@@ -28,7 +27,6 @@ const ProjectPictures = ({ selectedProjectID }) => {
 
         if (res.ok) {
           setProjectImages(res.data);
-          //   console.log(`Project images fetched successfully`);
         } else {
           console.log(res.data);
         }
