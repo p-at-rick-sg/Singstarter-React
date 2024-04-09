@@ -15,19 +15,37 @@ import {
   TextField,
   Grid,
   Typography,
+  Snackbar,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const QandASection = ({ selectedProjectID, projectOwner }) => {
   const [qAndA, setQandA] = useState([]);
   const [questionInput, setQuestionInput] = useState("");
   const { user } = useUser();
-  const decodedClaims = jwtDecode(user.accessToken);
-
-  // const decodedClaims = jwtDecode(user.accessToken);
 
   const questionRef = useRef("");
 
   const fetchData = useFetch();
+
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = `/signin`;
+    navigate(path);
+  };
+
+  const [open, setOpen] = useState(false);
+  const handleSnackbar = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,13 +55,15 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
     ) {
       addQuestion();
       setQuestionInput("");
-    } else {
+    } else if (questionInput.length === 0) {
       console.log(`dog`);
+    } else {
+      handleSnackbar();
     }
   };
 
   const getQandA = async () => {
-    console.log(selectedProjectID);
+    // console.log(selectedProjectID);
     if (selectedProjectID !== null) {
       try {
         const res = await fetchData(
@@ -55,7 +75,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
 
         if (res.ok) {
           setQandA(res.data);
-          console.log(`Projects fetched successfully`);
+          // console.log(`Projects fetched successfully`);
         } else {
           // alert(JSON.stringify(res.data));
           console.log(res.data);
@@ -86,7 +106,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
 
   useEffect(() => {
     if (selectedProjectID !== undefined) getQandA();
-  }, [selectedProjectID]);
+  }, [selectedProjectID, projectOwner]);
 
   return (
     <>
@@ -111,7 +131,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
       <br />
       <br />
 
-      {decodedClaims.id !== projectOwner && (
+      {user.id !== projectOwner && (
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             id="standard-basic"
@@ -129,6 +149,15 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
           <Button variant="outlined" type="submit">
             Ask
           </Button>
+
+          <Snackbar
+            open={open}
+            autoHideDuration={7500}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            onClose={handleClose}
+            message="Please login to ask questions"
+            action={<Button onClick={routeChange}>Login</Button>}
+          />
         </Box>
       )}
     </>

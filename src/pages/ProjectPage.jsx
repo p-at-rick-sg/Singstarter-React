@@ -4,6 +4,7 @@ import useFetch from "../hooks/useFetch";
 import { Container, Grid, Paper } from "@mui/material";
 import ProjectDetails from "../components/ProjectDetails";
 import QandASection from "../components/QandASection";
+import ProjectPictures from "../components/ProjectPictures";
 
 const ProjectPage = () => {
   const { id } = useParams(); // extract project ID from URL
@@ -16,9 +17,9 @@ const ProjectPage = () => {
         const res = await fetchData(`/api/projects/?projectID=${id}`, "GET");
         if (res.ok) {
           setProject(res.data);
-          console.log(
-            `Project details fetched successfully for project ID: ${id}`
-          );
+          // console.log(
+          //   `Project details fetched successfully for project ID: ${id}`
+          // );
         } else {
           console.error("Failed to fetch project details:", res.data);
         }
@@ -40,29 +41,7 @@ const ProjectPage = () => {
         <Grid container item spacing={2}>
           <Grid container item xs={12} md={5}>
             <Grid item xs={12}>
-              <Paper>
-                {/* Placeholder for your picture carousel */}
-                Picture carousel goes here
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />.
-                <br />
-              </Paper>
+              <ProjectPictures selectedProjectID={id} />
             </Grid>
           </Grid>
 
