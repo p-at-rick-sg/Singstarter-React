@@ -84,7 +84,7 @@ function App() {
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/profile" element={<ProfileManager />} />
               {/* move these routes to be under the a master member page?? */}
-              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkout/:projectID" element={<Checkout />} />
               <Route path="/stripe" element={<StripePayment />} />
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />

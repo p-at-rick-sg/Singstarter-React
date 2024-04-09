@@ -1,7 +1,12 @@
-import React from 'react';
+import AddressForm from './AddressForm';
 
 const Checkout = () => {
-  return <div></div>;
+  return (
+    <div>
+      <h1>Checkout page</h1>
+      <AddressForm />
+    </div>
+  );
 };
 
 export default Checkout;

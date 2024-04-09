@@ -6,7 +6,7 @@ export const UserContext = createContext();
 export function UserProvider({children}) {
   //Add all the stuff we will keep in context below
 
-  const [pageTitle, setPageTitle] = useState('Temp Title');
+  const [pageTitle, setPageTitle] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState({
     accessToken: null,
@@ -15,6 +15,7 @@ export function UserProvider({children}) {
     lastName: null,
     role: null,
     createdDate: null,
+    id: null,
   });
 
   const checkSession = async () => {
@@ -22,7 +23,8 @@ export function UserProvider({children}) {
     if (sessionStorage.getItem('access') !== null) {
       const sessionAccess = await sessionStorage.getItem('access');
       const role = await sessionStorage.getItem('role');
-      await setUser({...user, accessToken: sessionAccess, role: role});
+      const id = await sessionStorage.getItem('id');
+      await setUser({...user, accessToken: sessionAccess, role: role, id: id});
     }
   };
 
@@ -37,6 +39,7 @@ export function UserProvider({children}) {
       lastName: null,
       role: null,
       createdDate: null,
+      id: null,
     });
   };
 

@@ -1,14 +1,19 @@
-import {
-  Card,
-  Grid,
-  Paper,
-  Typography,
-  Container,
-  Button,
-} from "@mui/material";
-import React from "react";
+import {useNavigate, useLocation} from 'react-router-dom';
+import {useState} from 'react';
+import {Card, Grid, Paper, Typography, Container, Button} from '@mui/material';
 
-const ProjectDetails = (props) => {
+import Checkout from './Checkout';
+
+const ProjectDetails = props => {
+  const navigate = useNavigate();
+  const myData = useLocation();
+  const [projectID, setProjectID] = useState('');
+
+  const handleClick = () => {
+    const path = myData.pathname.split('/')[2];
+    navigate(`/checkout/${path}`);
+  };
+
   return (
     <>
       {/* <Paper>
@@ -27,8 +32,8 @@ const ProjectDetails = (props) => {
           <Typography>
             Target: {props.project[0].currentTotal} / ${props.project[0].target}
           </Typography>
-          <Button variant="contained" size="large">
-            HI PATRICK
+          <Button variant="contained" size="large" onClick={handleClick}>
+            Pledge Now
           </Button>
         </Grid>
         <Grid item>
