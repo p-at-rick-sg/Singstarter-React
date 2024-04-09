@@ -37,11 +37,6 @@ export default function AddressForm() {
     telephone: '',
   });
 
-  const [allIds, setAllIds] = useState({
-    projectID: projectID,
-    userID: user.id,
-  });
-
   const [inputProduct, setInputProduct] = useState({
     price: 0,
     quantity: 1,
@@ -455,6 +450,6 @@ export default function AddressForm() {
     );
   }
   if (stage === 2) {
-    return <StripePayment product={cart} address={inputFields} ids={allIds} />;
+    return <StripePayment product={cart} address={inputFields} projectID={projectID} />;
   }
 }

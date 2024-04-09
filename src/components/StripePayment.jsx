@@ -4,7 +4,8 @@ import {useEffect, useState} from 'react';
 import {useUser} from '../hooks/useUser';
 
 //MUI imports
-import {Card, CardContent, CardActions, CardMedia, Button, Typography} from '@mui/material';
+import {Container, Button, Typography, Box, Grid, Avatar} from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 
 const StripePayment = ({product, address}) => {
   const fetchData = useFetch();
@@ -62,30 +63,47 @@ const StripePayment = ({product, address}) => {
 
   return (
     <>
-      <h1>Stripe Payment Component{user && user.id}</h1>
-      <Card sx={{maxWidth: 345}}>
-        <CardMedia
-          sx={{height: 140}}
-          image="https://storage.googleapis.com/ga-project-3-assets/payment-image.jpg"
-          title="green iguana"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {product.name}
+      <h1>Stripe Payment Component</h1>
+      <Container component="main" maxWidth="sm">
+        <Box
+          sx={{
+            marginTop: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          <Avatar sx={{m: 1, bgcolor: 'primary.main'}}>
+            <HomeIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Your Order Details
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {product.description}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button onClick={makePayment} size="medium">
-            Pay S${product.price * product.quantity} Now
-          </Button>
-          <Button size="small" sx={{color: 'grey'}}>
-            Cancel
-          </Button>
-        </CardActions>
-      </Card>
+          <Box sx={{mt: 1}}>
+            <Grid container spacing={2}>
+              <Grid item sm={12}>
+                <Typography gutterBottom variant="h5" component="div">
+                  {product.name}
+                </Typography>
+              </Grid>
+              <Grid item sm={12}>
+                <Typography variant="body2" color="text.secondary">
+                  {product.description}
+                </Typography>
+              </Grid>
+              <Grid item sm={12}>
+                <Button onClick={makePayment} size="medium">
+                  Pay S${product.price * product.quantity} Now
+                </Button>
+              </Grid>
+              <Grid item sm={12}>
+                <Button size="small" sx={{color: 'grey'}}>
+                  Cancel
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
     </>
   );
 };

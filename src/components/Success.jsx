@@ -1,15 +1,17 @@
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import {useEffect, useState} from 'react';
 import {useUser} from '../hooks/useUser';
 //MUI Imports
-import {Box, Button, Typography, Grid} from '@mui/material';
+import {Box, Button, Typography, Grid, Container, Avatar} from '@mui/material';
+import PaidIcon from '@mui/icons-material/Paid';
 
 const Success = () => {
   const {user} = useUser();
   const fetchData = useFetch();
   const location = useLocation();
-  console.log(location);
+  const navigate = useNavigate();
+  const [orderID, setOrderID] = useState();
 
   const getSuccessDetails = async ID => {
     const body = {sessionID: ID};
@@ -26,14 +28,34 @@ const Success = () => {
 
   return (
     <>
-      <Box>
-        <Grid container>
-          <Typography variant="h2">Thanks for your support!</Typography>
-          <Typography variant="h4">Your Payment was Successful</Typography>
-          <p>This small business really appreciates your support :-)</p>
-          <Button>Return Home</Button>
-        </Grid>
-      </Box>
+      <Container component="main" maxWidth="md">
+        <Box
+          sx={{
+            marginTop: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          <Avatar sx={{m: 1, bgcolor: 'primary.main'}}>
+            <PaidIcon />
+          </Avatar>
+          <Grid container spacing={2} justify="center" alignItems="center">
+            <Grid item sm={12}>
+              <Typography component="h1" variant="h2">
+                Order Successfully Placed
+              </Typography>
+            </Grid>
+            <Grid item sm={12}>
+              <Typography component="h1" variant="h5">
+                This small business really appreciates your support
+              </Typography>
+            </Grid>
+            <Grid item sm={12}>
+              <Button onClick={() => navigate('/')}>Return Home</Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
     </>
   );
 };
