@@ -15,7 +15,9 @@ import {
   TextField,
   Grid,
   Typography,
+  Snackbar,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const QandASection = ({ selectedProjectID, projectOwner }) => {
   const [qAndA, setQandA] = useState([]);
@@ -26,6 +28,25 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
 
   const fetchData = useFetch();
 
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = `/signin`;
+    navigate(path);
+  };
+
+  const [open, setOpen] = useState(false);
+  const handleSnackbar = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
@@ -34,8 +55,10 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
     ) {
       addQuestion();
       setQuestionInput("");
-    } else {
+    } else if (questionInput.length === 0) {
       console.log(`dog`);
+    } else {
+      handleSnackbar();
     }
   };
 
@@ -126,6 +149,15 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
           <Button variant="outlined" type="submit">
             Ask
           </Button>
+
+          <Snackbar
+            open={open}
+            autoHideDuration={7500}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            onClose={handleClose}
+            message="Please login to ask questions"
+            action={<Button onClick={routeChange}>Login</Button>}
+          />
         </Box>
       )}
     </>
