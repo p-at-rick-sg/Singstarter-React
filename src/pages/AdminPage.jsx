@@ -34,7 +34,7 @@ import {
 
 function EditToolbar({ setRows, setRowModesModel }) {
   const handleClick = () => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = Date.now(); // using Date.now() to generate a unique id
     setRows((oldRows) => [
       ...oldRows,
       { id, name: "", email: "", isNew: true },
@@ -103,23 +103,24 @@ const AdminPage = () => {
     }
   };
 
-  const handleSaveClick = (id) => async () => {
-    // Fetching the updated row directly from the state
+  const handleSaveClick = async (id) => {
+    // Find the updated row in the DataGrid's state
     const updatedRow = rows.find((row) => row.id === id);
-    if (!updatedRow) {
-      console.error("Failed to find the updated row data");
-      return;
-    }
 
-    const updatedUserData = {
-      firstName: updatedRow.name, // Ensure these match your DataGrid's `field` definitions
-      lastName: updatedRow.lastName,
+    // Extract and prepare the data to be updated
+    const updatedData = {
+      // Assuming name is "FirstName LastName" and needs splitting
+      firstName: updatedRow.name.split(" ")[0],
+      lastName: updatedRow.name.split(" ").slice(1).join(" ") || "", // Handle no last name
       role: updatedRow.role,
-      active: updatedRow.active,
+      active: updatedRow.active === "true" ? true : false, // Ensure boolean
     };
 
-    console.log(`Updating user with ID: ${id}`, updatedUserData);
-    await updateAccount(id, updatedUserData);
+    // Log for debugging
+    console.log("Data to be updated:", updatedData);
+
+    // Call the function to update data in the backend
+    await updateAccount(id, updatedData);
   };
 
   const updateAccount = async (userID, updatedUser) => {
@@ -133,6 +134,7 @@ const AdminPage = () => {
       );
       if (res.ok) {
         console.log("User updated successfully", res);
+        console.log("GET UPDATED USER:", updatedUser);
         // Optionally refresh user list or update UI accordingly
       } else {
         console.error("Failed to update user:", res.message);
@@ -143,33 +145,6 @@ const AdminPage = () => {
       // Handle errors (e.g., show a message to the user)
     }
   };
-
-  // const updateAccount = async (userID, updatedUser) => {
-  //   // const updatedUser = {
-  //   //   firstName: inputFields.firstName,
-  //   //   lastName: inputFields.lastName,
-  //   //   active: inputFields.active,
-  //   // };
-
-  //   try {
-  //     const res = await fetchData(
-  //       `/api/users/update/${userID}`,
-  //       "PATCH",
-  //       updatedUser,
-  //       user.accessToken
-  //     );
-  //     if (res.ok) {
-  //       console.log("User updated successfully", res);
-  //       // Optionally refresh user list or update UI accordingly
-  //     } else {
-  //       console.error("Failed to update user:", res.message);
-  //       // Handle errors (e.g., show a message to the user)
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating user:", error.message);
-  //     // Handle errors (e.g., show a message to the user)
-  //   }
-  // };
 
   useEffect(() => {
     const transformedRows = users.map((user) => ({
@@ -247,39 +222,43 @@ const AdminPage = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const handleEditClick = (id) => () => {
+    console.log("EDITING");
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
-  // const handleSaveClick = (id) => async () => {
-  //   const rowToUpdate = rows.find((row) => row.id === id);
-  //   const updatedData = {
-  //     firstName: rowToUpdate.firstName,
-  //     lastName: rowToUpdate.lastName,
-  //     // add other fields as needed
-  //   };
-  //   await updateAccount(id, updatedData);
-  //   setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  //   // Optionally, refresh your data here
-  // };
 
   const handleProcessRowUpdate = async (newRow) => {
+    // Assuming the newRow.name is in "FirstName LastName" format
+    const [firstName, ...lastNameParts] = newRow.name.split(" ");
+    const lastName = lastNameParts.join(" "); // Re-join the remaining parts as the last name
+    // Construct the updated user data with firstName and lastName separated
+    const updatedUserData = {
+      firstName: firstName,
+      lastName: lastName,
+      role: newRow.role,
+      active: newRow.active, // Convert string to boolean if necessary
+    };
+
+    console.log(`Updating user with ID: ${newRow.id}`, updatedUserData);
+
     try {
       const response = await fetchData(
         `/api/users/update/${newRow.id}`,
         "PATCH",
-        newRow,
+        updatedUserData,
         user.accessToken
       );
+
       if (response.ok) {
-        console.log("User updated successfully");
-        return newRow; // Return the updated row to be committed to the grid
+        console.log("User updated successfully", response.data);
+        return { ...newRow, ...response.data }; // Return updated data, merge in case API returns updated info
       } else {
-        // Handle non-ok response
         console.error("Failed to update user:", response.statusText);
+        // Handle non-OK response
       }
     } catch (error) {
       console.error("Error updating user:", error);
+      throw error; // Propagate error up to prevent DataGrid from committing the changes
     }
-    return newRow;
   };
 
   const handleDeleteClick = (id) => () => {
