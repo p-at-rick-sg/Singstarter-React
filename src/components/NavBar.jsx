@@ -29,6 +29,8 @@ const NavBar = () => {
       setProfileOpen(!profileOpen);
       if (user.role === "contributor") {
         navigate("/member");
+      } else if (user.role === "admin") {
+        navigate("/admin/dashboard");
       } else navigate("/");
     } else {
       setProfileOpen(!profileOpen);
@@ -77,6 +79,15 @@ const NavBar = () => {
               {user.role === "contributor" && (
                 <Button color="inherit" component={NavLink} to="member">
                   Member Area
+                </Button>
+              )}
+              {user.role === "admin" && (
+                <Button
+                  color="inherit"
+                  component={NavLink}
+                  to="admin/dashboard"
+                >
+                  Admin Dashboard
                 </Button>
               )}
 
