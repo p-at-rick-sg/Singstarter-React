@@ -80,11 +80,6 @@ const ProfileManager = () => {
   const handleUpdate = async e => {
     e.preventDefault();
     console.log(e);
-    // if (!e.target.validity.valid) {
-    //   setError({...error, [e.target.name]: true});
-    // } else {
-    //   setError({...error, [e.target.name]: false});
-    // }
     //put all the values into a single object to send 1 update
     const updatedUser = {
       firstName: inputFields.firstName,

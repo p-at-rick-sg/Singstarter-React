@@ -25,7 +25,7 @@ import {useUser} from '../hooks/useUser';
 const Signup = () => {
   const fetchData = useFetch();
   const {setPageTitle, setUser, user} = useUser(); // comes from user context
-  // const [emailExists, setEmailExists] = useState(false);
+
   const [error, setError] = useState({
     firstName: false,
     lastName: false,

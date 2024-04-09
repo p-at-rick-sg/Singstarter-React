@@ -1,20 +1,21 @@
 import React, { useRef, useState } from "react";
-import { jwtDecode } from "jwt-decode";
-
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
 
 import { useUser } from "../hooks/useUser";
 import useFetch from "../hooks/useFetch";
 
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  TextField,
+  Typography,
+} from "@mui/material";
+
 const QandA = (props) => {
   const { user } = useUser();
-  const decodedClaims = jwtDecode(user.accessToken);
+
   const fetchData = useFetch();
   const [answerState, setAnswerState] = useState(false);
   const answerRef = useRef();
@@ -24,7 +25,7 @@ const QandA = (props) => {
     if (user.role === "contributor") {
       addAnswer();
     } else {
-      console.log(`dog`);
+      console.log(`not logged in`);
     }
   };
 
@@ -38,7 +39,6 @@ const QandA = (props) => {
       );
 
       if (res.ok) {
-        console.log(`answer added successfully`);
         props.getQandA();
         setAnswerState(false);
       } else {
@@ -54,7 +54,6 @@ const QandA = (props) => {
     <>
       <Card variant="outlined">
         <CardContent>
-          {/* <Typography variant="body1">{props.id}</Typography> */}
           <Typography variant="body1">Question:</Typography>
           <Typography variant="body1">{props.question}</Typography>
           <br />
@@ -101,8 +100,7 @@ const QandA = (props) => {
           )}
         </CardContent>
         <CardActions>
-          {/* {(user.role === "contributor") && ( */}
-          {decodedClaims.id === props.projectOwner && (
+          {user.id === props.projectOwner && (
             <>
               {!answerState && (
                 <>

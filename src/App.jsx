@@ -85,7 +85,7 @@ function App() {
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/profile" element={<ProfileManager />} />
               {/* move these routes to be under the a master member page?? */}
-              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkout/:projectID" element={<Checkout />} />
               <Route path="/stripe" element={<StripePayment />} />
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
@@ -105,6 +105,7 @@ function App() {
               <Route path="/" element={<Navigate to="home" />} />
               <Route path="home" element={<LandingPage />} />
               <Route path="*" element={<NotFoundPage />} />
+              <Route path="/project/:id" element={<ProjectPage />} />
               {/* move these routes to be under the a master member page?? */}
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
@@ -128,6 +129,7 @@ function App() {
               <Route path="signin" element={<Signin />} />
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/discover" element={<DiscoverPage />} />
+              <Route path="/project/:id" element={<ProjectPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
             <Footer />

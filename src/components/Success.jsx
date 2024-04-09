@@ -1,14 +1,63 @@
-import {Button, Typography} from '@mui/material';
+import {useLocation, useNavigate} from 'react-router-dom';
+import useFetch from '../hooks/useFetch';
+import {useEffect, useState} from 'react';
+import {useUser} from '../hooks/useUser';
+//MUI Imports
+import {Box, Button, Typography, Grid, Container, Avatar} from '@mui/material';
+import PaidIcon from '@mui/icons-material/Paid';
 
 const Success = () => {
-  return;
-  <>
-    <Typography variant="h2" component="div">
-      Thanks for your support!
-    </Typography>
-    <h4>Your Payment was Successful</h4>
-    <p>This small business really appreciates your support :-)</p>
-  </>;
+  const {user} = useUser();
+  const fetchData = useFetch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [orderID, setOrderID] = useState();
+
+  const getSuccessDetails = async ID => {
+    const body = {sessionID: ID};
+    const sessionDetails = await fetchData('/api/payment/success', 'PATCH', body, user.accessToken);
+    console.log(sessionDetails);
+  };
+
+  useEffect(() => {
+    location.search.split('=')[1];
+    if (location.search.split('=')[1]) {
+      getSuccessDetails(location.search.split('=')[1]);
+    }
+  }, [location]);
+
+  return (
+    <>
+      <Container component="main" maxWidth="md">
+        <Box
+          sx={{
+            marginTop: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          <Avatar sx={{m: 1, bgcolor: 'primary.main'}}>
+            <PaidIcon />
+          </Avatar>
+          <Grid container spacing={2} justify="center" alignItems="center">
+            <Grid item sm={12}>
+              <Typography component="h1" variant="h2">
+                Order Successfully Placed
+              </Typography>
+            </Grid>
+            <Grid item sm={12}>
+              <Typography component="h1" variant="h5">
+                This small business really appreciates your support
+              </Typography>
+            </Grid>
+            <Grid item sm={12}>
+              <Button onClick={() => navigate('/')}>Return Home</Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    </>
+  );
 };
 
 export default Success;

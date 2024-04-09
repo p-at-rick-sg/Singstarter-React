@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 import QandA from "../components/QandA";
 
@@ -15,19 +15,38 @@ import {
   TextField,
   Grid,
   Typography,
+  Snackbar,
 } from "@mui/material";
 
 const QandASection = ({ selectedProjectID, projectOwner }) => {
   const [qAndA, setQandA] = useState([]);
   const [questionInput, setQuestionInput] = useState("");
   const { user } = useUser();
-  const decodedClaims = jwtDecode(user.accessToken);
-
-  // const decodedClaims = jwtDecode(user.accessToken);
 
   const questionRef = useRef("");
 
   const fetchData = useFetch();
+
+  // code to make snackbar work
+  const navigate = useNavigate();
+  const routeChange = () => {
+    const path = `/signin`;
+    navigate(path);
+  };
+
+  const [open, setOpen] = useState(false);
+  const handleSnackbar = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  // end snackbar code
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,13 +56,14 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
     ) {
       addQuestion();
       setQuestionInput("");
+    } else if (questionInput.length === 0) {
+      console.log(`Empty input`);
     } else {
-      console.log(`dog`);
+      handleSnackbar();
     }
   };
 
   const getQandA = async () => {
-    console.log(selectedProjectID);
     if (selectedProjectID !== null) {
       try {
         const res = await fetchData(
@@ -55,19 +75,18 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
 
         if (res.ok) {
           setQandA(res.data);
-          console.log(`Projects fetched successfully`);
         } else {
-          // alert(JSON.stringify(res.data));
           console.log(res.data);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   const addQuestion = async () => {
     try {
       const res = await fetchData(
-        // DON'T FORGET TO change the concat id to a propped value
         "/api/projects/q/" + selectedProjectID,
         "PATCH",
         { question: questionRef.current.value },
@@ -75,18 +94,18 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
       );
 
       if (res.ok) {
-        console.log(`question added successfully`);
         getQandA();
       } else {
-        alert(JSON.stringify(res.data));
         console.log(res.data);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     if (selectedProjectID !== undefined) getQandA();
-  }, [selectedProjectID]);
+  }, [selectedProjectID, projectOwner]);
 
   return (
     <>
@@ -111,7 +130,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
       <br />
       <br />
 
-      {decodedClaims.id !== projectOwner && (
+      {user.id !== projectOwner && (
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             id="standard-basic"
@@ -129,6 +148,15 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
           <Button variant="outlined" type="submit">
             Ask
           </Button>
+
+          <Snackbar
+            open={open}
+            autoHideDuration={7500}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            onClose={handleClose}
+            message="Please login to ask questions"
+            action={<Button onClick={routeChange}>Login</Button>}
+          />
         </Box>
       )}
     </>
@@ -136,15 +164,3 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
 };
 
 export default QandASection;
-
-// TODO
-// -[x] user context for login state
-// -[x] add question to project using project id
-// -[x] add answer to question using question id
-// -[] toast for asking question when not logged in
-// -[x] answer question button should only appear when logged in as contributor
-
-/*
-NOTES:
--[] put user _id in context to shortcircuit easier
-*/
