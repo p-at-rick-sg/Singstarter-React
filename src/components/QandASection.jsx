@@ -106,7 +106,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
 
   useEffect(() => {
     if (selectedProjectID !== undefined) getQandA();
-  }, [selectedProjectID]);
+  }, [selectedProjectID, projectOwner]);
 
   return (
     <>
