@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import useFetch from "../hooks/useFetch";
-import LandingPage from "../pages/LandingPage";
-import { Title } from "@mui/icons-material";
+
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 

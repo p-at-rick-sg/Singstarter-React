@@ -102,36 +102,40 @@ function HeroHome() {
       </div>
       <div className="flex justify-center items-center min-h-screen bg-white">
         <div className="w-full max-w-6xl">
-          <Carousel className="rounded-xl">
+          <Carousel className="rounded-xl overflow-hidden">
             {projects.map((project, index) => (
-              <div key={project._id} className="relative">
+              <div
+                key={project._id}
+                className="relative"
+                style={{ width: "1200px", height: "800px" }}
+              >
                 <img
                   src={project.images?.[0]?.URL ?? "defaultImageFallbackURL"}
                   alt={`Slide ${index + 1}`}
-                  className="h-full w-full object-contain" // Changed from object-cover to object-contain
+                  className="absolute w-full h-full object-cover" // This ensures the image covers the entire div
                 />
-                <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+                <div className="absolute inset-0 grid place-items-center bg-black/75">
                   <div className="w-3/4 text-center md:w-2/4">
                     <Typography
                       variant="h1"
                       color="white"
                       className="mb-4 text-3xl md:text-4xl lg:text-5xl"
                     >
-                      {project.title}asdasd
+                      {project.title}
                     </Typography>
                     <Typography
                       variant="lead"
                       color="white"
                       className="mb-12 opacity-80"
                     >
-                      {project.description}asdasd
+                      {project.description}
                     </Typography>
                     <div className="flex justify-center gap-2">
                       <Button size="lg" color="white">
                         Explore
                       </Button>
                       <Button size="lg" color="white" variant="text">
-                        Gallery
+                        Discover More
                       </Button>
                     </div>
                   </div>
