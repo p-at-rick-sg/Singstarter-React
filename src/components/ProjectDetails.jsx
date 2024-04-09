@@ -1,36 +1,42 @@
-import {useNavigate, useLocation} from 'react-router-dom';
-import {useState} from 'react';
-import {Card, Grid, Paper, Typography, Container, Button} from '@mui/material';
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { format } from "date-fns";
+import {
+  Card,
+  Grid,
+  Paper,
+  Typography,
+  Container,
+  Button,
+} from "@mui/material";
 
-import Checkout from './Checkout';
+import Checkout from "./Checkout";
 
-const ProjectDetails = props => {
+const ProjectDetails = (props) => {
   const navigate = useNavigate();
   const myData = useLocation();
-  const [projectID, setProjectID] = useState('');
 
   const handleClick = () => {
-    const path = myData.pathname.split('/')[2];
+    const path = myData.pathname.split("/")[2];
     navigate(`/checkout/${path}`);
   };
 
   return (
     <>
-      {/* <Paper>
-        <Typography variant="h4">{props.project[0].title}</Typography>
-        <Typography>asdf</Typography>
-        <Typography item paragraph>
-          {props.project[0].description}
-        </Typography>
-      </Paper> */}
-
       <Grid container spacing={2}>
         <Grid item md={8}>
           <Typography variant="h4">{props.project[0].title}</Typography>
         </Grid>
         <Grid item md={4}>
           <Typography>
-            Target: {props.project[0].currentTotal} / ${props.project[0].target}
+            Target: ${props.project[0].currentTotal} / $
+            {props.project[0].target}
+          </Typography>
+          <Typography>
+            by{" "}
+            {props.project[0].endDate
+              ? format(new Date(props.project[0].endDate), "dd MMMM yyyy")
+              : "Unknown Date"}
           </Typography>
           <Button variant="contained" size="large" onClick={handleClick}>
             Pledge Now
@@ -41,39 +47,9 @@ const ProjectDetails = props => {
         </Grid>
       </Grid>
 
-      {/* <Paper>
-        <div>Project ID: {props.project[0]._id}</div>
-        <div>User ID (project owner): {props.project[0].owner}</div>
-
-        <div>Project Title: </div>
-        <div>Project Description: </div>
-        <div>Project target ($): {props.project[0].target}</div>
-        <div>Project current total ($): {props.project[0].currentTotal}</div>
-        <div>Project created date: {props.project[0].createdDate}</div>
-        <div>Project end date: {props.project[0].endDate}</div>
-      </Paper> */}
       <br />
     </>
   );
 };
 
 export default ProjectDetails;
-
-/*
-prop:
--[] project id
--[] user id (owner)
--[] project title
--[] project description
--[] project images
--[] project target
--[] project current total
--[] project created date
--[] project end date
-
-ux flow:
-- as user: 
-    main page -> project page (contains components) -> <ProjectDetails />, <QandA />, <ImageCarousell />
-                 ^prop project id & contributor id   
-
-*/
