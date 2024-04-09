@@ -93,8 +93,6 @@ const ProjectPictures = ({ selectedProjectID }) => {
           <Button variant="contained" onClick={goToNextSlide}>
             Next
           </Button>
-          <Button onClick={() => getProjectPictures()}>test fetch</Button>
-          <Button onClick={() => console.log(images)}>test state</Button>
         </CardActions>
       </Card>
       <Dialog open={open} onClose={handleClose}>
