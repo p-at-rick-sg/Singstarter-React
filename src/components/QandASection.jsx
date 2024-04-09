@@ -21,9 +21,6 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
   const [qAndA, setQandA] = useState([]);
   const [questionInput, setQuestionInput] = useState("");
   const { user } = useUser();
-  const decodedClaims = jwtDecode(user.accessToken);
-
-  // const decodedClaims = jwtDecode(user.accessToken);
 
   const questionRef = useRef("");
 
@@ -43,7 +40,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
   };
 
   const getQandA = async () => {
-    console.log(selectedProjectID);
+    // console.log(selectedProjectID);
     if (selectedProjectID !== null) {
       try {
         const res = await fetchData(
@@ -55,7 +52,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
 
         if (res.ok) {
           setQandA(res.data);
-          console.log(`Projects fetched successfully`);
+          // console.log(`Projects fetched successfully`);
         } else {
           // alert(JSON.stringify(res.data));
           console.log(res.data);
@@ -111,7 +108,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
       <br />
       <br />
 
-      {decodedClaims.id !== projectOwner && (
+      {user.id !== projectOwner && (
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             id="standard-basic"

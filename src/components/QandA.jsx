@@ -14,7 +14,7 @@ import useFetch from "../hooks/useFetch";
 
 const QandA = (props) => {
   const { user } = useUser();
-  const decodedClaims = jwtDecode(user.accessToken);
+  // const decodedClaims = jwtDecode(user.accessToken);
   const fetchData = useFetch();
   const [answerState, setAnswerState] = useState(false);
   const answerRef = useRef();
@@ -101,8 +101,7 @@ const QandA = (props) => {
           )}
         </CardContent>
         <CardActions>
-          {/* {(user.role === "contributor") && ( */}
-          {decodedClaims.id === props.projectOwner && (
+          {user.id === props.projectOwner && (
             <>
               {!answerState && (
                 <>
