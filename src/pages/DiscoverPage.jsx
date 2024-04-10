@@ -1,28 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, Typography, Grid } from "@mui/material";
+import {
+  Box,
+  TextField,
+  List,
+  ListItem,
+  Typography,
+  Divider,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import HomeCard from "../components/HomeCard";
 import useDebounce from "../hooks/useDebounce";
+import useFetch from "../hooks/useFetch";
+import HomeCard from "../components/HomeCard";
 
 function DiscoverPage() {
+  const fetchData = useFetch();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  // Debounce search term so that search happens 500 ms after user stops typing
+  // Debounce search term so that search happens 500ms after user stops typing
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const searchProject = async () => {
       // Only attempt to fetch data if there's a search term
       if (debouncedSearchTerm) {
         try {
-          const response = await fetch(
+          const response = await fetchData(
             `/api/projects/search?term=${debouncedSearchTerm}`
           );
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           //   const data = await response.json();
+          console.log("searching....");
+          console.log(debouncedSearchTerm);
+          console.log(response.data);
           setSearchResults(response.data); // Assuming the response is an array of projects
         } catch (error) {
           console.error(
@@ -36,7 +48,7 @@ function DiscoverPage() {
       }
     };
 
-    fetchData();
+    searchProject();
   }, [debouncedSearchTerm]);
 
   const handleSearchChange = (event) => {
@@ -65,19 +77,30 @@ function DiscoverPage() {
           ),
         }}
       />
-      <Grid container spacing={2} justifyContent="center">
-        {searchResults && searchResults.length > 0
-          ? searchResults.map((project) => (
-              <Grid item key={project._id} xs={12} sm={6} md={4}>
-                <HomeCard project={project} />
-              </Grid>
+      {searchTerm && (
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          {searchResults.length > 0 ? (
+            searchResults.map((project) => (
+              <React.Fragment key={project._id}>
+                <ListItem button>
+                  <Typography variant="subtitle1">{project.title}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {project.description}
+                  </Typography>
+                </ListItem>
+                <Divider />
+              </React.Fragment>
             ))
-          : searchTerm && (
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                No projects found
-              </Typography>
-            )}
-      </Grid>
+          ) : (
+            <ListItem>
+              <Typography variant="body1">No projects found</Typography>
+            </ListItem>
+          )}
+        </List>
+      )}
+      <HomeCard></HomeCard>
     </Box>
   );
 }
