@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
+import { useUser } from "../hooks/useUser";
+import UploadFiles from "./UploadFiles";
 import {
   Button,
   Card,
@@ -11,9 +13,11 @@ import {
   DialogContent,
 } from "@mui/material";
 
-const ProjectPictures = ({ selectedProjectID }) => {
+const ProjectPictures = ({ selectedProjectID, projectOwner }) => {
   const fetchData = useFetch();
+  const { user } = useUser();
   const [projectImages, setProjectImages] = useState([]);
+  const [showUpload, setShowUpload] = useState(false);
 
   const getProjectPictures = async () => {
     if (selectedProjectID !== null) {
@@ -81,19 +85,44 @@ const ProjectPictures = ({ selectedProjectID }) => {
           </Typography>
         </CardContent>
         <CardActions style={{ justifyContent: "center" }}>
-          <Button
-            variant="contained"
-            onClick={goToPrevSlide}
-            style={{ marginRight: 10 }}
-          >
-            Previous
-          </Button>
-          <Button variant="contained" onClick={goToNextSlide}>
-            Next
-          </Button>
+          {!showUpload && (
+            <>
+              <Button
+                variant="contained"
+                onClick={goToPrevSlide}
+                style={{ marginRight: 10 }}
+              >
+                Previous
+              </Button>
+              <Button variant="contained" onClick={goToNextSlide}>
+                Next
+              </Button>
+            </>
+          )}
+
+          {showUpload && <UploadFiles projectID={selectedProjectID} />}
+          {user.id === projectOwner && (
+            <Button
+              onClick={() => {
+                if (showUpload === false) {
+                  setShowUpload(true);
+                } else {
+                  setShowUpload(false);
+                }
+              }}
+            >
+              {!showUpload && "Upload Image"}
+              {showUpload && "Cancel"}
+            </Button>
+          )}
         </CardActions>
       </Card>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth={true}
+        maxWidth={"lg"}
+      >
         <DialogContent>
           <img
             src={images[currentImageIndex]}

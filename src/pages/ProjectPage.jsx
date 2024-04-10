@@ -17,9 +17,6 @@ const ProjectPage = () => {
         const res = await fetchData(`/api/projects/?projectID=${id}`, "GET");
         if (res.ok) {
           setProject(res.data);
-          // console.log(
-          //   `Project details fetched successfully for project ID: ${id}`
-          // );
         } else {
           console.error("Failed to fetch project details:", res.data);
         }
@@ -29,7 +26,7 @@ const ProjectPage = () => {
     };
 
     getProjectDetails();
-  }, [id]); // Only re-run the effect if `id` changes
+  }, [id]); // only re-run the effect if `id` changes
 
   if (!project) {
     return <div>Loading project details...</div>;
@@ -41,7 +38,10 @@ const ProjectPage = () => {
         <Grid container item spacing={2}>
           <Grid container item xs={12} md={5}>
             <Grid item xs={12}>
-              <ProjectPictures selectedProjectID={id} />
+              <ProjectPictures
+                selectedProjectID={id}
+                projectOwner={project[0].owner}
+              />
             </Grid>
           </Grid>
 
@@ -61,17 +61,3 @@ const ProjectPage = () => {
 };
 
 export default ProjectPage;
-
-/*
-ux flow:
-
-- as contributor:
-    main page -> project page (contains components) -> <ProjectDetails />, <QandASection />, <ImageCarousell /> -> ask/answer question
-                 ^prop project id & contributor id   
-
-- as user: 
-    main page -> project page  -> view project details -> ask question
-                 ^prop project id & contributor id   
-
-    
-*/
