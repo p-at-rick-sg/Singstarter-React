@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { format, compareAsc, parseISO, parse } from "date-fns";
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  Switch,
+  FormGroup,
+  FormControlLabel,
+  Paper,
+} from "@mui/material";
 import { useUser } from "../hooks/useUser";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -17,6 +25,7 @@ import {
 } from "@mui/x-data-grid";
 import {
   LineChart,
+  BarChart,
   Line,
   XAxis,
   YAxis,
@@ -63,6 +72,7 @@ const AdminPage = () => {
   const [chartData, setChartData] = useState([]);
   const [pieChartData, setPieChartData] = useState([]);
   const { user, setUser, checkSession, setPageTitle } = useUser();
+  const [projects, setProjects] = useState([]);
 
   //Call API USER ALL
   const getAllUser = async () => {
@@ -83,6 +93,34 @@ const AdminPage = () => {
   useEffect(() => {
     getAllUser();
   }, []);
+
+  const getProjects = async () => {
+    try {
+      const res = await fetchData("/api/projects", "GET");
+      if (res.ok) {
+        setProjects(res.data);
+        console.log(`Projects fetched successfully`);
+      } else {
+        console.error("Failed to fetch projects:", JSON.stringify(res.data));
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
+  };
+
+  useEffect(() => {
+    getProjects();
+  }, []);
+
+  // Prepare chart data
+  const barChartData = projects.map((project) => ({
+    name:
+      project.title.length > 10
+        ? `${project.title.substring(0, 10)}...`
+        : project.title, // Shorten the title for display
+    Target: project.target,
+    Current: project.currentTotal,
+  }));
 
   const deleteAccount = async (userID) => {
     try {
@@ -430,11 +468,11 @@ const AdminPage = () => {
         </Typography>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart
-            data={chartData}
+            data={data}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
+            <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />
@@ -501,6 +539,30 @@ const AdminPage = () => {
           </PieChart>
         </ResponsiveContainer>
       </div>
+      <Box sx={{ mt: 4, mb: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Project Funding Overview
+        </Typography>
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart
+            data={barChartData}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="Target" fill="#8884d8" name="Funding Goal" />
+            <Bar dataKey="Current" fill="#82ca9d" name="Funds Raised" />
+          </BarChart>
+        </ResponsiveContainer>
+      </Box>
     </Container>
   );
 };

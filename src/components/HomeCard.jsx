@@ -4,27 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+
 const HomeCard = () => {
   const [projects, setProjects] = useState([]);
   const fetchData = useFetch();
-
-  const navigate = useNavigate();
-  // Get the necessary state and functions from UserContext
-  const { user, authenticated, checkSession } = useContext(UserContext);
-
-  useEffect(() => {
-    checkSession();
-  }, []);
-
-  const handlePledgeClick = (projectId) => {
-    console.log("Authenticated?", authenticated); // Debugging line
-    if (authenticated) {
-      navigate(`/checkout/${projectId}`);
-    } else {
-      navigate(`/signin`);
-    }
-  };
 
   const getProjects = async () => {
     try {
@@ -32,7 +15,6 @@ const HomeCard = () => {
 
       if (res.ok) {
         setProjects(res.data);
-        console.log(res.data[0]._id);
         console.log(`Projects fetched successfully`);
       } else {
         alert(JSON.stringify(res.data));
@@ -108,12 +90,12 @@ const HomeCard = () => {
                 >
                   More Info
                 </Link>
-                <button
+                <Link
+                  to={`/project/${project._id}`}
                   className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700 transition"
-                  onClick={() => handlePledgeClick(project._id)}
                 >
                   Pledge
-                </button>
+                </Link>
                 <Link
                   to={`/project/${project._id}`} // Adjust the path as needed
                   className="inline-block bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-700 transition"
