@@ -89,6 +89,7 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
         setRows([]);
       }
     };
+    //run the logic above
     innerFunc();
   }, [projects]);
 
