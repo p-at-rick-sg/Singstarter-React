@@ -468,7 +468,7 @@ const AdminPage = () => {
         </Typography>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart
-            data={data}
+            data={chartData}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
