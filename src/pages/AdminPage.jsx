@@ -394,14 +394,6 @@ const AdminPage = () => {
     // More data points...
   ];
 
-  const composedChartData = [
-    { name: "Jan", Users: 400, Active: 240, Registrations: 240 },
-    { name: "Feb", Users: 300, Active: 139, Registrations: 221 },
-    { name: "Mar", Users: 200, Active: 980, Registrations: 229 },
-    { name: "Apr", Users: 278, Active: 390, Registrations: 200 },
-    // Add more data as needed
-  ];
-
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" gutterBottom component="div">
@@ -438,11 +430,11 @@ const AdminPage = () => {
         </Typography>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart
-            data={data}
+            data={chartData}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="month" />
             <YAxis />
             <Tooltip />
             <Legend />

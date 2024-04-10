@@ -109,7 +109,10 @@ function App() {
               <Route path="/" element={<Navigate to="home" />} />
               <Route path="home" element={<LandingPage />} />
               <Route path="*" element={<NotFoundPage />} />
+              <Route path="/project/:id" element={<ProjectPage />} />
               {/* move these routes to be under the a master member page?? */}
+              <Route path="/discover" element={<DiscoverPage />} />
+
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
               <Route path="/admin/dashboard" element={<AdminPage />} />

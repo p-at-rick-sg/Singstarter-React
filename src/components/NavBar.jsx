@@ -46,7 +46,7 @@ const NavBar = () => {
             <Toolbar>
               <Link to="/home">
                 <img
-                  src="/src/image/NavLogo.png"
+                  src="/src/image/NavLogo.jpg"
                   alt="SingStarter"
                   width="200"
                   height="200"

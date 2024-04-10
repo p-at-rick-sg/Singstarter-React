@@ -16,7 +16,7 @@ const LandingPage = () => {
           </div> */}
           <div className="text-center pb-12 md:pb-24">
             <h2 className="inline-block text-5xl text-pink-500 font-black relative after:content-[''] after:block after:w-20 after:h-1 after:bg-pink-500 after:absolute after:left-1/2 after:-translate-x-1/2 after:mt-3">
-              Recent Kick Starter Projects
+              Recent Sing Starter Projects
             </h2>
           </div>
           <HomeCard />

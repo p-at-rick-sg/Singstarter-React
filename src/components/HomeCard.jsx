@@ -1,12 +1,30 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import useFetch from "../hooks/useFetch";
+import { useNavigate } from "react-router-dom";
 
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
-
+import { UserContext } from "../context/UserContext";
 const HomeCard = () => {
   const [projects, setProjects] = useState([]);
   const fetchData = useFetch();
+
+  const navigate = useNavigate();
+  // Get the necessary state and functions from UserContext
+  const { user, authenticated, checkSession } = useContext(UserContext);
+
+  useEffect(() => {
+    checkSession();
+  }, []);
+
+  const handlePledgeClick = (projectId) => {
+    console.log("Authenticated?", authenticated); // Debugging line
+    if (authenticated) {
+      navigate(`/checkout/${projectId}`);
+    } else {
+      navigate(`/signin`);
+    }
+  };
 
   const getProjects = async () => {
     try {
@@ -84,15 +102,24 @@ const HomeCard = () => {
                 />
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-around bg-white pb-8">
-                <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+                <Link
+                  to={`/project/${project._id}`}
+                  className="inline-block bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+                >
                   More Info
-                </button>
-                <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700 transition">
+                </Link>
+                <button
+                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                  onClick={() => handlePledgeClick(project._id)}
+                >
                   Pledge
                 </button>
-                <button className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-700 transition">
+                <Link
+                  to={`/project/${project._id}`} // Adjust the path as needed
+                  className="inline-block bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-700 transition"
+                >
                   Chat
-                </button>
+                </Link>
               </div>
             </div>
           );

@@ -132,12 +132,19 @@ function HeroHome() {
                       {project.description}
                     </Typography>
                     <div className="flex justify-center gap-2">
-                      <Button size="lg" color="white">
-                        Explore
-                      </Button>
-                      <Button size="lg" color="white" variant="text">
-                        Discover More
-                      </Button>
+                      <Link
+                        to={`/project/${project._id}`}
+                        className="inline-block"
+                      >
+                        <Button size="lg" color="white">
+                          Explore
+                        </Button>
+                      </Link>
+                      <Link to="/discover" className="inline-block">
+                        <Button size="lg" color="white" variant="text">
+                          Discover More
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </div>
