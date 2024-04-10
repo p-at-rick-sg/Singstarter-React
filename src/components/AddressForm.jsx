@@ -51,8 +51,6 @@ export default function AddressForm() {
     quantity: 1,
   });
 
-  const [totalPrice, setTotalPrice] = useState(0);
-
   const [error, setError] = useState({
     firstName: false,
     lastName: false,

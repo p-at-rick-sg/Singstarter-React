@@ -1,29 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useRef, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
-import QandA from "../components/QandA";
+import QandA from '../components/QandA';
 
-import useFetch from "../hooks/useFetch";
-import { useUser } from "../hooks/useUser";
+import useFetch from '../hooks/useFetch';
+import {useUser} from '../hooks/useUser';
 
 // mui
-import {
-  Paper,
-  List,
-  Box,
-  Button,
-  TextField,
-  Grid,
-  Typography,
-  Snackbar,
-} from "@mui/material";
+import {Paper, List, Box, Button, TextField, Grid, Typography, Snackbar} from '@mui/material';
 
-const QandASection = ({ selectedProjectID, projectOwner }) => {
+const QandASection = ({selectedProjectID, projectOwner}) => {
   const [qAndA, setQandA] = useState([]);
-  const [questionInput, setQuestionInput] = useState("");
-  const { user } = useUser();
+  const [questionInput, setQuestionInput] = useState('');
+  const {user} = useUser();
 
-  const questionRef = useRef("");
+  const questionRef = useRef('');
 
   const fetchData = useFetch();
 
@@ -40,7 +31,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
   };
 
   const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -48,14 +39,11 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
   };
   // end snackbar code
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    if (
-      (user.role === "contributor" || user.role === "user") &&
-      questionInput.length !== 0
-    ) {
+    if ((user.role === 'contributor' || user.role === 'user') && questionInput.length !== 0) {
       addQuestion();
-      setQuestionInput("");
+      setQuestionInput('');
     } else if (questionInput.length === 0) {
       console.log(`Empty input`);
     } else {
@@ -67,8 +55,8 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
     if (selectedProjectID !== null) {
       try {
         const res = await fetchData(
-          "/api/projects/qa/" + selectedProjectID,
-          "GET",
+          '/api/projects/qa/' + selectedProjectID,
+          'GET',
           undefined,
           undefined
         );
@@ -87,9 +75,9 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
   const addQuestion = async () => {
     try {
       const res = await fetchData(
-        "/api/projects/q/" + selectedProjectID,
-        "PATCH",
-        { question: questionRef.current.value },
+        '/api/projects/q/' + selectedProjectID,
+        'PATCH',
+        {question: questionRef.current.value},
         user.accessToken
       );
 
@@ -110,10 +98,9 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
   return (
     <>
       <Typography variant="h4">Q & A</Typography>
-      {selectedProjectID && <p>{selectedProjectID}</p>}
-      <Paper style={{ maxHeight: 300, overflow: "auto" }}>
+      <Paper style={{maxHeight: 300, overflow: 'auto'}}>
         <List>
-          {qAndA.map((item) => {
+          {qAndA.map(item => {
             return (
               <QandA
                 key={item._id}
@@ -136,13 +123,13 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
             id="standard-basic"
             inputRef={questionRef}
             value={questionInput}
-            onChange={(e) => setQuestionInput(e.target.value)}
+            onChange={e => setQuestionInput(e.target.value)}
             label="Ask a question"
             maxRows={5}
             variant="standard"
             fullWidth
-            inputProps={{ minLength: 20, maxLength: 3600 }}
-            sx={{ maxWidth: 555 }}
+            inputProps={{minLength: 20, maxLength: 3600}}
+            sx={{maxWidth: 555}}
           />
 
           <Button variant="outlined" type="submit">
@@ -152,7 +139,7 @@ const QandASection = ({ selectedProjectID, projectOwner }) => {
           <Snackbar
             open={open}
             autoHideDuration={7500}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
             onClose={handleClose}
             message="Please login to ask questions"
             action={<Button onClick={routeChange}>Login</Button>}

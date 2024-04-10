@@ -25,8 +25,8 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
   const [orders, setOrders] = useState([]);
   const [orderLines, setOrderLines] = useState({});
 
-  //Get the order data
-  function createRow(projectID, title, target, total) {
+  //create a table row for projects
+  function createProjectRow(projectID, title, target, total) {
     return {
       projectID,
       title,
@@ -35,7 +35,7 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
       history: [],
     };
   }
-
+  //create a table row for orders in each project
   function createOrdersRow(orderID, date, customerEmail, value) {
     return (
       {
@@ -48,11 +48,9 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
   }
 
   const fetchOrdersForProject = async projectID => {
-    //gets orders for 1 project
     try {
       const SUFFIX = '/api/projects/orders?projectID=' + projectID;
       const result = await fetchData(SUFFIX, 'GET', undefined, user.accessToken);
-      console.log('fetching this data: ', result);
       return result.data || [];
     } catch (err) {
       console.error('failed to get orders by project id');
@@ -63,40 +61,36 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
   useEffect(() => {
     const innerFunc = async () => {
       if (projects.length !== 0) {
-        const orders = await fetchOrdersForProject(projects[0]._id);
-        setOrders(prevOrders => {
-          const newOrders = Array.isArray(orders) ? orders : [];
-          return [...prevOrders, ...newOrders];
-        });
+        //create the basic row for the project
+        for (const project of projects) {
+          const newRow = createProjectRow(
+            project._id,
+            project.title,
+            project.target,
+            project.total || 0
+          );
+          // create the orders rows
+          const orders = await fetchOrdersForProject(project._id);
+          if (orders.length !== 0) {
+            for (const order of orders) {
+              const date = new Date(order._doc.createdDate).toLocaleDateString();
+              const newOrderRow = createOrdersRow(
+                order._id,
+                date,
+                order.customerEmail,
+                order._doc.totalValue
+              );
+              newRow.history.push(newOrderRow);
+            }
+          }
+          setRows(prevRows => [...prevRows, newRow || {}]);
+        }
+      } else {
+        setRows([]);
       }
     };
     innerFunc();
   }, [projects]);
-
-  useEffect(() => {
-    console.log(orders);
-    if (projects.length !== 0) {
-      for (const project of projects) {
-        const newRow = createRow(project._id, project.title, project.target, project.total || 0);
-        if (orders.length !== 0) {
-          for (const order of orders) {
-            const date = new Date(order._doc.createdDate).toLocaleDateString();
-            const newOrderRow = createOrdersRow(
-              order._id,
-              date,
-              order.customerEmail,
-              order._doc.totalValue
-            );
-            newRow.history.push(newOrderRow);
-          }
-        }
-        //setRows([...rows, newRow || {}]);
-        setRows(prevRows => [...prevRows, newRow || {}]);
-      }
-    } else {
-      setRows([]);
-    }
-  }, [orders]);
 
   function Row({row}) {
     const [open, setOpen] = useState(false);
@@ -186,3 +180,8 @@ export default function ProjectTable({projects, user, setSelectedProjectID}) {
     </Box>
   );
 }
+
+// setOrders(prevOrders => {
+//   const newOrders = Array.isArray(orders) ? orders : [];
+//   return [...prevOrders, ...newOrders];
+// });

@@ -14,9 +14,22 @@ const Success = () => {
   const [orderID, setOrderID] = useState();
 
   const getSuccessDetails = async ID => {
-    const body = {sessionID: ID};
-    const sessionDetails = await fetchData('/api/payment/success', 'PATCH', body, user.accessToken);
-    console.log(sessionDetails);
+    try {
+      const body = {sessionID: ID};
+      const sessionDetails = await fetchData(
+        '/api/payment/success',
+        'PATCH',
+        body,
+        user.accessToken
+      );
+      console.log(sessionDetails);
+      if (sessionDetails) {
+        sessionStorage.removeItem('cart');
+        sessionStorage.removeItem('shippingAddress');
+      }
+    } catch (err) {
+      console.error('failed to get order details: ', err.message);
+    }
   };
 
   useEffect(() => {
@@ -31,15 +44,20 @@ const Success = () => {
       <Container component="main" maxWidth="md">
         <Box
           sx={{
+            height: '75vh',
+            width: '100vw',
             marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            justifyContent: 'center',
           }}>
-          <Avatar sx={{m: 1, bgcolor: 'primary.main'}}>
-            <PaidIcon />
-          </Avatar>
-          <Grid container spacing={2} justify="center" alignItems="center">
+          <Grid container spacing={2} justify="center">
+            <Grid item sm={12}>
+              <Avatar sx={{m: 1, bgcolor: 'primary.main'}}>
+                <PaidIcon />
+              </Avatar>
+            </Grid>
             <Grid item sm={12}>
               <Typography component="h1" variant="h2">
                 Order Successfully Placed

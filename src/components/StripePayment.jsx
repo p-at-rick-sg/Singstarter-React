@@ -7,7 +7,7 @@ import {useUser} from '../hooks/useUser';
 import {Container, Button, Typography, Box, Grid, Avatar} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 
-const StripePayment = ({product, address}) => {
+const StripePayment = ({product, address, projectID}) => {
   const fetchData = useFetch();
   const {user} = useUser();
   const [orderID, setOrderID] = useState(null);
@@ -25,8 +25,8 @@ const StripePayment = ({product, address}) => {
     delete newOrder['firstName'];
     delete newOrder['lastName'];
     delete newOrder['quantity'];
-    newOrder.projectID = newOrder.productOwner;
     delete newOrder['productOwner'];
+    newOrder.projectID = projectID;
     const result = await fetchData('/api/projects/orders', 'PUT', newOrder, user.accessToken);
     console.log('response from the new order call: ', result.data._id);
     setOrderID(result.data._id);

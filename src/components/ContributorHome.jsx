@@ -38,7 +38,6 @@ const ContributorHome = () => {
           user.accessToken
         );
         if (result.ok) {
-          console.log(result);
           setProjects(result.data);
         }
       } catch (err) {
@@ -110,15 +109,3 @@ const ContributorHome = () => {
 };
 
 export default ContributorHome;
-
-{
-  /* <Grid item xs={8} sm={5}>
-<Button
-  type="submit"
-  fullWidth
-  variant="contained"
-  sx={{mt: 3, mb: 2, margin: '5px'}}>
-  Add my Project
-</Button>
-</Grid> */
-}

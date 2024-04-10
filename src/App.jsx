@@ -1,55 +1,54 @@
-import { useEffect, useState, Fragment } from "react";
-import { Route, Routes, Navigate, NavLink } from "react-router-dom";
+import {useEffect, useState, Fragment} from 'react';
+import {Route, Routes, Navigate, NavLink} from 'react-router-dom';
 
 ///Component Imports
-import LandingPage from "./pages/LandingPage";
-import MemberPage from "./pages/MemberPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import ProjectPage from "./pages/ProjectPage";
-import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
-import Signup from "./components/Signup";
-import Signin from "./components/Signin";
-import Success from "./components/Success";
-import Cancel from "./components/Cancel";
-import AddProject from "./components/AddProject";
-import ProfileManager from "./components/ProfileManager";
-import StripePayment from "./components/StripePayment";
-import Checkout from "./components/Checkout";
-import AdminPage from "./pages/AdminPage";
+import LandingPage from './pages/LandingPage';
+import MemberPage from './pages/MemberPage';
+import NotFoundPage from './pages/NotFoundPage';
+import ProjectPage from './pages/ProjectPage';
+import NavBar from './components/NavBar';
+import Footer from './components/Footer';
+import Signup from './components/Signup';
+import Signin from './components/Signin';
+import Success from './components/Success';
+import Cancel from './components/Cancel';
+import AddProject from './components/AddProject';
+import ProfileManager from './components/ProfileManager';
+import StripePayment from './components/StripePayment';
+import Checkout from './components/Checkout';
+import AdminPage from './pages/AdminPage';
 
 //Context Imports (may need to set the theme here if we want light/dark mode setup)
-import { useUser } from "./hooks/useUser";
+import {useUser} from './hooks/useUser';
 //MUI Stuff
 //Create the theme and apply it around the whole app
-import { createTheme, ThemeProvider } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import DiscoverPage from "./pages/DiscoverPage";
+import {createTheme, ThemeProvider} from '@mui/material';
+import {LocalizationProvider} from '@mui/x-date-pickers';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 
 const userTheme = createTheme({
   palette: {
     primary: {
-      main: "#ef0dbf",
+      main: '#ef0dbf',
     },
     secondary: {
-      main: "#0def3e",
+      main: '#0def3e',
     },
     footer: {
-      main: "#fee0f4",
-      text: "#ca009f",
+      main: '#fee0f4',
+      text: '#ca009f',
     },
   },
 });
 
 function App() {
-  const { user, checkSession } = useUser();
+  const {user, checkSession} = useUser();
 
   useEffect(() => {
     checkSession();
   }, []);
 
-  if (user.role === "contributor") {
+  if (user.role === 'contributor') {
     return (
       <ThemeProvider theme={userTheme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -62,6 +61,7 @@ function App() {
               <Route path="/member" element={<MemberPage />} />
               <Route path="/member/add" element={<AddProject />} />
               <Route path="/project/:id" element={<ProjectPage />} />
+              <Route path="/checkout/:projectID" element={<Checkout />} />
               <Route path="/profile" element={<ProfileManager />} />
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
@@ -71,7 +71,7 @@ function App() {
         </LocalizationProvider>
       </ThemeProvider>
     );
-  } else if (user.role === "user") {
+  } else if (user.role === 'user') {
     return (
       <ThemeProvider theme={userTheme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -86,7 +86,7 @@ function App() {
               <Route path="/profile" element={<ProfileManager />} />
               {/* move these routes to be under the a master member page?? */}
               <Route path="/checkout/:projectID" element={<Checkout />} />
-              <Route path="/stripe" element={<StripePayment />} />
+              <Route path="checkout/stripe" element={<StripePayment />} />
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
             </Routes>
@@ -95,7 +95,7 @@ function App() {
         </LocalizationProvider>
       </ThemeProvider>
     );
-  } else if (user.role === "admin") {
+  } else if (user.role === 'admin') {
     return (
       <ThemeProvider theme={userTheme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -105,7 +105,6 @@ function App() {
               <Route path="/" element={<Navigate to="home" />} />
               <Route path="home" element={<LandingPage />} />
               <Route path="*" element={<NotFoundPage />} />
-              <Route path="/project/:id" element={<ProjectPage />} />
               {/* move these routes to be under the a master member page?? */}
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
@@ -128,8 +127,6 @@ function App() {
               <Route path="signup" element={<Signup />} />
               <Route path="signin" element={<Signin />} />
               <Route path="/project" element={<ProjectPage />} />
-              <Route path="/discover" element={<DiscoverPage />} />
-              <Route path="/project/:id" element={<ProjectPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
             <Footer />

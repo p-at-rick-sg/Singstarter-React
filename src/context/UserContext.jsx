@@ -19,7 +19,6 @@ export function UserProvider({children}) {
   });
 
   const checkSession = async () => {
-    console.log('checking session: ', sessionStorage.getItem('role'));
     if (sessionStorage.getItem('access') !== null) {
       const sessionAccess = await sessionStorage.getItem('access');
       const role = await sessionStorage.getItem('role');
