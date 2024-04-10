@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
+import {useState, useEffect} from 'react';
+import {useNavigate, NavLink} from 'react-router-dom';
+import useFetch from '../hooks/useFetch';
 
 //MUI Imports
 import {
@@ -14,17 +14,17 @@ import {
   Typography,
   Switch,
   FormControlLabel,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+} from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 // Component Imports
 
 // Context Stuff
-import { useUser } from "../hooks/useUser";
+import {useUser} from '../hooks/useUser';
 
 const Signup = () => {
   const fetchData = useFetch();
-  const { setPageTitle, setUser, user } = useUser(); // comes from user context
+  const {setPageTitle, setUser, user} = useUser(); // comes from user context
 
   const [error, setError] = useState({
     firstName: false,
@@ -41,33 +41,33 @@ const Signup = () => {
   });
 
   const [companyFields, setCompanyFields] = useState({
-    companyName: "",
-    taxId: "",
+    companyName: '',
+    taxId: '',
   });
 
-  const [passwordErrorText, setPasswordErrorText] = useState("");
+  const [passwordErrorText, setPasswordErrorText] = useState('');
   const navigate = useNavigate();
   //state for the form
   const [inputFields, SetInputFields] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    address1: "",
-    address2: "",
-    town: "",
-    country: "Singapore",
-    postcode: "",
-    telephone: "",
-    role: "user",
-    password: "",
-    passwordCheck: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    address1: '',
+    address2: '',
+    town: '',
+    country: 'Singapore',
+    postcode: '',
+    telephone: '',
+    role: 'user',
+    password: '',
+    passwordCheck: '',
   });
 
   const [checked, setChecked] = useState(false);
 
-  useEffect(() => setPageTitle("Signup"), []);
+  useEffect(() => setPageTitle('Signup'), []);
 
-  const handleSignup = async (e) => {
+  const handleSignup = async e => {
     e.preventDefault();
     // setSubmitting(true); //we can use this variable for the spinner
     //put the variables into an object if they exist
@@ -85,40 +85,39 @@ const Signup = () => {
     if (inputFields.role) newUser.role = inputFields.role;
     if (inputFields.telephone) newUser.telephone = inputFields.telephone;
     //company specific fields
-    if (checked) newUser.role = "contributor";
+    if (checked) newUser.role = 'contributor';
     if (companyFields.taxId) newUser.taxId = companyFields.taxId;
-    if (companyFields.companyName)
-      newUser.companyName = companyFields.companyName;
+    if (companyFields.companyName) newUser.companyName = companyFields.companyName;
 
     //send the call to the backend
-    const result = await fetchData("/auth/signup", "PUT", newUser);
+    const result = await fetchData('/auth/signup', 'PUT', newUser);
     if (result.ok) {
-      console.log("signup successful");
-      navigate("/signin");
+      console.log('signup successful');
+      navigate('/signin');
     } else {
       //signup has failed for some reason
-      console.error("failed signup attempt");
+      console.error('failed signup attempt');
     }
     // setSubmitting(false);
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     if (!e.target.validity.valid) {
-      setError({ ...error, [e.target.name]: true });
+      setError({...error, [e.target.name]: true});
     } else {
-      setError({ ...error, [e.target.name]: false });
+      setError({...error, [e.target.name]: false});
     }
-    SetInputFields({ ...inputFields, [e.target.name]: e.target.value });
+    SetInputFields({...inputFields, [e.target.name]: e.target.value});
     if (inputFields.password !== inputFields.passwordCheck) {
-      setPasswordErrorText("Password Mismatch");
+      setPasswordErrorText('Password Mismatch');
     }
   };
 
-  const handleCompanyChange = (e) => {
-    setCompanyFields({ ...companyFields, [e.target.name]: e.target.value });
+  const handleCompanyChange = e => {
+    setCompanyFields({...companyFields, [e.target.name]: e.target.value});
   };
 
-  const handleSwitch = (e) => {
+  const handleSwitch = e => {
     setChecked(e.target.checked);
   };
 
@@ -128,18 +127,17 @@ const Signup = () => {
         <Box
           sx={{
             marginTop: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+          <Avatar sx={{m: 1, bgcolor: 'primary.main'}}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" onSubmit={handleSignup} sx={{ mt: 3 }}>
+          <Box component="form" onSubmit={handleSignup} sx={{mt: 3}}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -153,7 +151,7 @@ const Signup = () => {
                   onChange={handleChange}
                   autoFocus
                   error={error.firstName}
-                  inputProps={{ pattern: "[A-Za-z]+" }}
+                  inputProps={{pattern: '[A-Za-z]+'}}
                   helperText={error.firstName}
                   //   disabled={addUser ? true : false}
                 />
@@ -167,7 +165,7 @@ const Signup = () => {
                   name="lastName"
                   value={inputFields.lastName}
                   onChange={handleChange}
-                  inputProps={{ pattern: "[A-Za-z]+" }}
+                  inputProps={{pattern: '[A-Za-z]+'}}
                   error={error.lastName}
                   helperText={error.lastName}
                   autoComplete="family-name"
@@ -185,13 +183,9 @@ const Signup = () => {
                   value={inputFields.address1}
                   onChange={handleChange}
                   autoFocus
-                  inputProps={{ pattern: "[A-Za-z0-9 ]+" }}
+                  inputProps={{pattern: '[A-Za-z0-9 ]+'}}
                   error={error.address1}
-                  helperText={
-                    error.address1
-                      ? "Please enter Letters and Numbers Only"
-                      : ""
-                  }
+                  helperText={error.address1 ? 'Please enter Letters and Numbers Only' : ''}
                   //   disabled={addUser ? true : false}
                 />
               </Grid>
@@ -202,13 +196,9 @@ const Signup = () => {
                   label="Address Line 2 (Optional)"
                   name="address2"
                   value={inputFields.address2}
-                  inputProps={{ pattern: "[A-Za-z0-9 ]+" }}
+                  inputProps={{pattern: '[A-Za-z0-9 ]+'}}
                   error={error.address2}
-                  helperText={
-                    error.address2
-                      ? "Please enter Letters and Numbers Only"
-                      : ""
-                  }
+                  helperText={error.address2 ? 'Please enter Letters and Numbers Only' : ''}
                   onChange={handleChange}
                   //   disabled={addUser ? true : false}
                 />
@@ -223,9 +213,9 @@ const Signup = () => {
                   label="Town or City"
                   value={inputFields.town}
                   onChange={handleChange}
-                  inputProps={{ pattern: "[A-Za-z]+" }}
+                  inputProps={{pattern: '[A-Za-z]+'}}
                   error={error.town}
-                  helperText={error.town ? "Please enter Letters Only" : ""}
+                  helperText={error.town ? 'Please enter Letters Only' : ''}
                   autoFocus
                   //   disabled={addUser ? true : false}
                 />
@@ -239,9 +229,9 @@ const Signup = () => {
                   id="country"
                   label="Country"
                   value={inputFields.country}
-                  inputProps={{ pattern: "[A-Za-z]+" }}
+                  inputProps={{pattern: '[A-Za-z]+'}}
                   error={error.country}
-                  helperText={error.country ? "Please enter Letters Only" : ""}
+                  helperText={error.country ? 'Please enter Letters Only' : ''}
                   onChange={handleChange}
                   autoFocus
                   //   disabled={addUser ? true : false}
@@ -253,13 +243,9 @@ const Signup = () => {
                   id="postcode"
                   label="Postcode/Zip Code"
                   name="postcode"
-                  inputProps={{ pattern: "[A-Za-z0-9]+" }}
+                  inputProps={{pattern: '[A-Za-z0-9]+'}}
                   error={error.postcode}
-                  helperText={
-                    error.postcode
-                      ? "Please enter Letters and Numbers Only"
-                      : ""
-                  }
+                  helperText={error.postcode ? 'Please enter Letters and Numbers Only' : ''}
                   value={inputFields.postcode}
                   onChange={handleChange}
                   //   disabled={addUser ? true : false}
@@ -273,12 +259,10 @@ const Signup = () => {
                   label="Telephone (Optional)"
                   name="telephone"
                   value={inputFields.telephone}
-                  inputProps={{ pattern: "[0-9+]+" }}
+                  inputProps={{pattern: '[0-9+]+'}}
                   onChange={handleChange}
                   error={error.telephone}
-                  helperText={
-                    error.telephone ? "Please enter Numbers and + Only" : ""
-                  }
+                  helperText={error.telephone ? 'Please enter Numbers and + Only' : ''}
                   //   disabled={addUser ? true : false}
                 />
               </Grid>
@@ -298,7 +282,7 @@ const Signup = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <FormControlLabel
-                    sx={{ pl: 2, pt: 2 }}
+                    sx={{pl: 2, pt: 2}}
                     // required
                     checked={checked}
                     onChange={handleSwitch}
@@ -350,11 +334,7 @@ const Signup = () => {
                   onChange={handleChange}
                   autoComplete="email"
                   error={error.password || error.passwordMismatch}
-                  helperText={
-                    error.password || error.passwordMismatch
-                      ? { passwordErrorText }
-                      : ""
-                  }
+                  helperText={error.password || error.passwordMismatch ? {passwordErrorText} : ''}
                   //   disabled={addUser ? true : false}
                 />
               </Grid>
@@ -398,7 +378,7 @@ const Signup = () => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{mt: 3, mb: 2}}
               //   disabled={addUser ? true : false}
             >
               Sign Up Now
@@ -407,9 +387,7 @@ const Signup = () => {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="signin" variant="body2">
-                  <NavLink to="/signin">
-                    Already have an account? Sign in Here
-                  </NavLink>
+                  <NavLink to="/signin">Already have an account? Sign in Here</NavLink>
                 </Link>
               </Grid>
             </Grid>
