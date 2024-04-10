@@ -13,8 +13,6 @@ function HeroHome() {
 
       if (res.ok) {
         setProjects(res.data);
-        console.log(res.data[0]._id);
-        console.log("all data shown", res.data);
         console.log(`Projects fetched successfully`);
       } else {
         alert(JSON.stringify(res.data));
@@ -103,7 +101,11 @@ function HeroHome() {
       </div>
       <div className="flex justify-center items-center min-h-screen bg-white">
         <div className="w-full max-w-6xl">
-          <Carousel className="rounded-xl overflow-hidden">
+          <Carousel
+            className="rounded-xl overflow-hidden"
+            autoplay={{ duration: 1.3 }}
+            loop={true}
+          >
             {projects.map((project, index) => (
               <div
                 key={project._id}
