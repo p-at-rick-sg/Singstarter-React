@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import {
   Box,
   TextField,
@@ -70,7 +72,7 @@ function DiscoverPage() {
         onChange={handleSearchChange}
         size="small"
         variant="outlined"
-        sx={{ width: "100%", maxWidth: "500px", mb: 4 }}
+        sx={{ width: "100%", maxWidth: "800px", height: "100px", mb: 1 }}
         InputProps={{
           startAdornment: (
             <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
@@ -85,7 +87,14 @@ function DiscoverPage() {
             searchResults.map((project) => (
               <React.Fragment key={project._id}>
                 <ListItem button>
-                  <Typography variant="subtitle1">{project.title}</Typography>
+                  <Typography variant="subtitle1">
+                    <Link
+                      to={`/project/${project._id}`}
+                      className="transition-all text-blue-900 hover:text-blue-600"
+                    >
+                      {project.title}
+                    </Link>
+                  </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {project.description}
                   </Typography>

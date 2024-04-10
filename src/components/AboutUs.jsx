@@ -42,7 +42,7 @@ const AboutUs = () => {
   }, []);
 
   const links = [
-    { name: "Open roles", href: "#" },
+    // { name: "Open roles", href: "#" },
     { name: "Contact Us", href: "#" },
     { name: "Our values", href: "#" },
     { name: "Meet our leadership", href: "#" },

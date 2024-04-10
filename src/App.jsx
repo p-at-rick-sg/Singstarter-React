@@ -63,6 +63,7 @@ function App() {
               <Route path="/member/add" element={<AddProject />} />
               <Route path="/project/:id" element={<ProjectPage />} />
               <Route path="/checkout/:projectID" element={<Checkout />} />
+              <Route path="/discover" element={<DiscoverPage />} />
               <Route path="/profile" element={<ProfileManager />} />
               <Route path="/success" element={<Success />} />
               <Route path="/cancel" element={<Cancel />} />
@@ -86,6 +87,8 @@ function App() {
               <Route path="/project" element={<ProjectPage />} />
               <Route path="/profile" element={<ProfileManager />} />
               {/* move these routes to be under the a master member page?? */}
+              <Route path="/discover" element={<DiscoverPage />} />
+
               <Route path="/checkout/:projectID" element={<Checkout />} />
               <Route path="checkout/stripe" element={<StripePayment />} />
               <Route path="/success" element={<Success />} />

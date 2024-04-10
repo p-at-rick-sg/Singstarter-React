@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Carousel, Typography, Button } from "@material-tailwind/react";
 import useFetch from "../hooks/useFetch";
+import { Link } from "react-router-dom";
 
 function HeroHome() {
   const [projects, setProjects] = useState([]);
@@ -61,7 +62,7 @@ function HeroHome() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Hero content */}
-        <div className="pt-32 pb-12 md:pt-40 md:pb-20">
+        <div className="pt-32 pb-12 md:pt-40 md:pb-0">
           {/* Section header */}
           <div className="text-center pb-12 md:pb-16">
             <h1
@@ -88,12 +89,12 @@ function HeroHome() {
                 data-aos-delay="300"
               >
                 <div>
-                  <a
-                    href="#0"
+                  <Link
+                    to="/discover"
                     className="inline-block px-6 py-3 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out bg-black hover:bg-grey-100 active:bg-blue-700"
                   >
                     Explore Now
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
