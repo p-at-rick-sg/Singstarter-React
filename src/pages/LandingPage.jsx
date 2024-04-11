@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react";
-import HeroHome from "../components/HeroHome";
-import HomeCard from "../components/HomeCard";
-import AboutUs from "../components/AboutUs";
+import React, {useState, useEffect} from 'react';
+import {useUser} from '../hooks/useUser';
+import HeroHome from '../components/HeroHome';
+import HomeCard from '../components/HomeCard';
+import AboutUs from '../components/AboutUs';
 
 const LandingPage = () => {
+  const {setPageTitle} = useUser();
+  useEffect(() => {
+    setPageTitle('');
+  });
   return (
     <>
       <HeroHome></HeroHome>

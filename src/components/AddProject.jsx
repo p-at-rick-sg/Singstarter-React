@@ -39,6 +39,10 @@ const AddProject = () => {
     name: null,
   });
 
+  useEffect(() => {
+    setPageTitle('Add Project');
+  });
+
   const handleChange = e => {
     setNewProject({...newProject, [e.target.name]: e.target.value});
   };

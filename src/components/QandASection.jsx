@@ -97,7 +97,7 @@ const QandASection = ({selectedProjectID, projectOwner}) => {
 
   return (
     <>
-      <Typography variant="h4">Q & A</Typography>
+      {/* <Typography variant="h4">Q & A</Typography> */}
       <Paper style={{maxHeight: 300, overflow: 'auto'}}>
         <List>
           {qAndA.map(item => {
